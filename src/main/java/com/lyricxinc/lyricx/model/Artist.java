@@ -7,7 +7,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table
 public class Artist {
 
     @Id
@@ -32,4 +31,7 @@ public class Artist {
 
     @OneToMany(mappedBy = "artist", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Album> albums;
+
+    @OneToMany(mappedBy = "artist", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<ArtistSong> artistSongs;
 }

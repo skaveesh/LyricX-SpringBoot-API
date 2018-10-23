@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table
 public class AppUser {
 
     @Id
@@ -24,7 +23,13 @@ public class AppUser {
     @CreationTimestamp
     private LocalDateTime joinedDate;
 
-    @OneToMany(mappedBy = "appUser", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<UserInGroup> usersInGroup;
+    @OneToMany(mappedBy = "appUser", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<GroupUser> usersInGroup;
+
+    @OneToMany(mappedBy = "appUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Favourite> favourites;
+
+    @OneToMany(mappedBy = "appUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Playlist> playlists;
 
 }

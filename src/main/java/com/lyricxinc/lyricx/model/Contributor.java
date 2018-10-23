@@ -8,7 +8,6 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
-@Table
 public class Contributor {
 
     @Id

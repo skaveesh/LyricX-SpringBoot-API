@@ -5,22 +5,30 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
-public class Group {
+public class Admin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     @NotBlank
-    private String groupName;
+    private String name;
+
+    @NotBlank
+    @Column(unique = true)
+    private String email;
+
+    @NotBlank
+    private String password;
+
+    private boolean fullControl;
+
+    private boolean suspendedStatus;
 
     @CreationTimestamp
-    private LocalDateTime createdDate;
+    private LocalDateTime joinedDate;
 
-    @OneToMany(mappedBy = "group", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<GroupUser> groupUsers;
 
 }

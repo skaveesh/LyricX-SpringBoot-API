@@ -6,7 +6,6 @@ import java.time.Year;
 import java.util.Set;
 
 @Entity
-@Table
 public class Album {
 
     @Id

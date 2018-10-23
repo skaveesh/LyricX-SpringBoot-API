@@ -8,19 +8,22 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-public class Group {
+public class Playlist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "id")
+    private AppUser appUser;
 
     @NotBlank
-    private String groupName;
+    private String playlistName;
 
     @CreationTimestamp
     private LocalDateTime createdDate;
 
-    @OneToMany(mappedBy = "group", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<GroupUser> groupUsers;
-
+    @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<PlaylistSong> playlistSongs;
 }

@@ -3,8 +3,7 @@ package com.lyricxinc.lyricx.model;
 import javax.persistence.*;
 
 @Entity
-@Table
-public class UserInGroup {
+public class SongGenre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,9 +11,9 @@ public class UserInGroup {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id")
-    private Group group;
+    private Genre genre;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id")
-    private AppUser appUser;
+    private Song song;
 }

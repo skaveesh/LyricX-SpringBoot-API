@@ -3,7 +3,6 @@ package com.lyricxinc.lyricx.model;
 import javax.persistence.*;
 
 @Entity
-@Table
 public class ArtistGenre {
 
     @Id

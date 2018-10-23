@@ -6,9 +6,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
-@Table
 public class Song {
 
     @Id
@@ -63,4 +63,15 @@ public class Song {
     private LocalDateTime publishedDate;
 
     private boolean publishedState;
+
+    @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<SongGenre> songGenres;
+
+    @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<ArtistSong> artistSongs;
+
+    @OneToMany(mappedBy = "song", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<SongModify> songModifies;
+
+    
 }
