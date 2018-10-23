@@ -28,4 +28,63 @@ public class SongModify {
     private LocalDateTime modifiedDate;
 
     private boolean hiddenStatus;
+
+    public SongModify() {
+    }
+
+    public SongModify(Song song, @NotBlank String lyrics, Contributor contributor, LocalDateTime modifiedDate, boolean hiddenStatus) {
+        this.song = song;
+        this.lyrics = lyrics;
+        this.contributor = contributor;
+        this.modifiedDate = modifiedDate;
+        this.hiddenStatus = hiddenStatus;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Song getSong() {
+        return song;
+    }
+
+    public void setSong(Song song) {
+        this.song = song;
+    }
+
+    public String getLyrics() {
+        return lyrics;
+    }
+
+    public void setLyrics(String lyrics) {
+        this.lyrics = lyrics;
+    }
+
+    public Contributor getContributor() {
+        return contributor;
+    }
+
+    public void setContributor(Contributor contributor) {
+        this.contributor = contributor;
+    }
+
+    public LocalDateTime getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(LocalDateTime modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+    public boolean isHiddenStatus() {
+        return hiddenStatus;
+    }
+
+    public void setHiddenStatus(boolean hiddenStatus) {
+        this.hiddenStatus = hiddenStatus;
+    }
 }

@@ -73,5 +73,196 @@ public class Song {
     @OneToMany(mappedBy = "song", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<SongModify> songModifies;
 
-    
+    public Song() {
+    }
+
+    public Song(@NotBlank String name, Album album, @Size(max = 5) String guitarKey, @Size(max = 5) String beat, Language language, String keywords, @NotBlank String lyrics, String youTubeLink, String spotifyLink, String deezerLink, Contributor addedBy, LocalDateTime addedDate, Contributor lastModifiedBy, LocalDateTime lastModifiedDate, Contributor publishedBy, LocalDateTime publishedDate, boolean publishedState, Set<SongGenre> songGenres, Set<ArtistSong> artistSongs) {
+        this.name = name;
+        this.album = album;
+        this.guitarKey = guitarKey;
+        this.beat = beat;
+        this.language = language;
+        this.keywords = keywords;
+        this.lyrics = lyrics;
+        this.youTubeLink = youTubeLink;
+        this.spotifyLink = spotifyLink;
+        this.deezerLink = deezerLink;
+        this.addedBy = addedBy;
+        this.addedDate = addedDate;
+        this.lastModifiedBy = lastModifiedBy;
+        this.lastModifiedDate = lastModifiedDate;
+        this.publishedBy = publishedBy;
+        this.publishedDate = publishedDate;
+        this.publishedState = publishedState;
+        this.songGenres = songGenres;
+        this.artistSongs = artistSongs;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Album getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(Album album) {
+        this.album = album;
+    }
+
+    public String getGuitarKey() {
+        return guitarKey;
+    }
+
+    public void setGuitarKey(String guitarKey) {
+        this.guitarKey = guitarKey;
+    }
+
+    public String getBeat() {
+        return beat;
+    }
+
+    public void setBeat(String beat) {
+        this.beat = beat;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
+
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
+    }
+
+    public String getLyrics() {
+        return lyrics;
+    }
+
+    public void setLyrics(String lyrics) {
+        this.lyrics = lyrics;
+    }
+
+    public String getYouTubeLink() {
+        return youTubeLink;
+    }
+
+    public void setYouTubeLink(String youTubeLink) {
+        this.youTubeLink = youTubeLink;
+    }
+
+    public String getSpotifyLink() {
+        return spotifyLink;
+    }
+
+    public void setSpotifyLink(String spotifyLink) {
+        this.spotifyLink = spotifyLink;
+    }
+
+    public String getDeezerLink() {
+        return deezerLink;
+    }
+
+    public void setDeezerLink(String deezerLink) {
+        this.deezerLink = deezerLink;
+    }
+
+    public Contributor getAddedBy() {
+        return addedBy;
+    }
+
+    public void setAddedBy(Contributor addedBy) {
+        this.addedBy = addedBy;
+    }
+
+    public LocalDateTime getAddedDate() {
+        return addedDate;
+    }
+
+    public void setAddedDate(LocalDateTime addedDate) {
+        this.addedDate = addedDate;
+    }
+
+    public Contributor getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(Contributor lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Contributor getPublishedBy() {
+        return publishedBy;
+    }
+
+    public void setPublishedBy(Contributor publishedBy) {
+        this.publishedBy = publishedBy;
+    }
+
+    public LocalDateTime getPublishedDate() {
+        return publishedDate;
+    }
+
+    public void setPublishedDate(LocalDateTime publishedDate) {
+        this.publishedDate = publishedDate;
+    }
+
+    public boolean isPublishedState() {
+        return publishedState;
+    }
+
+    public void setPublishedState(boolean publishedState) {
+        this.publishedState = publishedState;
+    }
+
+    public Set<SongGenre> getSongGenres() {
+        return songGenres;
+    }
+
+    public void setSongGenres(Set<SongGenre> songGenres) {
+        this.songGenres = songGenres;
+    }
+
+    public Set<ArtistSong> getArtistSongs() {
+        return artistSongs;
+    }
+
+    public void setArtistSongs(Set<ArtistSong> artistSongs) {
+        this.artistSongs = artistSongs;
+    }
+
+    public Set<SongModify> getSongModifies() {
+        return songModifies;
+    }
+
+    public void setSongModifies(Set<SongModify> songModifies) {
+        this.songModifies = songModifies;
+    }
 }

@@ -16,4 +16,36 @@ public class Favourite {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id")
     private Song song;
+
+    public Favourite() {
+    }
+
+    public Favourite(AppUser appUser, Song song) {
+        this.appUser = appUser;
+        this.song = song;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
+
+    public Song getSong() {
+        return song;
+    }
+
+    public void setSong(Song song) {
+        this.song = song;
+    }
 }

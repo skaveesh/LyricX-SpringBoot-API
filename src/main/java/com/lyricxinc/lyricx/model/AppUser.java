@@ -32,4 +32,68 @@ public class AppUser {
     @OneToMany(mappedBy = "appUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Playlist> playlists;
 
+    public AppUser() {
+    }
+
+    public AppUser(@NotBlank String googleIdToken, boolean disabledStatus, LocalDateTime joinedDate) {
+        this.googleIdToken = googleIdToken;
+        this.disabledStatus = disabledStatus;
+        this.joinedDate = joinedDate;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getGoogleIdToken() {
+        return googleIdToken;
+    }
+
+    public void setGoogleIdToken(String googleIdToken) {
+        this.googleIdToken = googleIdToken;
+    }
+
+    public boolean isDisabledStatus() {
+        return disabledStatus;
+    }
+
+    public void setDisabledStatus(boolean disabledStatus) {
+        this.disabledStatus = disabledStatus;
+    }
+
+    public LocalDateTime getJoinedDate() {
+        return joinedDate;
+    }
+
+    public void setJoinedDate(LocalDateTime joinedDate) {
+        this.joinedDate = joinedDate;
+    }
+
+    public Set<GroupUser> getUsersInGroup() {
+        return usersInGroup;
+    }
+
+    public void setUsersInGroup(Set<GroupUser> usersInGroup) {
+        this.usersInGroup = usersInGroup;
+    }
+
+    public Set<Favourite> getFavourites() {
+        return favourites;
+    }
+
+    public void setFavourites(Set<Favourite> favourites) {
+        this.favourites = favourites;
+    }
+
+    public Set<Playlist> getPlaylists() {
+        return playlists;
+    }
+
+    public void setPlaylists(Set<Playlist> playlists) {
+        this.playlists = playlists;
+    }
 }

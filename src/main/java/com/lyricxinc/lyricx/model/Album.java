@@ -32,4 +32,80 @@ public class Album {
 
     @OneToMany(mappedBy = "album", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Song> songs;
+
+    public Album() {
+    }
+
+    public Album(Artist artist, Year year, @NotBlank String name, @NotBlank String imgUrl, Contributor addedBy, Set<Song> songs) {
+        this.artist = artist;
+        this.year = year;
+        this.name = name;
+        this.imgUrl = imgUrl;
+        this.addedBy = addedBy;
+        this.songs = songs;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Artist getArtist() {
+        return artist;
+    }
+
+    public void setArtist(Artist artist) {
+        this.artist = artist;
+    }
+
+    public Year getYear() {
+        return year;
+    }
+
+    public void setYear(Year year) {
+        this.year = year;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public Contributor getAddedBy() {
+        return addedBy;
+    }
+
+    public void setAddedBy(Contributor addedBy) {
+        this.addedBy = addedBy;
+    }
+
+    public boolean isApprovedStatus() {
+        return approvedStatus;
+    }
+
+    public void setApprovedStatus(boolean approvedStatus) {
+        this.approvedStatus = approvedStatus;
+    }
+
+    public Set<Song> getSongs() {
+        return songs;
+    }
+
+    public void setSongs(Set<Song> songs) {
+        this.songs = songs;
+    }
 }
