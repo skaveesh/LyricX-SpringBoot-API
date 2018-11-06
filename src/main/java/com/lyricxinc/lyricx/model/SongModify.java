@@ -14,14 +14,14 @@ public class SongModify {
     private long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "songId", nullable = false)
     private Song song;
 
     @NotBlank
     private String lyrics;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "contributorId", nullable = false)
     private Contributor contributor;
 
     @UpdateTimestamp

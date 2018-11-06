@@ -10,11 +10,11 @@ public class ArtistSong {
     private long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "artistId", nullable = false)
     private Artist artist;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "songId", nullable = false)
     private Song song;
 
     public ArtistSong() {

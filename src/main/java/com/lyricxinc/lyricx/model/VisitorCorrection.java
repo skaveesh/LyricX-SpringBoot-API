@@ -14,7 +14,7 @@ public class VisitorCorrection {
     private long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "songId", nullable = false)
     private Song song;
 
     @NotBlank

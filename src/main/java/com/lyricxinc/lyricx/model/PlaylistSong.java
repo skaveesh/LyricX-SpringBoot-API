@@ -10,11 +10,11 @@ public class PlaylistSong {
     private long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "playlistId", nullable = false)
     private Playlist playlist;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "songId", nullable = false)
     private Song song;
 
     public PlaylistSong() {

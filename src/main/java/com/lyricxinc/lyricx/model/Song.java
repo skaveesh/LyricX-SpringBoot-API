@@ -4,6 +4,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -19,7 +20,7 @@ public class Song {
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "albumId", nullable = false)
     private Album album;
 
     @Size(max = 5)
@@ -29,13 +30,15 @@ public class Song {
     private String beat;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "languageId", nullable = false)
     private Language language;
 
     private String keywords;
 
-    @NotBlank
-    private String lyrics;
+    @Lob
+    @NotNull
+    @Column(length = 100000)
+    private byte[] lyrics;
 
     private String youTubeLink;
 
@@ -43,40 +46,40 @@ public class Song {
 
     private String deezerLink;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "addedById", nullable = true)
     private Contributor addedBy;
 
     @CreationTimestamp
     private LocalDateTime addedDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "lastModifiedById", nullable = true)
     private Contributor lastModifiedBy;
 
     private LocalDateTime lastModifiedDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "publishedById", nullable = true)
     private Contributor publishedBy;
 
     private LocalDateTime publishedDate;
 
     private boolean publishedState;
 
-    @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<SongGenre> songGenres;
 
-    @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<ArtistSong> artistSongs;
 
-    @OneToMany(mappedBy = "song", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "song", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<SongModify> songModifies;
 
     public Song() {
     }
 
-    public Song(@NotBlank String name, Album album, @Size(max = 5) String guitarKey, @Size(max = 5) String beat, Language language, String keywords, @NotBlank String lyrics, String youTubeLink, String spotifyLink, String deezerLink, Contributor addedBy, LocalDateTime addedDate, Contributor lastModifiedBy, LocalDateTime lastModifiedDate, Contributor publishedBy, LocalDateTime publishedDate, boolean publishedState, Set<SongGenre> songGenres, Set<ArtistSong> artistSongs) {
+    public Song(@NotBlank String name, Album album, @Size(max = 5) String guitarKey, @Size(max = 5) String beat, Language language, String keywords, @NotBlank byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, Contributor addedBy, boolean publishedState) {
         this.name = name;
         this.album = album;
         this.guitarKey = guitarKey;
@@ -88,14 +91,7 @@ public class Song {
         this.spotifyLink = spotifyLink;
         this.deezerLink = deezerLink;
         this.addedBy = addedBy;
-        this.addedDate = addedDate;
-        this.lastModifiedBy = lastModifiedBy;
-        this.lastModifiedDate = lastModifiedDate;
-        this.publishedBy = publishedBy;
-        this.publishedDate = publishedDate;
         this.publishedState = publishedState;
-        this.songGenres = songGenres;
-        this.artistSongs = artistSongs;
     }
 
     public long getId() {
@@ -154,11 +150,11 @@ public class Song {
         this.keywords = keywords;
     }
 
-    public String getLyrics() {
+    public byte[] getLyrics() {
         return lyrics;
     }
 
-    public void setLyrics(String lyrics) {
+    public void setLyrics(byte[] lyrics) {
         this.lyrics = lyrics;
     }
 

@@ -20,30 +20,33 @@ public class Artist {
     @NotBlank
     private String imgUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "addedById", nullable = true)
     private Contributor addedBy;
 
     private boolean approvedStatus;
 
-    @OneToMany(mappedBy = "artist", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Column(unique = true)
+    @Size(max = 50)
+    private String artistUrl;
+
+    @OneToMany(mappedBy = "artist", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<ArtistGenre> artistGenres;
 
-    @OneToMany(mappedBy = "artist", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Set<Album> albums;
 
-    @OneToMany(mappedBy = "artist", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Set<ArtistSong> artistSongs;
 
     public Artist() {
     }
 
-    public Artist(@NotBlank @Size(max = 50) String name, @NotBlank String imgUrl, Contributor addedBy, boolean approvedStatus, Set<ArtistGenre> artistGenres) {
+    public Artist(@NotBlank @Size(max = 50) String name, @NotBlank String imgUrl, Contributor addedBy, boolean approvedStatus) {
         this.name = name;
         this.imgUrl = imgUrl;
         this.addedBy = addedBy;
         this.approvedStatus = approvedStatus;
-        this.artistGenres = artistGenres;
     }
 
     public long getId() {
@@ -84,6 +87,14 @@ public class Artist {
 
     public void setApprovedStatus(boolean approvedStatus) {
         this.approvedStatus = approvedStatus;
+    }
+
+    public String getArtistUrl() {
+        return artistUrl;
+    }
+
+    public void setArtistUrl(String artistUrl) {
+        this.artistUrl = artistUrl;
     }
 
     public Set<ArtistGenre> getArtistGenres() {

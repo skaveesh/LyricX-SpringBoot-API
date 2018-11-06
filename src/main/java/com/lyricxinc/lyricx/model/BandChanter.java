@@ -3,28 +3,28 @@ package com.lyricxinc.lyricx.model;
 import javax.persistence.*;
 
 @Entity
-public class GroupUser {
+public class BandChanter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
-    private Group group;
+    @JoinColumn(name = "bandId", nullable = false)
+    private Band band;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
-    private AppUser appUser;
+    @JoinColumn(name = "chanterId", nullable = false)
+    private Chanter chanter;
 
     private boolean moderatorStatus;
 
-    public GroupUser() {
+    public BandChanter() {
     }
 
-    public GroupUser(Group group, AppUser appUser, boolean moderatorStatus) {
-        this.group = group;
-        this.appUser = appUser;
+    public BandChanter(Band band, Chanter chanter, boolean moderatorStatus) {
+        this.band = band;
+        this.chanter = chanter;
         this.moderatorStatus = moderatorStatus;
     }
 
@@ -36,20 +36,20 @@ public class GroupUser {
         this.id = id;
     }
 
-    public Group getGroup() {
-        return group;
+    public Band getBand() {
+        return band;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
+    public void setBand(Band band) {
+        this.band = band;
     }
 
-    public AppUser getAppUser() {
-        return appUser;
+    public Chanter getChanter() {
+        return chanter;
     }
 
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
+    public void setChanter(Chanter chanter) {
+        this.chanter = chanter;
     }
 
     public boolean isModeratorStatus() {

@@ -6,9 +6,10 @@ import javax.validation.constraints.Size;
 
 @Entity
 public class Genre {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private short id;
 
     @NotBlank
     @Size(max = 30)
@@ -21,11 +22,11 @@ public class Genre {
         this.genreName = genreName;
     }
 
-    public int getId() {
+    public short getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(short id) {
         this.id = id;
     }
 
@@ -36,6 +37,5 @@ public class Genre {
     public void setGenreName(String genreName) {
         this.genreName = genreName;
     }
-
 
 }

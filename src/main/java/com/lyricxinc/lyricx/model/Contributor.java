@@ -16,17 +16,19 @@ public class Contributor {
 
     @NotBlank
     @Column(unique = true)
+    @Size(min = 5)
     private String email;
 
     @NotBlank
+    @Size(min = 8)
     private String password;
 
     @NotBlank
-    @Size(max = 50)
+    @Size(min = 3, max = 50)
     private String firstName;
 
     @NotBlank
-    @Size(max = 50)
+    @Size(min = 3, max = 50)
     private String lastName;
 
     @Size(max = 500)
@@ -47,7 +49,7 @@ public class Contributor {
     public Contributor() {
     }
 
-    public Contributor(@NotBlank String email, @NotBlank String password, @NotBlank @Size(max = 50) String firstName, @NotBlank @Size(max = 50) String lastName, @Size(max = 500) String description, @NotBlank String imgUrl, String contactLink, boolean seniorContributor, boolean suspendStatus, LocalDateTime joinedDate) {
+    public Contributor(@NotBlank String email, @NotBlank String password, @NotBlank @Size(max = 50) String firstName, @NotBlank @Size(max = 50) String lastName, @Size(max = 500) String description, @NotBlank String imgUrl, String contactLink, boolean seniorContributor, boolean suspendStatus) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -57,7 +59,6 @@ public class Contributor {
         this.contactLink = contactLink;
         this.seniorContributor = seniorContributor;
         this.suspendStatus = suspendStatus;
-        this.joinedDate = joinedDate;
     }
 
     public long getId() {
@@ -144,7 +145,4 @@ public class Contributor {
         return joinedDate;
     }
 
-    public void setJoinedDate(LocalDateTime joinedDate) {
-        this.joinedDate = joinedDate;
-    }
 }

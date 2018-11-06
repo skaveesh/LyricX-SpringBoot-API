@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-public class AppUser {
+public class Chanter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,22 +23,27 @@ public class AppUser {
     @CreationTimestamp
     private LocalDateTime joinedDate;
 
-    @OneToMany(mappedBy = "appUser", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<GroupUser> usersInGroup;
+    @OneToMany(mappedBy = "chanter", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<BandChanter> bandChanters;
 
-    @OneToMany(mappedBy = "appUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chanter", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<Favourite> favourites;
 
-    @OneToMany(mappedBy = "appUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chanter", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<Playlist> playlists;
 
-    public AppUser() {
+    @OneToMany(mappedBy = "chanter", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<ChanterFriend> chanters;
+
+    @OneToMany(mappedBy = "friend", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<ChanterFriend> friends;
+
+    public Chanter() {
     }
 
-    public AppUser(@NotBlank String googleIdToken, boolean disabledStatus, LocalDateTime joinedDate) {
+    public Chanter(@NotBlank String googleIdToken, boolean disabledStatus) {
         this.googleIdToken = googleIdToken;
         this.disabledStatus = disabledStatus;
-        this.joinedDate = joinedDate;
     }
 
     public long getId() {
@@ -69,16 +74,12 @@ public class AppUser {
         return joinedDate;
     }
 
-    public void setJoinedDate(LocalDateTime joinedDate) {
-        this.joinedDate = joinedDate;
+    public Set<BandChanter> getBandChanters() {
+        return bandChanters;
     }
 
-    public Set<GroupUser> getUsersInGroup() {
-        return usersInGroup;
-    }
-
-    public void setUsersInGroup(Set<GroupUser> usersInGroup) {
-        this.usersInGroup = usersInGroup;
+    public void setBandChanters(Set<BandChanter> bandChanters) {
+        this.bandChanters = bandChanters;
     }
 
     public Set<Favourite> getFavourites() {
@@ -95,5 +96,21 @@ public class AppUser {
 
     public void setPlaylists(Set<Playlist> playlists) {
         this.playlists = playlists;
+    }
+
+    public Set<ChanterFriend> getChanters() {
+        return chanters;
+    }
+
+    public void setChanters(Set<ChanterFriend> chanters) {
+        this.chanters = chanters;
+    }
+
+    public Set<ChanterFriend> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(Set<ChanterFriend> friends) {
+        this.friends = friends;
     }
 }

@@ -10,18 +10,18 @@ public class Favourite {
     private int id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
-    private AppUser appUser;
+    @JoinColumn(name = "chanterId", nullable = false)
+    private Chanter chanter;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "songId", nullable = false)
     private Song song;
 
     public Favourite() {
     }
 
-    public Favourite(AppUser appUser, Song song) {
-        this.appUser = appUser;
+    public Favourite(Chanter chanter, Song song) {
+        this.chanter = chanter;
         this.song = song;
     }
 
@@ -33,12 +33,12 @@ public class Favourite {
         this.id = id;
     }
 
-    public AppUser getAppUser() {
-        return appUser;
+    public Chanter getChanter() {
+        return chanter;
     }
 
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
+    public void setChanter(Chanter chanter) {
+        this.chanter = chanter;
     }
 
     public Song getSong() {

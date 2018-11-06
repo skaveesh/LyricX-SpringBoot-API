@@ -15,8 +15,8 @@ public class Playlist {
     private int id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
-    private AppUser appUser;
+    @JoinColumn(name = "chanterId", nullable = false)
+    private Chanter chanter;
 
     @NotBlank
     private String playlistName;
@@ -24,20 +24,20 @@ public class Playlist {
     @CreationTimestamp
     private LocalDateTime createdDate;
 
-    @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<PlaylistSong> playlistSongs;
 
     public Playlist() {
     }
 
-    public Playlist(AppUser appUser, @NotBlank String playlistName, LocalDateTime createdDate) {
-        this.appUser = appUser;
+    public Playlist(Chanter chanter, @NotBlank String playlistName, LocalDateTime createdDate) {
+        this.chanter = chanter;
         this.playlistName = playlistName;
         this.createdDate = createdDate;
     }
 
-    public Playlist(AppUser appUser, @NotBlank String playlistName, LocalDateTime createdDate, Set<PlaylistSong> playlistSongs) {
-        this.appUser = appUser;
+    public Playlist(Chanter chanter, @NotBlank String playlistName, LocalDateTime createdDate, Set<PlaylistSong> playlistSongs) {
+        this.chanter = chanter;
         this.playlistName = playlistName;
         this.createdDate = createdDate;
         this.playlistSongs = playlistSongs;
@@ -51,12 +51,12 @@ public class Playlist {
         this.id = id;
     }
 
-    public AppUser getAppUser() {
-        return appUser;
+    public Chanter getChanter() {
+        return chanter;
     }
 
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
+    public void setChanter(Chanter chanter) {
+        this.chanter = chanter;
     }
 
     public String getPlaylistName() {

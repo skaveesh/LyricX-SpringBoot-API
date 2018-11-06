@@ -1,5 +1,6 @@
 package com.lyricxinc.lyricx.rest.controller;
 
+import com.lyricxinc.lyricx.core.exception.NotFoundCustomException;
 import com.lyricxinc.lyricx.rest.Error;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController, Error {
 
     @Override
-    public String handleError(){
-        return "An error has occurred";
+    public String handleError() {
+        throw new NotFoundCustomException();
     }
 
     @Override

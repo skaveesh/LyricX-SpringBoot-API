@@ -7,14 +7,14 @@ public class ArtistGenre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "artistId", nullable = false)
     private Artist artist;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "genreId", nullable = false)
     private Genre genre;
 
     public ArtistGenre() {
@@ -25,11 +25,11 @@ public class ArtistGenre {
         this.genre = genre;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

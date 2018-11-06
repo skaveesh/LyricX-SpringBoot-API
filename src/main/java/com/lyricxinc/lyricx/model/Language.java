@@ -9,7 +9,7 @@ public class Language {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private byte id;
+    private short id;
 
     @NotBlank
     @Size(max = 30)
@@ -22,11 +22,11 @@ public class Language {
         this.language = language;
     }
 
-    public byte getId() {
+    public short getId() {
         return id;
     }
 
-    public void setId(byte id) {
+    public void setId(short id) {
         this.id = id;
     }
 

@@ -13,7 +13,7 @@ public class Album {
     private long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "artistId", nullable = false)
     private Artist artist;
 
     private Year year;
@@ -25,24 +25,23 @@ public class Album {
     private String imgUrl;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "contributorId", nullable = false)
     private Contributor addedBy;
 
     private boolean approvedStatus;
 
-    @OneToMany(mappedBy = "album", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "album", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Set<Song> songs;
 
     public Album() {
     }
 
-    public Album(Artist artist, Year year, @NotBlank String name, @NotBlank String imgUrl, Contributor addedBy, Set<Song> songs) {
+    public Album(Artist artist, Year year, @NotBlank String name, @NotBlank String imgUrl, Contributor addedBy) {
         this.artist = artist;
         this.year = year;
         this.name = name;
         this.imgUrl = imgUrl;
         this.addedBy = addedBy;
-        this.songs = songs;
     }
 
     public long getId() {
