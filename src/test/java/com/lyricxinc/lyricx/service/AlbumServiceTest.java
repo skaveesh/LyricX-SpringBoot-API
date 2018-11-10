@@ -34,7 +34,7 @@ public class AlbumServiceTest {
         Artist artist = artistService.getArtistById(1L);
         Year year = Year.parse("2014");
         Contributor contributor = contributorService.getContributorByEmail("sammy@yahoo.com");
-        Album newAlbum = new Album(artist, year, "Native", "https://album.jpg", contributor);
+        Album newAlbum = new Album(artist, year, "Native", "https://album.jpg", contributor, true);
         albumService.addAlbum(newAlbum);
     }
 

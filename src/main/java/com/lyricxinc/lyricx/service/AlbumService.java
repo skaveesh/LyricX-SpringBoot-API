@@ -5,6 +5,8 @@ import com.lyricxinc.lyricx.repository.AlbumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class AlbumService {
 
@@ -20,6 +22,7 @@ public class AlbumService {
     }
 
     public void addAlbum(Album album){
+        album.setAlbumUrl(UUID.randomUUID().toString().replace("-", ""));
         this.albumRepository.save(album);
     }
 

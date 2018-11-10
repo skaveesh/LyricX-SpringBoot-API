@@ -46,6 +46,12 @@ public class Song {
 
     private String deezerLink;
 
+    @NotBlank
+    private String imgUrl;
+
+    @Column(unique = true)
+    private String songUrl;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "addedById", nullable = true)
     private Contributor addedBy;
@@ -79,7 +85,7 @@ public class Song {
     public Song() {
     }
 
-    public Song(@NotBlank String name, Album album, @Size(max = 5) String guitarKey, @Size(max = 5) String beat, Language language, String keywords, @NotBlank byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, Contributor addedBy, boolean publishedState) {
+    public Song(@NotBlank String name, Album album, @Size(max = 5) String guitarKey, @Size(max = 5) String beat, Language language, String keywords, @NotBlank byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, String imgUrl, Contributor addedBy, boolean publishedState) {
         this.name = name;
         this.album = album;
         this.guitarKey = guitarKey;
@@ -90,6 +96,7 @@ public class Song {
         this.youTubeLink = youTubeLink;
         this.spotifyLink = spotifyLink;
         this.deezerLink = deezerLink;
+        this.imgUrl = imgUrl;
         this.addedBy = addedBy;
         this.publishedState = publishedState;
     }
@@ -182,6 +189,22 @@ public class Song {
         this.deezerLink = deezerLink;
     }
 
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public String getSongUrl() {
+        return songUrl;
+    }
+
+    public void setSongUrl(String songUrl) {
+        this.songUrl = songUrl;
+    }
+
     public Contributor getAddedBy() {
         return addedBy;
     }
@@ -192,10 +215,6 @@ public class Song {
 
     public LocalDateTime getAddedDate() {
         return addedDate;
-    }
-
-    public void setAddedDate(LocalDateTime addedDate) {
-        this.addedDate = addedDate;
     }
 
     public Contributor getLastModifiedBy() {

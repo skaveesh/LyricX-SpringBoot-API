@@ -1,5 +1,8 @@
 package com.lyricxinc.lyricx.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -27,8 +30,10 @@ public class Artist {
     private boolean approvedStatus;
 
     @Column(unique = true)
-    @Size(max = 50)
     private String artistUrl;
+
+    @CreationTimestamp
+    private LocalDateTime addedDate;
 
     @OneToMany(mappedBy = "artist", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<ArtistGenre> artistGenres;
@@ -95,6 +100,10 @@ public class Artist {
 
     public void setArtistUrl(String artistUrl) {
         this.artistUrl = artistUrl;
+    }
+
+    public LocalDateTime getAddedDate() {
+        return addedDate;
     }
 
     public Set<ArtistGenre> getArtistGenres() {

@@ -1,7 +1,10 @@
 package com.lyricxinc.lyricx.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.Set;
 
@@ -24,6 +27,12 @@ public class Album {
     @NotBlank
     private String imgUrl;
 
+    @Column(unique = true)
+    private String albumUrl;
+
+    @CreationTimestamp
+    private LocalDateTime addedDate;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "contributorId", nullable = false)
     private Contributor addedBy;
@@ -36,12 +45,13 @@ public class Album {
     public Album() {
     }
 
-    public Album(Artist artist, Year year, @NotBlank String name, @NotBlank String imgUrl, Contributor addedBy) {
+    public Album(Artist artist, Year year, @NotBlank String name, @NotBlank String imgUrl, Contributor addedBy, boolean approvedStatus) {
         this.artist = artist;
         this.year = year;
         this.name = name;
         this.imgUrl = imgUrl;
         this.addedBy = addedBy;
+        this.approvedStatus = approvedStatus;
     }
 
     public long getId() {
@@ -82,6 +92,18 @@ public class Album {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public String getAlbumUrl() {
+        return albumUrl;
+    }
+
+    public void setAlbumUrl(String albumUrl) {
+        this.albumUrl = albumUrl;
+    }
+
+    public LocalDateTime getAddedDate() {
+        return addedDate;
     }
 
     public Contributor getAddedBy() {

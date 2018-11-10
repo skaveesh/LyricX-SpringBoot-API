@@ -1,8 +1,8 @@
-package com.lyricxinc.lyricx.rest;
+package com.lyricxinc.lyricx.rest.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 
-public interface Error {
+public interface ErrorHandlerController {
     @RequestMapping("/error")
     String handleError();
 }

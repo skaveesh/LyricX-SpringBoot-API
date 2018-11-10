@@ -1,10 +1,11 @@
 package com.lyricxinc.lyricx.service;
 
-import com.lyricxinc.lyricx.core.NameRefine;
 import com.lyricxinc.lyricx.model.Artist;
 import com.lyricxinc.lyricx.repository.ArtistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class ArtistService {
@@ -21,18 +22,7 @@ public class ArtistService {
     }
 
     public void addArtist(Artist artist) {
-
-        String artistUrl = NameRefine.replaceWithDash(artist.getName());
-
-        int numberOfAlreadyExistArtists = artistRepository.findByName(artist.getName()).size();
-
-        if (numberOfAlreadyExistArtists < 1) {
-            artist.setArtistUrl(artistUrl);
-        } else {
-            numberOfAlreadyExistArtists++;
-            artist.setArtistUrl(artistUrl + "-" + numberOfAlreadyExistArtists);
-        }
-
+        artist.setArtistUrl( UUID.randomUUID().toString().replace("-", ""));
         artistRepository.save(artist);
     }
 

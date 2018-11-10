@@ -19,6 +19,10 @@ public class ContributorService {
         return contributorRepository.findByEmail(email);
     }
 
+    public Contributor getContributorById(long id){
+        return contributorRepository.findById(id).orElse(null);
+    }
+
     public void addContributor(Contributor contributor){
         contributorRepository.save(contributor);
     }

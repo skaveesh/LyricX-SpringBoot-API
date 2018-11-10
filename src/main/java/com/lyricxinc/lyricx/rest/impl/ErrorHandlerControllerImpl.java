@@ -1,7 +1,7 @@
-package com.lyricxinc.lyricx.rest.controller;
+package com.lyricxinc.lyricx.rest.impl;
 
 import com.lyricxinc.lyricx.core.exception.NotFoundCustomException;
-import com.lyricxinc.lyricx.rest.Error;
+import com.lyricxinc.lyricx.rest.controller.ErrorHandlerController;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController, Error {
+public class ErrorHandlerControllerImpl implements org.springframework.boot.web.servlet.error.ErrorController, ErrorHandlerController {
 
     @Override
     public String handleError() {

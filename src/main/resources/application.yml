@@ -1,0 +1,5 @@
+amazonProperties:
+  endpointUrl: https://s3.us-east-1.amazonaws.com
+  accessKey: AKIAJELL6DHDKDBRQNDA
+  secretKey: 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
+  bucketName: lyricx-images-bucket
