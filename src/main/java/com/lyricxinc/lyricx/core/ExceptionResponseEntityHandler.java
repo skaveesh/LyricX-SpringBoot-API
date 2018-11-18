@@ -30,7 +30,7 @@ public class ExceptionResponseEntityHandler {
         return handleNotFoundException(request);
     }
 
-    @ExceptionHandler({MultipartException.class,FileUploadBase.FileSizeLimitExceededException.class,java.lang.IllegalStateException.class})
+    @ExceptionHandler({MultipartException.class,FileUploadBase.FileSizeLimitExceededException.class})
     @ResponseBody
     public ResponseEntity<ErrorDetails> handleFileUploadErrorException(WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), "Error while uploading the image. Image should not exceed the size of 3Mb.", request.getDescription(false));

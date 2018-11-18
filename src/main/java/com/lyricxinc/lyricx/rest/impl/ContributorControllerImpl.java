@@ -5,10 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ContributorControllerImpl implements ContributorController {
-    @Override
-    public void loginContributor(String email, String password) {
-        System.out.println("logged in");
-    }
 
     @Override
     public void authContributor(String email) {

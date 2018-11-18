@@ -9,8 +9,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-public class ContributorInterceptor implements HandlerInterceptor {
+public class AdminInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -25,7 +24,7 @@ public class ContributorInterceptor implements HandlerInterceptor {
             boolean isEmailVerified = false;
 
             try {
-                decodeToken = FirebaseAuth.getInstance(FirebaseConfig.contributorFirebaseApp).verifyIdToken(authToken);
+                decodeToken = FirebaseAuth.getInstance(FirebaseConfig.adminFirebaseApp).verifyIdToken(authToken);
             } catch (Exception e) {
                 throw new ForbiddenCustomException("Provided credentials are not valid.");
             }

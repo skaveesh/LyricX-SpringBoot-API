@@ -5,9 +5,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("contributor")
 public interface ContributorController {
-    @PostMapping("login")
-    void loginContributor(String email, String password);
-
-    @PostMapping("authenticate")
+        @PostMapping("authenticate")
     void authContributor(String email);
 }
