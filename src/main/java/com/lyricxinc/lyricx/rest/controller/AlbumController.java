@@ -7,5 +7,5 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("album")
 public interface AlbumController {
     @PostMapping("add")
-    void addAlbum(long artistId, String name, String year, MultipartFile image, long addedById);
+    void addAlbum(long artistId, String name, String year, MultipartFile image, String addedById);
 }

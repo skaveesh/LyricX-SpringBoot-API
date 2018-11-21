@@ -2,12 +2,12 @@ package com.lyricxinc.lyricx.core;
 
 import java.time.LocalDateTime;
 
-public class ErrorDetails {
+public class ResponseData {
   private LocalDateTime timestamp;
   private String message;
   private String details;
 
-  public ErrorDetails(LocalDateTime timestamp, String message, String details) {
+  public ResponseData(LocalDateTime timestamp, String message, String details) {
     super();
     this.timestamp = timestamp;
     this.message = message;

@@ -28,18 +28,18 @@ public class SongService {
         return songRepository.findById(id).orElse(null);
     }
 
-    public void addSong(String name, long albumId, String guitarKey, String beat, String languageName, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, String contributorEmail) {
+    public void addSong(String name, long albumId, String guitarKey, String beat, String languageName, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, String contributorId) {
 
         Album album = albumService.getAlbum(albumId);
-        Song song = new Song(name, album, guitarKey, beat, languageService.findLanguageByName(languageName), keywords, lyrics, youTubeLink, spotifyLink, deezerLink, album.getImgUrl(),contributorService.getContributorByEmail(contributorEmail),false);
+        Song song = new Song(name, album, guitarKey, beat, languageService.findLanguageByName(languageName), keywords, lyrics, youTubeLink, spotifyLink, deezerLink, album.getImgUrl(),contributorService.getContributorById(contributorId),false);
         song.setSongUrl(UUID.randomUUID().toString().replace("-", ""));
 
         songRepository.save(song);
     }
 
-    public void addSongWithCustomImgUrl(String name, long albumId, String guitarKey, String beat, String languageName, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, String imgUrl, String contributorEmail) {
+    public void addSongWithCustomImgUrl(String name, long albumId, String guitarKey, String beat, String languageName, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, String imgUrl, String contributorId) {
 
-        Song song = new Song(name, albumService.getAlbum(albumId), guitarKey, beat, languageService.findLanguageByName(languageName), keywords, lyrics, youTubeLink, spotifyLink, deezerLink, imgUrl, contributorService.getContributorByEmail(contributorEmail),false);
+        Song song = new Song(name, albumService.getAlbum(albumId), guitarKey, beat, languageService.findLanguageByName(languageName), keywords, lyrics, youTubeLink, spotifyLink, deezerLink, imgUrl, contributorService.getContributorById(contributorId),false);
         song.setSongUrl(UUID.randomUUID().toString().replace("-", ""));
 
         songRepository.save(song);

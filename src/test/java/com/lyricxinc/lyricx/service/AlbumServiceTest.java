@@ -21,7 +21,8 @@ public class AlbumServiceTest {
     @Autowired
     private ArtistService artistService;
 
-    @Autowired ContributorService contributorService;
+    @Autowired
+    ContributorService contributorService;
 
     @Test
     public void getAlbum() {
@@ -33,9 +34,13 @@ public class AlbumServiceTest {
     public void addAlbum() {
         Artist artist = artistService.getArtistById(1L);
         Year year = Year.parse("2014");
-        Contributor contributor = contributorService.getContributorByEmail("sammy@yahoo.com");
-        Album newAlbum = new Album(artist, year, "Native", "https://album.jpg", contributor, true);
-        albumService.addAlbum(newAlbum);
+        Contributor contributor = contributorService.getContributorById("sammy@yahoo.com");
+        if (contributor != null) {
+            Album newAlbum = new Album(artist, year, "Native", "https://album.jpg", contributor, true);
+            albumService.addAlbum(newAlbum);
+        } else
+            System.out.println("Error");
+
     }
 
     @Test

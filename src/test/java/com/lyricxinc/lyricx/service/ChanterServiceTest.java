@@ -22,6 +22,6 @@ public class ChanterServiceTest {
 
     @Test
     public void removeAppUser() {
-        chanterService.removeAppUser(1L);
+        chanterService.removeAppUser("1r3tesg");
     }
 }

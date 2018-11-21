@@ -15,11 +15,7 @@ public class ContributorService {
         this.contributorRepository = contributorRepository;
     }
 
-    public Contributor getContributorByEmail(String email){
-        return contributorRepository.findByEmail(email);
-    }
-
-    public Contributor getContributorById(long id){
+    public Contributor getContributorById(String id){
         return contributorRepository.findById(id).orElse(null);
     }
 
@@ -31,7 +27,7 @@ public class ContributorService {
         contributorRepository.save(contributor);
     }
 
-    public void removeContributerByEmail(String email){
-        contributorRepository.delete(this.getContributorByEmail(email));
+    public void removeContributor(String id){
+        contributorRepository.deleteById(id);
     }
 }

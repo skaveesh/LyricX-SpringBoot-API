@@ -29,7 +29,7 @@ public class ArtistServiceTest {
 
     @Test
     public void addArtist() {
-        Contributor contributor = contributorService.getContributorByEmail("sammy@yahoo.com");
+        Contributor contributor = contributorService.getContributorById("sammy@yahoo.com");
 
         //Artist newArtist = new Artist("OneRepublic","https://image.png",contributor,true);
         Artist newArtist = new Artist("EMINEM","https://image.png",contributor,true);
@@ -38,14 +38,14 @@ public class ArtistServiceTest {
 
     @Test
     public void addArtistWithSameName() {
-        Contributor contributor = contributorService.getContributorByEmail("sammy@yahoo.com");
+        Contributor contributor = contributorService.getContributorById("sammy@yahoo.com");
         Artist newArtist = new Artist("OneRepublic","https://image2.png",contributor,true);
         artistService.addArtist(newArtist);
     }
 
     @Test
     public void updateArtist(){
-        Contributor contributor = contributorService.getContributorByEmail("john@gmail.com");
+        Contributor contributor = contributorService.getContributorById("john@gmail.com");
         Artist artist = artistService.getArtistById(2L);
         artist.setAddedBy(contributor);
 

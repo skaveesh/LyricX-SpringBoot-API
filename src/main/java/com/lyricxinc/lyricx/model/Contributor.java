@@ -1,27 +1,15 @@
 package com.lyricxinc.lyricx.model;
 
-import org.hibernate.annotations.CreationTimestamp;
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
 
 @Entity
 public class Contributor {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @NotBlank
-    @Column(unique = true)
-    @Size(min = 5)
-    private String email;
-
-    @NotBlank
-    @Size(min = 8)
-    private String password;
+    private String id;
 
     @NotBlank
     @Size(min = 3, max = 50)
@@ -41,48 +29,23 @@ public class Contributor {
 
     private boolean seniorContributor;
 
-    private boolean suspendStatus;
-
-    @CreationTimestamp
-    private LocalDateTime joinedDate;
-
     public Contributor() {
     }
 
-    public Contributor(@NotBlank String email, @NotBlank String password, @NotBlank @Size(max = 50) String firstName, @NotBlank @Size(max = 50) String lastName, @Size(max = 500) String description, @NotBlank String imgUrl, String contactLink, boolean seniorContributor, boolean suspendStatus) {
-        this.email = email;
-        this.password = password;
+    public Contributor(@NotBlank String id, @NotBlank @Size(max = 50) String firstName, @NotBlank @Size(max = 50) String lastName, String contactLink) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.description = description;
-        this.imgUrl = imgUrl;
         this.contactLink = contactLink;
-        this.seniorContributor = seniorContributor;
-        this.suspendStatus = suspendStatus;
+        this.seniorContributor = false;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getFirstName() {
@@ -105,7 +68,7 @@ public class Contributor {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(@Size(max = 500) String description) {
         this.description = description;
     }
 
@@ -132,17 +95,4 @@ public class Contributor {
     public void setSeniorContributor(boolean seniorContributor) {
         this.seniorContributor = seniorContributor;
     }
-
-    public boolean isSuspendStatus() {
-        return suspendStatus;
-    }
-
-    public void setSuspendStatus(boolean suspendStatus) {
-        this.suspendStatus = suspendStatus;
-    }
-
-    public LocalDateTime getJoinedDate() {
-        return joinedDate;
-    }
-
 }

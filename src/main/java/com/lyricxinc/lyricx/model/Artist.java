@@ -2,12 +2,11 @@ package com.lyricxinc.lyricx.model;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
-import java.util.Set;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 public class Artist {

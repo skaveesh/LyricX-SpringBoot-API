@@ -17,7 +17,7 @@ public class BandServiceTest {
     @Test
     public void getBandAppUsers(){
         for(BandChanter ap: bandService.getBandChanters(1)){
-            System.out.println(ap.getChanter().getGoogleIdToken());
+            System.out.println(ap.getChanter().getId());
         }
     }
 

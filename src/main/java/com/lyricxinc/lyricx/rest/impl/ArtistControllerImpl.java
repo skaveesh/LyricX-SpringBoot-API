@@ -1,6 +1,5 @@
 package com.lyricxinc.lyricx.rest.impl;
 
-import com.lyricxinc.lyricx.core.exception.ContributorSuspendedCustomException;
 import com.lyricxinc.lyricx.model.Artist;
 import com.lyricxinc.lyricx.model.Contributor;
 import com.lyricxinc.lyricx.rest.controller.ArtistController;
@@ -26,16 +25,14 @@ public class ArtistControllerImpl implements ArtistController {
     }
 
     @Override
-    public void addArtist(String name, MultipartFile image, long addedById) {
+    public void addArtist(String name, MultipartFile image, String addedById) {
         Contributor contributor = contributorService.getContributorById(addedById);
 
-        if (!contributor.isSuspendStatus()) {
-            String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ARTIST_FOLDER);
+        String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ARTIST_FOLDER);
 
-            Artist artist = new Artist(name, imgUrl, contributor, contributor.isSeniorContributor());
-            artistService.addArtist(artist);
-        }else
-            throw new ContributorSuspendedCustomException();
+        Artist artist = new Artist(name, imgUrl, contributor, contributor.isSeniorContributor());
+        artistService.addArtist(artist);
+
     }
 
 }

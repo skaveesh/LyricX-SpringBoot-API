@@ -15,12 +15,16 @@ public class ChanterService {
         this.chanterRepository = chanterRepository;
     }
 
-    public void addChanter(String googleIdToken){
-        Chanter chanter = new Chanter(googleIdToken, false);
+    public Chanter getChanterById(String id){
+        return chanterRepository.findById(id).orElse(null);
+    }
+
+    public void addChanter(String id){
+        Chanter chanter = new Chanter(id);
         chanterRepository.save(chanter);
     }
 
-    public void removeAppUser(long chanterId){
+    public void removeAppUser(String chanterId){
         chanterRepository.deleteById(chanterId);
     }
 }
