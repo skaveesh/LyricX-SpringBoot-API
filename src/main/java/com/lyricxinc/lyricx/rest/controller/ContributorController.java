@@ -1,13 +1,19 @@
 package com.lyricxinc.lyricx.rest.controller;
 
-import com.lyricxinc.lyricx.core.ResponseData;
+import com.lyricxinc.lyricx.core.response.HttpResponseData;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RequestMapping("contributor")
 public interface ContributorController {
+
     @PostMapping(value = "register", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    ResponseEntity<ResponseData> createAccount(String email, char password, String firstName, String lastName, String contactLink);
+    ResponseEntity<HttpResponseData> createAccount(String email, char[] password, String firstName, String lastName, String contactLink);
+
+    @PostMapping(value = "getContTest/test")
+    ResponseEntity<HttpResponseData> getContTest(HttpServletRequest request);
 }

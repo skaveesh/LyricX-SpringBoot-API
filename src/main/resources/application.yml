@@ -1,5 +1,5 @@
 amazonProperties:
-  endpointUrl: https://s3.us-east-1.amazonaws.com
-  accessKey: AKIAJELL6DHDKDBRQNDA
-  secretKey: 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
-  bucketName: lyricx-images-bucket
+  endpointUrl: https://s3.us-east-2.amazonaws.com
+  accessKey: AKIAVIWLUOY4IPTSFZ3H
+  secretKey: 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
+  bucketName: lyricx-images

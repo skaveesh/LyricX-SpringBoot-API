@@ -40,7 +40,7 @@ public class AmazonClientService {
     @PostConstruct
     private void initializeAmazon() {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
-        this.s3client = AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_1).withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
+        this.s3client = AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_2).withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
     }
 
     public enum S3BucketFolders {
@@ -80,6 +80,7 @@ public class AmazonClientService {
             uploadFileTos3bucket(fileName, s3BucketFolder, file);
             file.delete();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new FileUploadErrorCustomException("Error while uploading the file. Try again.");
         }
 

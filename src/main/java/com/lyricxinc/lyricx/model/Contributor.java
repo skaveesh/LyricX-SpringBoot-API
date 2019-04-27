@@ -1,5 +1,12 @@
 package com.lyricxinc.lyricx.model;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
+import org.springframework.data.repository.query.Param;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
@@ -9,6 +16,7 @@ import javax.validation.constraints.Size;
 public class Contributor {
 
     @Id
+    @NotBlank
     private String id;
 
     @NotBlank
@@ -22,7 +30,6 @@ public class Contributor {
     @Size(max = 500)
     private String description;
 
-    @NotBlank
     private String imgUrl;
 
     private String contactLink;
@@ -32,11 +39,12 @@ public class Contributor {
     public Contributor() {
     }
 
-    public Contributor(@NotBlank String id, @NotBlank @Size(max = 50) String firstName, @NotBlank @Size(max = 50) String lastName, String contactLink) {
+    public Contributor(String id, String firstName, String lastName, String imgUrl, String contactLink) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.contactLink = contactLink;
+        this.imgUrl = imgUrl;
         this.seniorContributor = false;
     }
 

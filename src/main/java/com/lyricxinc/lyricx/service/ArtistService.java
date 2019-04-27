@@ -17,7 +17,7 @@ public class ArtistService {
         this.artistRepository = artistRepository;
     }
 
-    public Artist getArtistById(Long id){
+    public Artist getArtistById(long id){
         return artistRepository.findById(id).orElse(null);
     }
 

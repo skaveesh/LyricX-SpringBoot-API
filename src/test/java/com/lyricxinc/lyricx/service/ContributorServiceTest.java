@@ -1,5 +1,6 @@
 package com.lyricxinc.lyricx.service;
 
+import com.lyricxinc.lyricx.model.Contributor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class ContributorServiceTest {
     @Test
     public void addContributor() {
 
+        contributorService.addContributor("skaveeshiiii12@gmail.com", new char[] {'s','k','v','e','e','s','h'}, "Samintha", "Kaveesh", "https://www.mylink.com");
     }
 
     @Test

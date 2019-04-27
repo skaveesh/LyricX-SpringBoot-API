@@ -1,4 +1,4 @@
-package com.lyricxinc.lyricx.core;
+package com.lyricxinc.lyricx.core.validator;
 
 import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
 import org.apache.commons.validator.routines.EmailValidator;
