@@ -45,13 +45,14 @@ public class Album {
     public Album() {
     }
 
-    public Album(Artist artist, Year year, @NotBlank String name, @NotBlank String imgUrl, Contributor addedBy, boolean approvedStatus) {
+    public Album(Artist artist, Year year, @NotBlank String name, @NotBlank String imgUrl, Contributor addedBy, boolean approvedStatus, String albumUrl) {
         this.artist = artist;
         this.year = year;
         this.name = name;
         this.imgUrl = imgUrl;
         this.addedBy = addedBy;
         this.approvedStatus = approvedStatus;
+        this.albumUrl = albumUrl;
     }
 
     public long getId() {

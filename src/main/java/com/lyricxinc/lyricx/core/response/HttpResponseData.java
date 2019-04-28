@@ -11,21 +11,21 @@ public class HttpResponseData {
 
   private LocalDateTime timestamp;
   private String message;
-  private String details;
+  private Object data;
 
   public HttpResponseData() {
   }
 
-  public void setTimestamp(LocalDateTime timestamp) {
+  void setTimestamp(LocalDateTime timestamp) {
     this.timestamp = timestamp;
   }
 
-  public void setMessage(String message) {
+  void setMessage(String message) {
     this.message = message;
   }
 
-  public void setDetails(String details) {
-    this.details = details;
+  public void setData(Object data) {
+    this.data = data;
   }
 
   public LocalDateTime getTimestamp() {
@@ -36,7 +36,7 @@ public class HttpResponseData {
     return message;
   }
 
-  public String getDetails() {
-    return details;
+  public Object getData() {
+    return data;
   }
 }

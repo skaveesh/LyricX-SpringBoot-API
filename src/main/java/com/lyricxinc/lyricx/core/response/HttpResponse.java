@@ -17,11 +17,11 @@ public class HttpResponse {
         this.httpResponseData = httpResponseData;
     }
 
-    public ResponseEntity<HttpResponseData> returnResponse(String message, String details, HttpStatus httpStatus) {
+    public ResponseEntity<HttpResponseData> returnResponse(HttpStatus httpStatus, String message, Object data) {
 
         httpResponseData.setTimestamp(LocalDateTime.now());
         httpResponseData.setMessage(message);
-        httpResponseData.setDetails(details);
+        httpResponseData.setData(data);
 
         return new ResponseEntity<>(httpResponseData, httpStatus);
     }

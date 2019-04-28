@@ -10,12 +10,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @RestController
 public class ContributorControllerImpl implements ContributorController {
 
     private final ContributorService contributorService;
     private final HttpResponse httpResponse;
+    private static final Logger LOGGER = Logger.getLogger(ContributorControllerImpl.class.getName());
 
     @Autowired
     public ContributorControllerImpl(ContributorService contributorService, HttpResponse httpResponse) {
@@ -26,14 +31,26 @@ public class ContributorControllerImpl implements ContributorController {
     @Override
     public ResponseEntity<HttpResponseData> createAccount(String email, char[] password, String firstName, String lastName, String contactLink) {
         contributorService.addContributor(email, password, firstName, lastName, contactLink);
-        return httpResponse.returnResponse("Account created successfully.", "", HttpStatus.OK);
+        return httpResponse.returnResponse(HttpStatus.OK, "Account created successfully.", null);
     }
 
     //TODO: remove this method after testing
     @Override
     public ResponseEntity<HttpResponseData> getContTest(HttpServletRequest request) {
-        System.out.println("________________get contributor test user is "+ request.getSession().getAttribute("userId"));
-        return httpResponse.returnResponse("Testing successful.", "", HttpStatus.I_AM_A_TEAPOT);
+
+        LOGGER.log(Level.INFO, "Contributor test user ID is " + request.getSession().getAttribute("userId"));
+
+        List<Object> arr = new ArrayList<>();
+        arr.add("abc");
+        arr.add("def");
+
+        List<String> arr2 = new ArrayList<>();
+        arr2.add("pqr");
+        arr2.add("xyz");
+
+        arr.add(arr2);
+
+        return httpResponse.returnResponse(HttpStatus.I_AM_A_TEAPOT, "Testing successful.", arr);
     }
 
 

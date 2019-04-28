@@ -32,14 +32,6 @@ public class AlbumServiceTest {
 
     @Test
     public void addAlbum() {
-        Artist artist = artistService.getArtistById(1L);
-        Year year = Year.parse("2014");
-        Contributor contributor = contributorService.getContributorById("sammy@yahoo.com");
-        if (contributor != null) {
-            Album newAlbum = new Album(artist, year, "Native", "https://album.jpg", contributor, true);
-            albumService.addAlbum(newAlbum);
-        } else
-            System.out.println("Error");
 
     }
 
