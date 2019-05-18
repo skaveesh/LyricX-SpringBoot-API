@@ -2,7 +2,6 @@ package com.lyricxinc.lyricx.rest.impl;
 
 import com.lyricxinc.lyricx.core.response.HttpResponse;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
-import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
 import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.rest.controller.AlbumController;
 import com.lyricxinc.lyricx.service.AlbumService;
@@ -13,7 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.Year;
+
+import static com.lyricxinc.lyricx.core.parser.YearParser.parseYear;
 
 @RestController
 public class AlbumControllerImpl implements AlbumController {
@@ -40,17 +40,19 @@ public class AlbumControllerImpl implements AlbumController {
 
         Album album = albumService.getAlbum(albumId);
 
-        if (album != null)
-            albumService.updateAlbum(album, artistId, name, parseYear(year), (String) request.getSession().getAttribute("userId"));
-        else
-            throw new ForbiddenCustomException("Requested album cannot be found.");
+        albumService.updateAlbum(request, album, artistId, name, parseYear(year));
 
         return httpResponse.returnResponse(HttpStatus.OK, "Album updated successfully.", null);
     }
 
     @Override
     public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, long albumId, MultipartFile image) {
-        return null;
+
+        Album album = albumService.getAlbum(albumId);
+
+        albumService.updateAlbum(request, album, image);
+
+        return httpResponse.returnResponse(HttpStatus.OK, "Album artwork updated successfully.", null);
     }
 
     @Override
@@ -58,18 +60,4 @@ public class AlbumControllerImpl implements AlbumController {
         return null;
     }
 
-    private Year parseYear(String year) {
-        Year yearParsed;
-
-        try {
-            yearParsed = Year.parse(year);
-        } catch (Exception e) {
-            throw new ForbiddenCustomException("Entered year cannot be parsed.");
-        }
-
-        if (yearParsed.compareTo(Year.now()) > 0)
-            throw new ForbiddenCustomException("Year cannot be greater than " + Year.now());
-
-        return yearParsed;
-    }
 }

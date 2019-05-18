@@ -5,11 +5,15 @@ import com.google.firebase.auth.UserRecord;
 import com.lyricxinc.lyricx.core.validator.StringValidator;
 import com.lyricxinc.lyricx.core.config.FirebaseConfig;
 import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
+import com.lyricxinc.lyricx.model.Album;
+import com.lyricxinc.lyricx.model.Artist;
 import com.lyricxinc.lyricx.model.Contributor;
 import com.lyricxinc.lyricx.repository.ContributorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class ContributorService {
@@ -51,8 +55,6 @@ public class ContributorService {
         } catch (Exception e) {
             throw new ForbiddenCustomException("Something went wrong while creating your account. " + e.getMessage());
         }
-
-
     }
 
     public void updateContributor(Contributor contributor) {
@@ -61,5 +63,31 @@ public class ContributorService {
 
     public void removeContributor(String id) {
         contributorRepository.deleteById(id);
+    }
+
+    public Contributor getContributorByHttpServletRequest(HttpServletRequest request){
+        return getContributorById((String) request.getSession().getAttribute("userId"));
+    }
+
+    /**
+     *verified contributor can update verified/non-verified artist
+     *non-verified contributor only can update non-verified artist
+     * @param contributor
+     * @param artist
+     */
+    public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Artist artist){
+        if (!contributor.isSeniorContributor() && artist.isApprovedStatus())
+            throw new ForbiddenCustomException("Only senior contributors can update verified artist.");
+    }
+
+    /**
+     *verified contributor can update verified/non-verified artist
+     *non-verified contributor only can update non-verified artist
+     * @param contributor
+     * @param album
+     */
+    public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Album album){
+        if (!contributor.isSeniorContributor() && album.isApprovedStatus())
+            throw new ForbiddenCustomException("Only senior contributors can update verified album.");
     }
 }

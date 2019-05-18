@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.Year;
 import java.util.UUID;
 
@@ -29,7 +30,13 @@ public class AlbumService {
     }
 
     public Album getAlbum(long id) {
-        return this.albumRepository.findById(id).orElse(null);
+
+        Album album = this.albumRepository.findById(id).orElse(null);
+
+        if (album == null)
+            throw new ForbiddenCustomException("Requested album cannot be found.");
+
+        return album;
     }
 
     public void addAlbum(long artistId, String name, Year year, MultipartFile image, String contributorId) {
@@ -38,21 +45,18 @@ public class AlbumService {
 
         Artist artist = artistService.getArtistById(artistId);
 
-        if (artist != null) {
-            String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
-            Album album = new Album(artist, year, name, imgUrl, contributor, contributor.isSeniorContributor(), UUID.randomUUID().toString().replace("-", ""));
-            this.albumRepository.save(album);
-        } else
-            throw new ForbiddenCustomException("Requested artist cannot be found.");
+        String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
+
+        Album album = new Album(artist, year, name, imgUrl, contributor, contributor.isSeniorContributor(), UUID.randomUUID().toString().replace("-", ""));
+
+        this.albumRepository.save(album);
     }
 
-    public void updateAlbum(Album album, long artistId, String name, Year year, String contributorId) {
+    public void updateAlbum(HttpServletRequest request, Album album, long artistId, String name, Year year) {
 
-        Contributor contributor = contributorService.getContributorById(contributorId);
+        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
-        if (!contributor.isSeniorContributor() && album.isApprovedStatus()) {
-            throw new ForbiddenCustomException("Only senior contributors can update verified content.");
-        }
+        contributorService.checkNonSeniorContributorEditsVerifiedContent(contributor, album);
 
         Artist artist = artistService.getArtistById(artistId);
 
@@ -60,10 +64,27 @@ public class AlbumService {
         album.setName(name);
         album.setYear(year);
 
-        this.albumRepository.save(album);
+        albumRepository.save(album);
+    }
+
+    public void updateAlbum(HttpServletRequest request, Album album, MultipartFile image) {
+
+        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
+
+        contributorService.checkNonSeniorContributorEditsVerifiedContent(contributor, album);
+
+        String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
+
+        //delete old album image from S3 bucket
+        amazonClientService.deleteFileFromS3Bucket(album.getImgUrl(), AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
+
+        album.setImgUrl(imgUrl);
+
+        albumRepository.save(album);
     }
 
     public void removeAlbum(long id) {
-        this.albumRepository.deleteById(id);
+
+        albumRepository.deleteById(id);
     }
 }
