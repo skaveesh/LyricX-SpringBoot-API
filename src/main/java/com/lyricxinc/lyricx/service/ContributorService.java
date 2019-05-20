@@ -28,7 +28,13 @@ public class ContributorService {
     }
 
     public Contributor getContributorById(String id) {
-        return contributorRepository.findById(id).orElse(null);
+
+        Contributor contributor = contributorRepository.findById(id).orElse(null);
+
+        if(contributor == null)
+            throw new ForbiddenCustomException("Contributor cannot be found.");
+
+        return contributor;
     }
 
     public void addContributor(String email, char[] password, String firstName, String lastName, String contactLink) {
@@ -43,8 +49,8 @@ public class ContributorService {
         createRequest.setPassword(String.valueOf(password));
         createRequest.setDisplayName(firstName + " " + lastName);
 
-        UserRecord userRecord = null;
-        Contributor contributor = null;
+        UserRecord userRecord;
+        Contributor contributor;
 
         try {
             userRecord = FirebaseAuth.getInstance(FirebaseConfig.contributorFirebaseApp).createUser(createRequest);
@@ -66,6 +72,7 @@ public class ContributorService {
     }
 
     public Contributor getContributorByHttpServletRequest(HttpServletRequest request){
+
         return getContributorById((String) request.getSession().getAttribute("userId"));
     }
 
@@ -76,6 +83,7 @@ public class ContributorService {
      * @param artist
      */
     public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Artist artist){
+
         if (!contributor.isSeniorContributor() && artist.isApprovedStatus())
             throw new ForbiddenCustomException("Only senior contributors can update verified artist.");
     }
@@ -87,6 +95,7 @@ public class ContributorService {
      * @param album
      */
     public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Album album){
+
         if (!contributor.isSeniorContributor() && album.isApprovedStatus())
             throw new ForbiddenCustomException("Only senior contributors can update verified album.");
     }

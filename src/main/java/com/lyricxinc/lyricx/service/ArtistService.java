@@ -51,7 +51,7 @@ public class ArtistService {
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
-        contributorService.checkNonSeniorContributorEditsVerifiedArtist(contributor, artist);
+        contributorService.checkNonSeniorContributorEditsVerifiedContent(contributor, artist);
 
         artist.setName(name);
 
@@ -62,7 +62,7 @@ public class ArtistService {
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
-        contributorService.checkNonSeniorContributorEditsVerifiedArtist(contributor, artist);
+        contributorService.checkNonSeniorContributorEditsVerifiedContent(contributor, artist);
 
         String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ARTIST_FOLDER);
 
@@ -72,6 +72,10 @@ public class ArtistService {
         artist.setImgUrl(imgUrl);
 
         artistRepository.save(artist);
+    }
+
+    public void removeImage(long id){
+        //TODO
     }
 
     public void removeArtist(long id){

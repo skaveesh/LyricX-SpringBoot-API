@@ -30,7 +30,7 @@ public class AlbumControllerImpl implements AlbumController {
     @Override
     public ResponseEntity<HttpResponseData> addAlbum(HttpServletRequest request, long artistId, String name, String year, MultipartFile image) {
 
-        albumService.addAlbum(artistId, name, parseYear(year), image, (String) request.getSession().getAttribute("userId"));
+        albumService.addAlbum(request, artistId, name, parseYear(year), image);
 
         return httpResponse.returnResponse(HttpStatus.OK, "Album created successfully.", null);
     }
@@ -38,7 +38,7 @@ public class AlbumControllerImpl implements AlbumController {
     @Override
     public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, long albumId, long artistId, String name, String year) {
 
-        Album album = albumService.getAlbum(albumId);
+        Album album = albumService.getAlbumById(albumId);
 
         albumService.updateAlbum(request, album, artistId, name, parseYear(year));
 
@@ -48,7 +48,7 @@ public class AlbumControllerImpl implements AlbumController {
     @Override
     public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, long albumId, MultipartFile image) {
 
-        Album album = albumService.getAlbum(albumId);
+        Album album = albumService.getAlbumById(albumId);
 
         albumService.updateAlbum(request, album, image);
 
@@ -56,7 +56,16 @@ public class AlbumControllerImpl implements AlbumController {
     }
 
     @Override
+    public ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, long albumId) {
+
+        //TODO
+        return null;
+    }
+
+    @Override
     public ResponseEntity<HttpResponseData> removeAlbum(HttpServletRequest request, long albumId) {
+
+        //TODO
         return null;
     }
 

@@ -1,5 +1,6 @@
 package com.lyricxinc.lyricx.service;
 
+import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
 import com.lyricxinc.lyricx.model.Language;
 import com.lyricxinc.lyricx.repository.LanguageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,20 @@ public class LanguageService {
         this.languageRepository = languageRepository;
     }
 
-    public Language findLanguageByName(String name){ return languageRepository.findByLanguage(name); }
+    public Language getLanguageById(short id) {
+        Language language = languageRepository.findById(id).orElse(null);
 
-    public void addLanguage(Language language){
+        if (language == null)
+            throw new ForbiddenCustomException("Requested language cannot be found.");
+
+        return language;
+    }
+
+    public Language findLanguageByName(String name) {
+        return languageRepository.findByLanguage(name);
+    }
+
+    public void addLanguage(Language language) {
         languageRepository.save(language);
     }
 

@@ -21,6 +21,9 @@ public interface AlbumController {
     @PutMapping("update/image")
     ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, long albumId, MultipartFile image);
 
+    @DeleteMapping("remove/albumart")
+    ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, long albumId);
+
     @DeleteMapping("remove")
     ResponseEntity<HttpResponseData> removeAlbum(HttpServletRequest request, long albumId);
 }

@@ -29,7 +29,7 @@ public class AlbumService {
         this.artistService = artistService;
     }
 
-    public Album getAlbum(long id) {
+    public Album getAlbumById(long id) {
 
         Album album = this.albumRepository.findById(id).orElse(null);
 
@@ -39,9 +39,9 @@ public class AlbumService {
         return album;
     }
 
-    public void addAlbum(long artistId, String name, Year year, MultipartFile image, String contributorId) {
+    public void addAlbum(HttpServletRequest request, long artistId, String name, Year year, MultipartFile image) {
 
-        Contributor contributor = contributorService.getContributorById(contributorId);
+        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
         Artist artist = artistService.getArtistById(artistId);
 
@@ -81,6 +81,10 @@ public class AlbumService {
         album.setImgUrl(imgUrl);
 
         albumRepository.save(album);
+    }
+
+    public void removeAlbumArt(long id){
+        //TODO
     }
 
     public void removeAlbum(long id) {

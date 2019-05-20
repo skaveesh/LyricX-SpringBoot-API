@@ -2,7 +2,6 @@ package com.lyricxinc.lyricx.service;
 
 import com.lyricxinc.lyricx.model.Artist;
 import com.lyricxinc.lyricx.model.Contributor;
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

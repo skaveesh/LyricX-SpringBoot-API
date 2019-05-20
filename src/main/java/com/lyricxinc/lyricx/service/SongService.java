@@ -1,11 +1,14 @@
 package com.lyricxinc.lyricx.service;
 
+import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
 import com.lyricxinc.lyricx.model.Album;
+import com.lyricxinc.lyricx.model.Contributor;
 import com.lyricxinc.lyricx.model.Song;
 import com.lyricxinc.lyricx.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 @Service
@@ -24,22 +27,33 @@ public class SongService {
         this.contributorService = contributorService;
     }
 
-    public Song getSong(long id) {
-        return songRepository.findById(id).orElse(null);
+    public Song getSongById(long id) {
+
+        Song song = songRepository.findById(id).orElse(null);
+
+        if(song == null)
+            throw new ForbiddenCustomException("Requested song cannot be found.");
+
+        return song;
     }
 
-    public void addSong(String name, long albumId, String guitarKey, String beat, String languageName, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, String contributorId) {
+    public void addSong(HttpServletRequest request, String name, long albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink) {
 
-        Album album = albumService.getAlbum(albumId);
-        Song song = new Song(name, album, guitarKey, beat, languageService.findLanguageByName(languageName), keywords, lyrics, youTubeLink, spotifyLink, deezerLink, album.getImgUrl(),contributorService.getContributorById(contributorId),false);
+        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
+
+        Album album = albumService.getAlbumById(albumId);
+
+        Song song = new Song(name, album, guitarKey, beat, languageService.getLanguageById(languageId), keywords, lyrics, youTubeLink, spotifyLink, deezerLink, album.getImgUrl(), contributor, false);
         song.setSongUrl(UUID.randomUUID().toString().replace("-", ""));
 
         songRepository.save(song);
     }
 
-    public void addSongWithCustomImgUrl(String name, long albumId, String guitarKey, String beat, String languageName, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, String imgUrl, String contributorId) {
+    public void addSongWithAlbumArt(HttpServletRequest request, String name, long albumId, String guitarKey, String beat, String languageName, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, String imgUrl) {
 
-        Song song = new Song(name, albumService.getAlbum(albumId), guitarKey, beat, languageService.findLanguageByName(languageName), keywords, lyrics, youTubeLink, spotifyLink, deezerLink, imgUrl, contributorService.getContributorById(contributorId),false);
+        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
+
+        Song song = new Song(name, albumService.getAlbumById(albumId), guitarKey, beat, languageService.findLanguageByName(languageName), keywords, lyrics, youTubeLink, spotifyLink, deezerLink, imgUrl, contributor, false);
         song.setSongUrl(UUID.randomUUID().toString().replace("-", ""));
 
         songRepository.save(song);
@@ -47,6 +61,14 @@ public class SongService {
 
     public void updateSong(Song song) {
         songRepository.save(song);
+    }
+
+    public void updateSongWithAlbumArt(){
+        //TODO
+    }
+
+    public void removeAlbumArt(long id){
+        //TODO
     }
 
     public void removeSong(long id) {

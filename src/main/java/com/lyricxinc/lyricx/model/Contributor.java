@@ -1,12 +1,5 @@
 package com.lyricxinc.lyricx.model;
 
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
-import org.springframework.data.repository.query.Param;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;

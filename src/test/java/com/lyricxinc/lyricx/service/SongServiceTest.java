@@ -20,7 +20,7 @@ public class SongServiceTest {
 
     @Test
     public void getSong() {
-        Song song = songService.getSong(1L);
+        Song song = songService.getSongById(1L);
 
         System.out.println(new String(song.getLyrics(), StandardCharsets.UTF_8));
         System.out.println(song.getAddedBy().getFirstName());
@@ -110,7 +110,7 @@ public class SongServiceTest {
                 "Said no more counting dollars\n" +
                 "We'll be, we'll be counting stars";
 
-        Song song = songService.getSong(1L);
+        Song song = songService.getSongById(1L);
 
         song.setLyrics(lyrics.getBytes());
 
