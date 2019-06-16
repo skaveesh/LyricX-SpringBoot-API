@@ -34,25 +34,33 @@ public class SongControllerImpl implements SongController {
 
     @Override
     public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, long songId, String name, long albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink) {
-        //TODO
-        return null;
+
+        songService.updateSong(request, songId, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
+
+        return httpResponse.returnResponse(HttpStatus.OK, "Song updated successfully.", null);
     }
 
     @Override
     public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, long songId, MultipartFile image) {
-        //TODO
-        return null;
+
+        songService.updateSong(request, songId, image);
+
+        return httpResponse.returnResponse(HttpStatus.OK, "Album art updated successfully.", null);
     }
 
     @Override
     public ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, long songId) {
-        //TODO
-        return null;
+
+        songService.removeAlbumArt(request, songId);
+
+        return httpResponse.returnResponse(HttpStatus.OK, "Album art removed successfully.", null);
     }
 
     @Override
     public ResponseEntity<HttpResponseData> removeSong(HttpServletRequest request, long songId) {
-        //TODO
-        return null;
+
+        songService.removeSong(request, songId);
+
+        return httpResponse.returnResponse(HttpStatus.OK, "Song removed successfully.", null);
     }
 }

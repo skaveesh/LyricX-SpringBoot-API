@@ -8,6 +8,7 @@ import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
 import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.model.Artist;
 import com.lyricxinc.lyricx.model.Contributor;
+import com.lyricxinc.lyricx.model.Song;
 import com.lyricxinc.lyricx.repository.ContributorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -74,6 +75,18 @@ public class ContributorService {
     public Contributor getContributorByHttpServletRequest(HttpServletRequest request){
 
         return getContributorById((String) request.getSession().getAttribute("userId"));
+    }
+
+    /**
+     *verified contributor can update verified/non-verified artist
+     *non-verified contributor only can update non-verified artist
+     * @param contributor
+     * @param song
+     */
+    public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Song song){
+
+        if (!contributor.isSeniorContributor() && song.isPublishedState())
+            throw new ForbiddenCustomException("Only senior contributors can update verified artist.");
     }
 
     /**

@@ -26,6 +26,7 @@ public class ArtistService {
     }
 
     public Artist getArtistById(long id){
+
         Artist artist = artistRepository.findById(id).orElse(null);
 
         if(artist==null)
