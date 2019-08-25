@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.List;
+
 import static com.lyricxinc.lyricx.core.parser.YearParser.parseYear;
 
 @RestController
@@ -33,6 +35,12 @@ public class AlbumControllerImpl implements AlbumController {
         albumService.addAlbum(request, artistId, name, parseYear(year), image);
 
         return httpResponse.returnResponse(HttpStatus.OK, "Album created successfully.", null);
+    }
+
+    @Override
+    public List<Album> searchAlbums(String keyword) {
+
+        return albumService.searchAlbums(keyword);
     }
 
     @Override

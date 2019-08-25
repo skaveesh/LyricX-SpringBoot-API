@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Year;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -37,6 +38,11 @@ public class AlbumService {
             throw new ForbiddenCustomException("Requested album cannot be found.");
 
         return album;
+    }
+
+    public List<Album> searchAlbums(String keyword){
+
+        return this.albumRepository.findTop20ByNameIgnoreCaseContainingOrderByNameAsc(keyword);
     }
 
     public void addAlbum(HttpServletRequest request, long artistId, String name, Year year, MultipartFile image) {
