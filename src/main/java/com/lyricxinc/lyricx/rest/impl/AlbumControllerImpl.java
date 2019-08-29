@@ -13,8 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
-import java.util.List;
-
 import static com.lyricxinc.lyricx.core.parser.YearParser.parseYear;
 
 @RestController
@@ -38,9 +36,9 @@ public class AlbumControllerImpl implements AlbumController {
     }
 
     @Override
-    public List<Album> searchAlbums(String keyword) {
+    public ResponseEntity<HttpResponseData> searchAlbums(String keyword) {
 
-        return albumService.searchAlbums(keyword);
+        return httpResponse.returnResponse(HttpStatus.OK, "Success", albumService.searchAlbums(keyword));
     }
 
     @Override

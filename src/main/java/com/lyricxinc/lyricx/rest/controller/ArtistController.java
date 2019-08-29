@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RequestMapping("artist")
 public interface ArtistController {
+
     @PostMapping("add")
     ResponseEntity<HttpResponseData> addArtist(HttpServletRequest request, String name, MultipartFile image);
 

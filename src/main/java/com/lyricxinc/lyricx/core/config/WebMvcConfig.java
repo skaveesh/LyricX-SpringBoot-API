@@ -4,6 +4,8 @@ import com.lyricxinc.lyricx.core.interceptor.AdminInterceptor;
 import com.lyricxinc.lyricx.core.interceptor.ChanterInterceptor;
 import com.lyricxinc.lyricx.core.interceptor.ContributorInterceptor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -16,5 +18,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(new ContributorInterceptor()).addPathPatterns("/contributor/**").excludePathPatterns("/contributor/register").addPathPatterns("/artist/**").addPathPatterns("/album/**");
         registry.addInterceptor(new ChanterInterceptor()).addPathPatterns("/chanter/**");
 
+    }
+
+    @Override
+    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+        configurer.defaultContentType(MediaType.APPLICATION_JSON);
     }
 }
