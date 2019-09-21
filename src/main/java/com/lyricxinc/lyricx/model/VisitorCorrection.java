@@ -33,13 +33,12 @@ public class VisitorCorrection {
 
     }
 
-    public VisitorCorrection(Song song, @NotBlank String submitterName, @NotBlank String submitterEmail, @NotBlank String correction, LocalDateTime addedDate) {
+    public VisitorCorrection(Song song, @NotBlank String submitterName, @NotBlank String submitterEmail, @NotBlank String correction) {
 
         this.song = song;
         this.submitterName = submitterName;
         this.submitterEmail = submitterEmail;
         this.correction = correction;
-        this.addedDate = addedDate;
     }
 
     public long getId() {
@@ -95,11 +94,6 @@ public class VisitorCorrection {
     public LocalDateTime getAddedDate() {
 
         return addedDate;
-    }
-
-    public void setAddedDate(LocalDateTime addedDate) {
-
-        this.addedDate = addedDate;
     }
 
 }

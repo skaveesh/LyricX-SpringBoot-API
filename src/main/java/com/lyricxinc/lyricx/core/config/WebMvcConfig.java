@@ -1,8 +1,5 @@
 package com.lyricxinc.lyricx.core.config;
 
-import com.lyricxinc.lyricx.core.interceptor.AdminInterceptor;
-import com.lyricxinc.lyricx.core.interceptor.ChanterInterceptor;
-import com.lyricxinc.lyricx.core.interceptor.ContributorInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;

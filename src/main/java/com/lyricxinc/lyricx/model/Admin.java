@@ -1,8 +1,12 @@
 package com.lyricxinc.lyricx.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Entity
 public class Admin {
@@ -14,6 +18,12 @@ public class Admin {
     private String name;
 
     private boolean fullControl;
+
+    @CreationTimestamp
+    private LocalDateTime addedDate;
+
+    @UpdateTimestamp
+    private LocalDateTime lastModifiedDate;
 
     public Admin() {
 
@@ -54,6 +64,16 @@ public class Admin {
     public void setFullControl(boolean fullControl) {
 
         this.fullControl = fullControl;
+    }
+
+    public LocalDateTime getAddedDate() {
+
+        return addedDate;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+
+        return lastModifiedDate;
     }
 
 }

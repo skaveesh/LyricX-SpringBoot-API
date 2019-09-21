@@ -1,10 +1,13 @@
 package com.lyricxinc.lyricx.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Entity
 public class SongRequest {
@@ -25,6 +28,9 @@ public class SongRequest {
 
     @NotBlank
     private String requesterEmail;
+
+    @CreationTimestamp
+    private LocalDateTime addedDate;
 
     public SongRequest() {
 
@@ -97,6 +103,11 @@ public class SongRequest {
     public void setRequesterEmail(String requesterEmail) {
 
         this.requesterEmail = requesterEmail;
+    }
+
+    public LocalDateTime getAddedDate() {
+
+        return addedDate;
     }
 
 }

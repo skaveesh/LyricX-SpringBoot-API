@@ -1,6 +1,7 @@
 package com.lyricxinc.lyricx.model;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -19,6 +20,9 @@ public class Band {
 
     @CreationTimestamp
     private LocalDateTime createdDate;
+
+    @UpdateTimestamp
+    private LocalDateTime lastModifiedDate;
 
     @OneToMany(mappedBy = "band", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<BandChanter> bandChanters;
@@ -55,6 +59,11 @@ public class Band {
     public LocalDateTime getCreatedDate() {
 
         return createdDate;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+
+        return lastModifiedDate;
     }
 
     public Set<BandChanter> getBandChanters() {

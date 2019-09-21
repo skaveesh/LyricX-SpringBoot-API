@@ -1,17 +1,11 @@
 package com.lyricxinc.lyricx.service;
 
-import com.lyricxinc.lyricx.mock.MockUser;
-import com.lyricxinc.lyricx.model.Album;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.servlet.http.HttpSession;
-import java.time.Year;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

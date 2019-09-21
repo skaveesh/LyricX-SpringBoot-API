@@ -1,6 +1,7 @@
 package com.lyricxinc.lyricx.model;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -59,11 +60,12 @@ public class Song {
     @CreationTimestamp
     private LocalDateTime addedDate;
 
+    @UpdateTimestamp
+    private LocalDateTime lastModifiedDate;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "lastModifiedById", nullable = true)
     private Contributor lastModifiedBy;
-
-    private LocalDateTime lastModifiedDate;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "publishedById", nullable = true)
@@ -248,6 +250,11 @@ public class Song {
         return addedDate;
     }
 
+    public LocalDateTime getLastModifiedDate() {
+
+        return lastModifiedDate;
+    }
+
     public Contributor getLastModifiedBy() {
 
         return lastModifiedBy;
@@ -256,16 +263,6 @@ public class Song {
     public void setLastModifiedBy(Contributor lastModifiedBy) {
 
         this.lastModifiedBy = lastModifiedBy;
-    }
-
-    public LocalDateTime getLastModifiedDate() {
-
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-
-        this.lastModifiedDate = lastModifiedDate;
     }
 
     public Contributor getPublishedBy() {

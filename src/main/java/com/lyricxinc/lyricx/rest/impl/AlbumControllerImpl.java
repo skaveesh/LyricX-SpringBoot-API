@@ -15,9 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import java.util.UUID;
-
-import static com.lyricxinc.lyricx.core.util.YearParserUtil.parseYear;
 
 @RestController
 public class AlbumControllerImpl implements AlbumController {
@@ -33,7 +30,7 @@ public class AlbumControllerImpl implements AlbumController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> addAlbum(HttpServletRequest request, UUID artistId, String name, String year, MultipartFile image) {
+    public ResponseEntity<HttpResponseData> addAlbum(HttpServletRequest request, long artistId, String name, String year, MultipartFile image) {
 
 //        albumService.addAlbum(request, artistId, name, parseYear(year, true), image);
         return httpResponse.returnResponse(HttpStatus.OK, "Album created successfully.", null);
@@ -60,7 +57,7 @@ public class AlbumControllerImpl implements AlbumController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, UUID albumId, MultipartFile image) {
+    public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, long albumId, MultipartFile image) {
 
         Album album = albumService.getAlbumById(albumId);
 
@@ -70,14 +67,14 @@ public class AlbumControllerImpl implements AlbumController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, UUID albumId) {
+    public ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, long albumId) {
 
         //TODO
         return null;
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> removeAlbum(HttpServletRequest request, UUID albumId) {
+    public ResponseEntity<HttpResponseData> removeAlbum(HttpServletRequest request, long albumId) {
 
         //TODO
         return null;

@@ -1,11 +1,15 @@
 package com.lyricxinc.lyricx.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @Entity
 public class Genre {
@@ -17,6 +21,12 @@ public class Genre {
     @NotBlank
     @Size(max = 30)
     private String genreName;
+
+    @CreationTimestamp
+    private LocalDateTime addedDate;
+
+    @UpdateTimestamp
+    private LocalDateTime lastModifiedDate;
 
     public Genre() {
 
@@ -45,6 +55,16 @@ public class Genre {
     public void setGenreName(String genreName) {
 
         this.genreName = genreName;
+    }
+
+    public LocalDateTime getAddedDate() {
+
+        return addedDate;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+
+        return lastModifiedDate;
     }
 
 }

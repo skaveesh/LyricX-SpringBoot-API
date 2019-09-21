@@ -1,6 +1,7 @@
 package com.lyricxinc.lyricx.model;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -24,6 +25,9 @@ public class Playlist {
     @CreationTimestamp
     private LocalDateTime createdDate;
 
+    @UpdateTimestamp
+    private LocalDateTime lastModifiedDate;
+
     @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<PlaylistSong> playlistSongs;
 
@@ -31,18 +35,16 @@ public class Playlist {
 
     }
 
-    public Playlist(Chanter chanter, @NotBlank String playlistName, LocalDateTime createdDate) {
+    public Playlist(Chanter chanter, @NotBlank String playlistName) {
 
         this.chanter = chanter;
         this.playlistName = playlistName;
-        this.createdDate = createdDate;
     }
 
-    public Playlist(Chanter chanter, @NotBlank String playlistName, LocalDateTime createdDate, Set<PlaylistSong> playlistSongs) {
+    public Playlist(Chanter chanter, @NotBlank String playlistName, Set<PlaylistSong> playlistSongs) {
 
         this.chanter = chanter;
         this.playlistName = playlistName;
-        this.createdDate = createdDate;
         this.playlistSongs = playlistSongs;
     }
 
@@ -81,9 +83,9 @@ public class Playlist {
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
+    public LocalDateTime getLastModifiedDate() {
 
-        this.createdDate = createdDate;
+        return lastModifiedDate;
     }
 
     public Set<PlaylistSong> getPlaylistSongs() {

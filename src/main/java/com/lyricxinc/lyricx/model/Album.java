@@ -2,9 +2,8 @@ package com.lyricxinc.lyricx.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
-import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -14,7 +13,6 @@ import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
@@ -38,10 +36,14 @@ public class Album {
     private String imgUrl;
 
     @Column(unique = true)
-    private String albumUrl;
+    @NotNull
+    private String surrogateKey;
 
     @CreationTimestamp
     private LocalDateTime addedDate;
+
+    @UpdateTimestamp
+    private LocalDateTime lastModifiedDate;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "contributorId", nullable = false)
@@ -57,7 +59,7 @@ public class Album {
 
     }
 
-    public Album(Artist artist, Year year, @NotBlank String name, @NotBlank String imgUrl, Contributor addedBy, boolean approvedStatus, String albumUrl) {
+    public Album(Artist artist, Year year, @NotBlank String name, @NotBlank String imgUrl, Contributor addedBy, boolean approvedStatus) {
 
         this.artist = artist;
         this.year = year;
@@ -65,7 +67,6 @@ public class Album {
         this.imgUrl = imgUrl;
         this.addedBy = addedBy;
         this.approvedStatus = approvedStatus;
-        this.albumUrl = albumUrl;
     }
 
     public long getId() {
@@ -116,19 +117,24 @@ public class Album {
         this.imgUrl = imgUrl;
     }
 
-    public String getAlbumUrl() {
+    public String getSurrogateKey() {
 
-        return albumUrl;
+        return surrogateKey;
     }
 
-    public void setAlbumUrl(String albumUrl) {
+    public void setSurrogateKey(String surrogateKey) {
 
-        this.albumUrl = albumUrl;
+        this.surrogateKey = surrogateKey;
     }
 
     public LocalDateTime getAddedDate() {
 
         return addedDate;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+
+        return lastModifiedDate;
     }
 
     public Contributor getAddedBy() {

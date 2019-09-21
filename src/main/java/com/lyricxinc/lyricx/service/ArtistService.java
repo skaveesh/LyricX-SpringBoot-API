@@ -26,7 +26,7 @@ public class ArtistService {
         this.amazonClientService = amazonClientService;
     }
 
-    public Artist getArtistById(UUID id) {
+    public Artist getArtistById(long id) {
 
         Artist artist = artistRepository.findById(id).orElse(null);
 
@@ -80,7 +80,7 @@ public class ArtistService {
         //TODO
     }
 
-    public void removeArtist(UUID id) {
+    public void removeArtist(long id) {
 
         artistRepository.deleteById(id);
     }

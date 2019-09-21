@@ -1,7 +1,10 @@
 package com.lyricxinc.lyricx.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -9,6 +12,9 @@ public class Chanter {
 
     @Id
     private String id;
+
+    @CreationTimestamp
+    private LocalDateTime addedDate;
 
     @OneToMany(mappedBy = "chanter", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<BandChanter> bandChanters;
@@ -42,6 +48,11 @@ public class Chanter {
     public void setId(String id) {
 
         this.id = id;
+    }
+
+    public LocalDateTime getAddedDate() {
+
+        return addedDate;
     }
 
     public Set<BandChanter> getBandChanters() {

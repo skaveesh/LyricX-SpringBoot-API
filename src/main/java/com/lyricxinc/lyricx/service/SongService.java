@@ -42,7 +42,7 @@ public class SongService {
         return song;
     }
 
-    public void addSong(HttpServletRequest request, String name, UUID albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink) {
+    public void addSong(HttpServletRequest request, String name, long albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink) {
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
@@ -54,7 +54,7 @@ public class SongService {
         songRepository.save(song);
     }
 
-    public void addSong(HttpServletRequest request, String name, UUID albumId, String guitarKey, String beat, String languageName, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, MultipartFile image) {
+    public void addSong(HttpServletRequest request, String name, long albumId, String guitarKey, String beat, String languageName, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, MultipartFile image) {
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
@@ -66,7 +66,7 @@ public class SongService {
         songRepository.save(song);
     }
 
-    public void updateSong(HttpServletRequest request, long songId, String name, UUID albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink) {
+    public void updateSong(HttpServletRequest request, long songId, String name, long albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink) {
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 

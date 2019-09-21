@@ -2,21 +2,17 @@ package com.lyricxinc.lyricx.service;
 
 import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
 import com.lyricxinc.lyricx.model.Album;
-import com.lyricxinc.lyricx.model.Artist;
 import com.lyricxinc.lyricx.model.Contributor;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.repository.AlbumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.time.Year;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @Validated
@@ -36,7 +32,7 @@ public class AlbumService {
         this.artistService = artistService;
     }
 
-    public Album getAlbumById(UUID id) {
+    public Album getAlbumById(long id) {
 
         Album album = this.albumRepository.findById(id).orElse(null);
 

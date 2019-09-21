@@ -1,6 +1,9 @@
 package com.lyricxinc.lyricx.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Favourite {
@@ -8,6 +11,9 @@ public class Favourite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @CreationTimestamp
+    private LocalDateTime lastModifiedDate;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "chanterId", nullable = false)
@@ -35,6 +41,11 @@ public class Favourite {
     public void setId(int id) {
 
         this.id = id;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+
+        return lastModifiedDate;
     }
 
     public Chanter getChanter() {

@@ -3,24 +3,13 @@ package com.lyricxinc.lyricx.service;
 import com.lyricxinc.lyricx.model.Song;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import javax.servlet.http.HttpSession;
 import java.nio.charset.StandardCharsets;
-import java.security.Principal;
-import java.util.*;
-
-import static org.mockito.Mockito.mock;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -47,7 +36,6 @@ public class SongServiceTest {
         HttpSession session = mock.getSession();
         session.setAttribute("userId", "gjzXThtgTsUBcZMw0eSADOI3Fs73");
 
-//        UUID uuid =new UUID();
 //        songService.addSong(mock, "Counting Stars",,"G","6x4", (short)1, "Native\n Counting stars", lyrics.getBytes(), "https://www.youtube.com/watch?v=hT_nvWreIhg", "https://open.spotify.com/track/6sy3LkhNFjJWlaeSMNwQ62", "https://www.deezer.com/us/track/65759979");
     }
 

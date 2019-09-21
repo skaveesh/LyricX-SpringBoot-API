@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.UUID;
 
 @RequestMapping("artist")
 public interface ArtistController {
@@ -18,15 +17,15 @@ public interface ArtistController {
     ResponseEntity<HttpResponseData> addArtist(HttpServletRequest request, String name, MultipartFile image);
 
     @PutMapping("update/details")
-    ResponseEntity<HttpResponseData> updateArtistName(HttpServletRequest request, UUID artistId, String name);
+    ResponseEntity<HttpResponseData> updateArtistName(HttpServletRequest request, long artistId, String name);
 
     @PutMapping("update/image")
-    ResponseEntity<HttpResponseData> updateArtistImage(HttpServletRequest request, UUID artistId, MultipartFile image);
+    ResponseEntity<HttpResponseData> updateArtistImage(HttpServletRequest request, long artistId, MultipartFile image);
 
     @DeleteMapping("delete/image")
-    ResponseEntity<HttpResponseData> removeArtistImage(HttpServletRequest request, UUID artistId);
+    ResponseEntity<HttpResponseData> removeArtistImage(HttpServletRequest request, long artistId);
 
     @DeleteMapping("delete")
-    ResponseEntity<HttpResponseData> removeArtist(HttpServletRequest request, UUID artistId);
+    ResponseEntity<HttpResponseData> removeArtist(HttpServletRequest request, long artistId);
 
 }

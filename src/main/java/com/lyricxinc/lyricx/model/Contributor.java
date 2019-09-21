@@ -2,12 +2,15 @@ package com.lyricxinc.lyricx.model;
 
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @Entity
 public class Contributor {
@@ -33,6 +36,12 @@ public class Contributor {
     private String contactLink;
 
     private boolean seniorContributor;
+
+    @CreationTimestamp
+    private LocalDateTime addedDate;
+
+    @UpdateTimestamp
+    private LocalDateTime lastModifiedDate;
 
     public Contributor() {
 
@@ -116,6 +125,16 @@ public class Contributor {
     public void setSeniorContributor(boolean seniorContributor) {
 
         this.seniorContributor = seniorContributor;
+    }
+
+    public LocalDateTime getAddedDate() {
+
+        return addedDate;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+
+        return lastModifiedDate;
     }
 
 }

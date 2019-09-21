@@ -1,6 +1,9 @@
 package com.lyricxinc.lyricx.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class ArtistGenre {
@@ -8,6 +11,9 @@ public class ArtistGenre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @CreationTimestamp
+    private LocalDateTime addedDate;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "artistId", nullable = false)
@@ -35,6 +41,11 @@ public class ArtistGenre {
     public void setId(long id) {
 
         this.id = id;
+    }
+
+    public LocalDateTime getAddedDate() {
+
+        return addedDate;
     }
 
     public Artist getArtist() {

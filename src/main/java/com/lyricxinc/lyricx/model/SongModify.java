@@ -25,7 +25,7 @@ public class SongModify {
     private Contributor contributor;
 
     @UpdateTimestamp
-    private LocalDateTime modifiedDate;
+    private LocalDateTime lastModifiedDate;
 
     private boolean hiddenStatus;
 
@@ -33,12 +33,11 @@ public class SongModify {
 
     }
 
-    public SongModify(Song song, @NotBlank String lyrics, Contributor contributor, LocalDateTime modifiedDate, boolean hiddenStatus) {
+    public SongModify(Song song, @NotBlank String lyrics, Contributor contributor, boolean hiddenStatus) {
 
         this.song = song;
         this.lyrics = lyrics;
         this.contributor = contributor;
-        this.modifiedDate = modifiedDate;
         this.hiddenStatus = hiddenStatus;
     }
 
@@ -82,14 +81,9 @@ public class SongModify {
         this.contributor = contributor;
     }
 
-    public LocalDateTime getModifiedDate() {
+    public LocalDateTime getLastModifiedDate() {
 
-        return modifiedDate;
-    }
-
-    public void setModifiedDate(LocalDateTime modifiedDate) {
-
-        this.modifiedDate = modifiedDate;
+        return lastModifiedDate;
     }
 
     public boolean isHiddenStatus() {

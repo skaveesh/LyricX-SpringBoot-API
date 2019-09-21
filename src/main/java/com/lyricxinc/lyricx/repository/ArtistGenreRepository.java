@@ -8,10 +8,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
 
 @Repository
-public interface ArtistGenreRepository extends JpaRepository<ArtistGenre, UUID> {
+public interface ArtistGenreRepository extends JpaRepository<ArtistGenre, Long> {
 
     @Modifying
     @Query(value = "insert into artist_genre (artist_id, genre_id) values(:artist_id, :genre_id)", nativeQuery = true)

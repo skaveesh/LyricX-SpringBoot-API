@@ -3,8 +3,10 @@ package com.lyricxinc.lyricx.model;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,6 +30,7 @@ public class Artist {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "contributorId", nullable = false)
+    @Valid
     private Contributor addedBy;
 
     private boolean approvedStatus;
@@ -38,6 +41,9 @@ public class Artist {
 
     @CreationTimestamp
     private LocalDateTime addedDate;
+
+    @UpdateTimestamp
+    private LocalDateTime lastModifiedDate;
 
     @OneToMany(mappedBy = "artist", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<ArtistGenre> artistGenres;
@@ -121,6 +127,11 @@ public class Artist {
     public LocalDateTime getAddedDate() {
 
         return addedDate;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+
+        return lastModifiedDate;
     }
 
     public Set<ArtistGenre> getArtistGenres() {
