@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 @RestController
 public class SongControllerImpl implements SongController {
@@ -20,12 +21,13 @@ public class SongControllerImpl implements SongController {
 
     @Autowired
     public SongControllerImpl(HttpResponse httpResponse, SongService songService) {
+
         this.httpResponse = httpResponse;
         this.songService = songService;
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> addSong(HttpServletRequest request, String name, long albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink) {
+    public ResponseEntity<HttpResponseData> addSong(HttpServletRequest request, String name, UUID albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink) {
 
         songService.addSong(request, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
 
@@ -33,7 +35,7 @@ public class SongControllerImpl implements SongController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, long songId, String name, long albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink) {
+    public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, long songId, String name, UUID albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink) {
 
         songService.updateSong(request, songId, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
 
@@ -63,4 +65,5 @@ public class SongControllerImpl implements SongController {
 
         return httpResponse.returnResponse(HttpStatus.OK, "Song removed successfully.", null);
     }
+
 }

@@ -9,7 +9,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties(LyricxUrlProperties.class)
 public class LyricxApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(LyricxApplication.class, args);
-	}
+    public static void main(String[] args) {
+
+        SpringApplication.run(LyricxApplication.class, args);
+    }
+
 }

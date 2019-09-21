@@ -11,14 +11,18 @@ public class BandChanterService {
 
     @Autowired
     public BandChanterService(BandChanterRepository bandChanterRepository) {
+
         this.bandChanterRepository = bandChanterRepository;
     }
 
-    public void addBandChanter(long chanterId, long bandId){
+    public void addBandChanter(long chanterId, long bandId) {
+
         bandChanterRepository.addBandAndChanter(chanterId, bandId, false);
     }
 
-    public void removeBandChanter(long chanterId, long bandId){
+    public void removeBandChanter(long chanterId, long bandId) {
+
         bandChanterRepository.deleteByBand_IdAndChanter_Id(chanterId, bandId);
     }
+
 }

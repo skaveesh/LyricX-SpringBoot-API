@@ -18,34 +18,43 @@ public class Favourite {
     private Song song;
 
     public Favourite() {
+
     }
 
     public Favourite(Chanter chanter, Song song) {
+
         this.chanter = chanter;
         this.song = song;
     }
 
     public int getId() {
+
         return id;
     }
 
     public void setId(int id) {
+
         this.id = id;
     }
 
     public Chanter getChanter() {
+
         return chanter;
     }
 
     public void setChanter(Chanter chanter) {
+
         this.chanter = chanter;
     }
 
     public Song getSong() {
+
         return song;
     }
 
     public void setSong(Song song) {
+
         this.song = song;
     }
+
 }

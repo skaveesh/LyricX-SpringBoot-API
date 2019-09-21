@@ -24,20 +24,23 @@ public class ContributorInterceptor implements HandlerInterceptor {
         authToken = authToken.substring(7);
         FirebaseToken decodeToken;
 
-        try {
+        try
+        {
             decodeToken = FirebaseAuth.getInstance(FirebaseConfig.contributorFirebaseApp).verifyIdToken(authToken);
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             throw new ForbiddenCustomException("Provided credentials are not valid.");
         }
 
-//        TODO: uncomment this after testing is over
-//        if (!decodeToken.isEmailVerified()) {
-//            throw new ForbiddenCustomException("Your account hasn't verified yet. Please verify.");
-//        }
+        //        TODO: uncomment this after testing is over
+        //        if (!decodeToken.isEmailVerified()) {
+        //            throw new ForbiddenCustomException("Your account hasn't verified yet. Please verify.");
+        //        }
 
         HttpSession session = request.getSession();
         session.setAttribute("userId", decodeToken.getUid());
 
         return true;
     }
+
 }

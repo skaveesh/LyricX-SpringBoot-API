@@ -2,9 +2,9 @@ package com.lyricxinc.lyricx.service;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
-import com.lyricxinc.lyricx.core.validator.StringValidator;
 import com.lyricxinc.lyricx.core.config.FirebaseConfig;
 import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
+import com.lyricxinc.lyricx.core.validator.StringValidator;
 import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.model.Artist;
 import com.lyricxinc.lyricx.model.Contributor;
@@ -24,6 +24,7 @@ public class ContributorService {
 
     @Autowired
     public ContributorService(ContributorRepository contributorRepository, Environment environment) {
+
         this.contributorRepository = contributorRepository;
         this.environment = environment;
     }
@@ -32,7 +33,7 @@ public class ContributorService {
 
         Contributor contributor = contributorRepository.findById(id).orElse(null);
 
-        if(contributor == null)
+        if (contributor == null)
             throw new ForbiddenCustomException("Contributor cannot be found.");
 
         return contributor;
@@ -53,63 +54,71 @@ public class ContributorService {
         UserRecord userRecord;
         Contributor contributor;
 
-        try {
+        try
+        {
             userRecord = FirebaseAuth.getInstance(FirebaseConfig.contributorFirebaseApp).createUser(createRequest);
 
             contributor = new Contributor(userRecord.getUid(), firstName, lastName, environment.getProperty("lyricx.contributor-image-url"), contactLink);
             contributorRepository.save(contributor);
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             throw new ForbiddenCustomException("Something went wrong while creating your account. " + e.getMessage());
         }
     }
 
     public void updateContributor(Contributor contributor) {
+
         contributorRepository.save(contributor);
     }
 
     public void removeContributor(String id) {
+
         contributorRepository.deleteById(id);
     }
 
-    public Contributor getContributorByHttpServletRequest(HttpServletRequest request){
+    public Contributor getContributorByHttpServletRequest(HttpServletRequest request) {
 
         return getContributorById((String) request.getSession().getAttribute("userId"));
     }
 
     /**
-     *verified contributor can update verified/non-verified artist
-     *non-verified contributor only can update non-verified artist
+     * verified contributor can update verified/non-verified artist
+     * non-verified contributor only can update non-verified artist
+     *
      * @param contributor
      * @param song
      */
-    public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Song song){
+    public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Song song) {
 
         if (!contributor.isSeniorContributor() && song.isPublishedState())
             throw new ForbiddenCustomException("Only senior contributors can update verified artist.");
     }
 
     /**
-     *verified contributor can update verified/non-verified artist
-     *non-verified contributor only can update non-verified artist
+     * verified contributor can update verified/non-verified artist
+     * non-verified contributor only can update non-verified artist
+     *
      * @param contributor
      * @param artist
      */
-    public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Artist artist){
+    public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Artist artist) {
 
         if (!contributor.isSeniorContributor() && artist.isApprovedStatus())
             throw new ForbiddenCustomException("Only senior contributors can update verified artist.");
     }
 
     /**
-     *verified contributor can update verified/non-verified artist
-     *non-verified contributor only can update non-verified artist
+     * verified contributor can update verified/non-verified artist
+     * non-verified contributor only can update non-verified artist
+     *
      * @param contributor
      * @param album
      */
-    public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Album album){
+    public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Album album) {
 
         if (!contributor.isSeniorContributor() && album.isApprovedStatus())
             throw new ForbiddenCustomException("Only senior contributors can update verified album.");
     }
+
 }

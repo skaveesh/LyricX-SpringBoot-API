@@ -14,11 +14,14 @@ public class ErrorHandlerControllerImpl implements org.springframework.boot.web.
 
     @Override
     public String handleError() {
+
         throw new NotFoundCustomException();
     }
 
     @Override
     public String getErrorPath() {
+
         return null;
     }
+
 }

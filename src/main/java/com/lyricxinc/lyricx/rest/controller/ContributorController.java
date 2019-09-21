@@ -1,6 +1,6 @@
 package com.lyricxinc.lyricx.rest.controller;
 
-import com.lyricxinc.lyricx.core.request.User;
+import com.lyricxinc.lyricx.core.request.contributor.ConTestRequest;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,5 +17,6 @@ public interface ContributorController {
     ResponseEntity<HttpResponseData> createAccount(String email, char[] password, String firstName, String lastName, String contactLink);
 
     @PostMapping(value = "getContTest/test")
-    ResponseEntity<HttpResponseData> getContTest(HttpServletRequest request, @RequestBody User user);
+    ResponseEntity<HttpResponseData> getContTest(HttpServletRequest request, @RequestBody ConTestRequest payload);
+
 }

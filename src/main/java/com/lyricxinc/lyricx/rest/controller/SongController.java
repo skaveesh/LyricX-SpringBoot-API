@@ -9,14 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 @RequestMapping("song")
 public interface SongController {
+
     @PostMapping("add")
-    ResponseEntity<HttpResponseData> addSong(HttpServletRequest request, String name, long albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink);
+    ResponseEntity<HttpResponseData> addSong(HttpServletRequest request, String name, UUID albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink);
 
     @PutMapping("update/details")
-    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, long songId, String name, long albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink);
+    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, long songId, String name, UUID albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink);
 
     @PutMapping("update/albumart")
     ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, long songId, MultipartFile image);
@@ -26,4 +28,5 @@ public interface SongController {
 
     @DeleteMapping("remove")
     ResponseEntity<HttpResponseData> removeSong(HttpServletRequest request, long songId);
+
 }

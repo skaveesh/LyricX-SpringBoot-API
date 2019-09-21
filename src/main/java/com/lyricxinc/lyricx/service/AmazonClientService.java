@@ -39,47 +39,58 @@ public class AmazonClientService {
 
     @PostConstruct
     private void initializeAmazon() {
+
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
         this.s3client = AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_2).withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
     }
 
     public enum S3BucketFolders {
-        ARTIST_FOLDER {
-            public String toString() {
-                return "artist";
-            }
-        },
+        ARTIST_FOLDER
+                {
+                    public String toString() {
 
-        ALBUM_FOLDER {
-            public String toString() {
-                return "album";
-            }
-        },
+                        return "artist";
+                    }
+                },
 
-        SONG_FOLDER {
-            public String toString() {
-                return "song";
-            }
-        },
+        ALBUM_FOLDER
+                {
+                    public String toString() {
 
-        CONTRIBUTOR_FOLDER {
-            public String toString() {
-                return "contributor";
-            }
-        }
+                        return "album";
+                    }
+                },
+
+        SONG_FOLDER
+                {
+                    public String toString() {
+
+                        return "song";
+                    }
+                },
+
+        CONTRIBUTOR_FOLDER
+                {
+                    public String toString() {
+
+                        return "contributor";
+                    }
+                }
     }
 
     public String uploadFile(MultipartFile multipartFile, S3BucketFolders s3BucketFolder) {
 
-        String fileUrl = "";
+        String fileUrl;
 
-        try {
+        try
+        {
             File file = convertMultiPartToFile(multipartFile);
             String fileName = UUID.randomUUID().toString().replace("-", "") + ".jpg";
             fileUrl = endpointUrl + "/" + bucketName + "/" + s3BucketFolder + "/" + fileName;
             uploadFileTos3bucket(fileName, s3BucketFolder, file);
             file.delete();
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
             throw new FileUploadErrorCustomException("Error while uploading the file. Try again.");
         }
@@ -97,13 +108,15 @@ public class AmazonClientService {
     }
 
     private void uploadFileTos3bucket(String fileName, S3BucketFolders s3BucketFolder, File file) {
-        s3client.putObject(new PutObjectRequest(bucketName, s3BucketFolder + "/" + fileName, file)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
+
+        s3client.putObject(new PutObjectRequest(bucketName, s3BucketFolder + "/" + fileName, file).withCannedAcl(CannedAccessControlList.PublicRead));
     }
 
     public String deleteFileFromS3Bucket(String fileUrl, S3BucketFolders s3BucketFolder) {
+
         String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
-        s3client.deleteObject(new DeleteObjectRequest(bucketName,  s3BucketFolder + "/" + fileName));
+        s3client.deleteObject(new DeleteObjectRequest(bucketName, s3BucketFolder + "/" + fileName));
         return "Successfully deleted";
     }
+
 }

@@ -24,37 +24,47 @@ public class Band {
     private Set<BandChanter> bandChanters;
 
     public Band() {
+
     }
 
     public Band(@NotBlank String bandName) {
+
         this.bandName = bandName;
     }
 
     public long getId() {
+
         return id;
     }
 
     public void setId(long id) {
+
         this.id = id;
     }
 
     public String getBandName() {
+
         return bandName;
     }
 
     public void setBandName(String bandName) {
+
         this.bandName = bandName;
     }
 
     public LocalDateTime getCreatedDate() {
+
         return createdDate;
     }
 
     public Set<BandChanter> getBandChanters() {
+
         return bandChanters;
     }
 
     public void setBandChanters(Set<BandChanter> bandChanters) {
+
         this.bandChanters = bandChanters;
     }
+
 }

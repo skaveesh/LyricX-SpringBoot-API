@@ -22,4 +22,5 @@ public class ChanterFriend {
 
     @CreationTimestamp
     private LocalDateTime friendSince;
+
 }

@@ -83,9 +83,11 @@ public class Song {
     private Set<SongModify> songModifies;
 
     public Song() {
+
     }
 
     public Song(@NotBlank String name, Album album, @Size(max = 5) String guitarKey, @Size(max = 5) String beat, Language language, String keywords, @NotBlank byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, String imgUrl, Contributor addedBy, boolean publishedState) {
+
         this.name = name;
         this.album = album;
         this.guitarKey = guitarKey;
@@ -102,182 +104,228 @@ public class Song {
     }
 
     public long getId() {
+
         return id;
     }
 
     public void setId(long id) {
+
         this.id = id;
     }
 
     public String getName() {
+
         return name;
     }
 
     public void setName(String name) {
+
         this.name = name;
     }
 
     public Album getAlbum() {
+
         return album;
     }
 
     public void setAlbum(Album album) {
+
         this.album = album;
     }
 
     public String getGuitarKey() {
+
         return guitarKey;
     }
 
     public void setGuitarKey(String guitarKey) {
+
         this.guitarKey = guitarKey;
     }
 
     public String getBeat() {
+
         return beat;
     }
 
     public void setBeat(String beat) {
+
         this.beat = beat;
     }
 
     public Language getLanguage() {
+
         return language;
     }
 
     public void setLanguage(Language language) {
+
         this.language = language;
     }
 
     public String getKeywords() {
+
         return keywords;
     }
 
     public void setKeywords(String keywords) {
+
         this.keywords = keywords;
     }
 
     public byte[] getLyrics() {
+
         return lyrics;
     }
 
     public void setLyrics(byte[] lyrics) {
+
         this.lyrics = lyrics;
     }
 
     public String getYouTubeLink() {
+
         return youTubeLink;
     }
 
     public void setYouTubeLink(String youTubeLink) {
+
         this.youTubeLink = youTubeLink;
     }
 
     public String getSpotifyLink() {
+
         return spotifyLink;
     }
 
     public void setSpotifyLink(String spotifyLink) {
+
         this.spotifyLink = spotifyLink;
     }
 
     public String getDeezerLink() {
+
         return deezerLink;
     }
 
     public void setDeezerLink(String deezerLink) {
+
         this.deezerLink = deezerLink;
     }
 
     public String getImgUrl() {
+
         return imgUrl;
     }
 
     public void setImgUrl(String imgUrl) {
+
         this.imgUrl = imgUrl;
     }
 
     public String getSongUrl() {
+
         return songUrl;
     }
 
     public void setSongUrl(String songUrl) {
+
         this.songUrl = songUrl;
     }
 
     public Contributor getAddedBy() {
+
         return addedBy;
     }
 
     public void setAddedBy(Contributor addedBy) {
+
         this.addedBy = addedBy;
     }
 
     public LocalDateTime getAddedDate() {
+
         return addedDate;
     }
 
     public Contributor getLastModifiedBy() {
+
         return lastModifiedBy;
     }
 
     public void setLastModifiedBy(Contributor lastModifiedBy) {
+
         this.lastModifiedBy = lastModifiedBy;
     }
 
     public LocalDateTime getLastModifiedDate() {
+
         return lastModifiedDate;
     }
 
     public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+
         this.lastModifiedDate = lastModifiedDate;
     }
 
     public Contributor getPublishedBy() {
+
         return publishedBy;
     }
 
     public void setPublishedBy(Contributor publishedBy) {
+
         this.publishedBy = publishedBy;
     }
 
     public LocalDateTime getPublishedDate() {
+
         return publishedDate;
     }
 
     public void setPublishedDate(LocalDateTime publishedDate) {
+
         this.publishedDate = publishedDate;
     }
 
     public boolean isPublishedState() {
+
         return publishedState;
     }
 
     public void setPublishedState(boolean publishedState) {
+
         this.publishedState = publishedState;
     }
 
     public Set<SongGenre> getSongGenres() {
+
         return songGenres;
     }
 
     public void setSongGenres(Set<SongGenre> songGenres) {
+
         this.songGenres = songGenres;
     }
 
     public Set<ArtistSong> getArtistSongs() {
+
         return artistSongs;
     }
 
     public void setArtistSongs(Set<ArtistSong> artistSongs) {
+
         this.artistSongs = artistSongs;
     }
 
     public Set<SongModify> getSongModifies() {
+
         return songModifies;
     }
 
     public void setSongModifies(Set<SongModify> songModifies) {
+
         this.songModifies = songModifies;
     }
+
 }

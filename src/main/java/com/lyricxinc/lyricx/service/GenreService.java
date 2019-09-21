@@ -12,18 +12,23 @@ public class GenreService {
 
     @Autowired
     public GenreService(GenreRepository genreRepository) {
+
         this.genreRepository = genreRepository;
     }
 
-    public Genre findGenreByName(String genreName){
+    public Genre findGenreByName(String genreName) {
+
         return genreRepository.findByGenreName(genreName);
     }
 
-    public Genre getGenreById(short id){
+    public Genre getGenreById(short id) {
+
         return genreRepository.findById(id).orElse(null);
     }
 
-    public void addGenre(String genreName){
+    public void addGenre(String genreName) {
+
         genreRepository.save(new Genre(genreName));
     }
+
 }

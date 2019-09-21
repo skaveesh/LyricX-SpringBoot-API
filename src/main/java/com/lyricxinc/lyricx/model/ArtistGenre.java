@@ -18,34 +18,42 @@ public class ArtistGenre {
     private Genre genre;
 
     public ArtistGenre() {
+
     }
 
     public ArtistGenre(Artist artist, Genre genre) {
+
         this.artist = artist;
         this.genre = genre;
     }
 
     public long getId() {
+
         return id;
     }
 
     public void setId(long id) {
+
         this.id = id;
     }
 
     public Artist getArtist() {
+
         return artist;
     }
 
     public void setArtist(Artist artist) {
+
         this.artist = artist;
     }
 
     public Genre getGenre() {
+
         return genre;
     }
 
     public void setGenre(Genre genre) {
+
         this.genre = genre;
     }
 

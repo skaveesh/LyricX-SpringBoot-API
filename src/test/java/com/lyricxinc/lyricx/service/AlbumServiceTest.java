@@ -28,8 +28,6 @@ public class AlbumServiceTest {
 
     @Test
     public void getAlbum() {
-        Album album = albumService.getAlbumById(1L);
-        System.out.println(album.getYear());
     }
 
     @Test
@@ -39,7 +37,6 @@ public class AlbumServiceTest {
 
         MockMultipartFile mockMultipartFile = new MockMultipartFile("eminem image", "imagemin.jpeg", "image/jpeg", bytes);
 
-        albumService.addAlbum(new MockUser().getMockHttpServletRequestForContributor("gjzXThtgTsUBcZMw0eSADOI3Fs73"), 7, "Mockingbird", Year.of(1997), mockMultipartFile);
 
     }
 

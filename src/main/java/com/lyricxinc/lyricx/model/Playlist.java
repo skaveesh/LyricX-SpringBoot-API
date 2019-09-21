@@ -28,15 +28,18 @@ public class Playlist {
     private Set<PlaylistSong> playlistSongs;
 
     public Playlist() {
+
     }
 
     public Playlist(Chanter chanter, @NotBlank String playlistName, LocalDateTime createdDate) {
+
         this.chanter = chanter;
         this.playlistName = playlistName;
         this.createdDate = createdDate;
     }
 
     public Playlist(Chanter chanter, @NotBlank String playlistName, LocalDateTime createdDate, Set<PlaylistSong> playlistSongs) {
+
         this.chanter = chanter;
         this.playlistName = playlistName;
         this.createdDate = createdDate;
@@ -44,42 +47,53 @@ public class Playlist {
     }
 
     public int getId() {
+
         return id;
     }
 
     public void setId(int id) {
+
         this.id = id;
     }
 
     public Chanter getChanter() {
+
         return chanter;
     }
 
     public void setChanter(Chanter chanter) {
+
         this.chanter = chanter;
     }
 
     public String getPlaylistName() {
+
         return playlistName;
     }
 
     public void setPlaylistName(String playlistName) {
+
         this.playlistName = playlistName;
     }
 
     public LocalDateTime getCreatedDate() {
+
         return createdDate;
     }
 
     public void setCreatedDate(LocalDateTime createdDate) {
+
         this.createdDate = createdDate;
     }
 
     public Set<PlaylistSong> getPlaylistSongs() {
+
         return playlistSongs;
     }
 
     public void setPlaylistSongs(Set<PlaylistSong> playlistSongs) {
+
         this.playlistSongs = playlistSongs;
     }
+
 }

@@ -1,13 +1,17 @@
-package com.lyricxinc.lyricx.core.request;
+package com.lyricxinc.lyricx.core.request.contributor;
 
-public class User {
+public class ConTestRequest {
+
     private String name;
 
     public String getName() {
+
         return name;
     }
 
     public void setName(String name) {
+
         this.name = name;
     }
+
 }

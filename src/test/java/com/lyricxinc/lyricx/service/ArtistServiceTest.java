@@ -63,11 +63,6 @@ public class ArtistServiceTest {
 
     @Test
     public void removeArtist() {
-        try {
 
-            artistService.removeArtist(6L);
-        }catch (Exception e){
-            System.out.println("MESSAGE : "+e.getMessage());
-        }
     }
 }

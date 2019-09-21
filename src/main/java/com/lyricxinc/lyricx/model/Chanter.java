@@ -26,57 +26,72 @@ public class Chanter {
     private Set<ChanterFriend> friends;
 
     public Chanter() {
+
     }
 
     public Chanter(@NotBlank String id) {
+
         this.id = id;
     }
 
     public String getId() {
+
         return id;
     }
 
     public void setId(String id) {
+
         this.id = id;
     }
 
     public Set<BandChanter> getBandChanters() {
+
         return bandChanters;
     }
 
     public void setBandChanters(Set<BandChanter> bandChanters) {
+
         this.bandChanters = bandChanters;
     }
 
     public Set<Favourite> getFavourites() {
+
         return favourites;
     }
 
     public void setFavourites(Set<Favourite> favourites) {
+
         this.favourites = favourites;
     }
 
     public Set<Playlist> getPlaylists() {
+
         return playlists;
     }
 
     public void setPlaylists(Set<Playlist> playlists) {
+
         this.playlists = playlists;
     }
 
     public Set<ChanterFriend> getChanters() {
+
         return chanters;
     }
 
     public void setChanters(Set<ChanterFriend> chanters) {
+
         this.chanters = chanters;
     }
 
     public Set<ChanterFriend> getFriends() {
+
         return friends;
     }
 
     public void setFriends(Set<ChanterFriend> friends) {
+
         this.friends = friends;
     }
+
 }

@@ -20,4 +20,5 @@ public interface BandChanterRepository extends JpaRepository<BandChanter, Long> 
     int deleteByBand_IdAndChanter_Id(long bandId, long chanterId);
 
     BandChanter findByBand_IdAndChanter_Id(long bandId, long chanterId);
+
 }

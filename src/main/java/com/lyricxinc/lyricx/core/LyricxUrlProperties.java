@@ -13,34 +13,43 @@ public class LyricxUrlProperties {
     private String songImageUrl = "";
 
     public String getContributorImageUrl() {
+
         return contributorImageUrl;
     }
 
     public void setContributorImageUrl(String contributorImageUrl) {
+
         this.contributorImageUrl = contributorImageUrl;
     }
 
     public String getArtistImageUrl() {
+
         return artistImageUrl;
     }
 
     public void setArtistImageUrl(String artistImageUrl) {
+
         this.artistImageUrl = artistImageUrl;
     }
 
     public String getAlbumImageUrl() {
+
         return albumImageUrl;
     }
 
     public void setAlbumImageUrl(String albumImageUrl) {
+
         this.albumImageUrl = albumImageUrl;
     }
 
     public String getSongImageUrl() {
+
         return songImageUrl;
     }
 
     public void setSongImageUrl(String songImageUrl) {
+
         this.songImageUrl = songImageUrl;
     }
+
 }

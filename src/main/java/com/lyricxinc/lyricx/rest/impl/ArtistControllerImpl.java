@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 @RestController
 public class ArtistControllerImpl implements ArtistController {
@@ -21,19 +22,22 @@ public class ArtistControllerImpl implements ArtistController {
 
     @Autowired
     ArtistControllerImpl(ArtistService artistService, HttpResponse httpResponse) {
+
         this.artistService = artistService;
         this.httpResponse = httpResponse;
     }
 
     @Override
     public ResponseEntity<HttpResponseData> addArtist(HttpServletRequest request, String name, MultipartFile image) {
+
         artistService.addArtist(request, name, image);
 
         return httpResponse.returnResponse(HttpStatus.OK, "Artist created successfully.", null);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateArtistName(HttpServletRequest request, long artistId, String name) {
+    public ResponseEntity<HttpResponseData> updateArtistName(HttpServletRequest request, UUID artistId, String name) {
+
         Artist artist = artistService.getArtistById(artistId);
         artistService.updateArtist(request, artist, name);
 
@@ -41,7 +45,8 @@ public class ArtistControllerImpl implements ArtistController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateArtistImage(HttpServletRequest request, long artistId, MultipartFile image) {
+    public ResponseEntity<HttpResponseData> updateArtistImage(HttpServletRequest request, UUID artistId, MultipartFile image) {
+
         Artist artist = artistService.getArtistById(artistId);
         artistService.updateArtist(request, artist, image);
 
@@ -49,15 +54,16 @@ public class ArtistControllerImpl implements ArtistController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> removeArtistImage(HttpServletRequest request, long artistId) {
+    public ResponseEntity<HttpResponseData> removeArtistImage(HttpServletRequest request, UUID artistId) {
         //TODO
         return null;
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> removeArtist(HttpServletRequest request, long artistId) {
+    public ResponseEntity<HttpResponseData> removeArtist(HttpServletRequest request, UUID artistId) {
 
         //TODO
         return null;
     }
+
 }

@@ -14,14 +14,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AdminInterceptor()).addPathPatterns("/admin/**");
-        registry.addInterceptor(new ContributorInterceptor()).addPathPatterns("/contributor/**").excludePathPatterns("/contributor/register").addPathPatterns("/artist/**").addPathPatterns("/album/**");
-        registry.addInterceptor(new ChanterInterceptor()).addPathPatterns("/chanter/**");
+
+        //TODO:uncomment these to get the authorization working
+//        registry.addInterceptor(new AdminInterceptor()).addPathPatterns("/admin/**");
+//        registry.addInterceptor(new ContributorInterceptor()).addPathPatterns("/contributor/**").excludePathPatterns("/contributor/register").addPathPatterns("/artist/**").addPathPatterns("/album/**");
+//        registry.addInterceptor(new ChanterInterceptor()).addPathPatterns("/chanter/**");
 
     }
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+
         configurer.defaultContentType(MediaType.APPLICATION_JSON);
     }
+
 }

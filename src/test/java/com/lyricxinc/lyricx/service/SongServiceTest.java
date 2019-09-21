@@ -18,10 +18,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import static org.mockito.Mockito.mock;
 
@@ -50,7 +47,8 @@ public class SongServiceTest {
         HttpSession session = mock.getSession();
         session.setAttribute("userId", "gjzXThtgTsUBcZMw0eSADOI3Fs73");
 
-        songService.addSong(mock, "Counting Stars",1,"G","6x4", (short)1, "Native\n Counting stars", lyrics.getBytes(), "https://www.youtube.com/watch?v=hT_nvWreIhg", "https://open.spotify.com/track/6sy3LkhNFjJWlaeSMNwQ62", "https://www.deezer.com/us/track/65759979");
+//        UUID uuid =new UUID();
+//        songService.addSong(mock, "Counting Stars",,"G","6x4", (short)1, "Native\n Counting stars", lyrics.getBytes(), "https://www.youtube.com/watch?v=hT_nvWreIhg", "https://open.spotify.com/track/6sy3LkhNFjJWlaeSMNwQ62", "https://www.deezer.com/us/track/65759979");
     }
 
 //    @Test
