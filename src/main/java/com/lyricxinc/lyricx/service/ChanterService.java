@@ -12,19 +12,24 @@ public class ChanterService {
 
     @Autowired
     public ChanterService(ChanterRepository chanterRepository) {
+
         this.chanterRepository = chanterRepository;
     }
 
-    public Chanter getChanterById(String id){
+    public Chanter getChanterById(String id) {
+
         return chanterRepository.findById(id).orElse(null);
     }
 
-    public void addChanter(String id){
+    public void addChanter(String id) {
+
         Chanter chanter = new Chanter(id);
         chanterRepository.save(chanter);
     }
 
-    public void removeAppUser(String chanterId){
+    public void removeAppUser(String chanterId) {
+
         chanterRepository.deleteById(chanterId);
     }
+
 }

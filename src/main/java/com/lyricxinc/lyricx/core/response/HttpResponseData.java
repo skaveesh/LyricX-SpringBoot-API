@@ -1,6 +1,7 @@
 package com.lyricxinc.lyricx.core.response;
 
 import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
 
 /*
@@ -9,34 +10,42 @@ Do not remove the getters nor change their access modifiers from public to any o
 @Component
 public class HttpResponseData {
 
-  private LocalDateTime timestamp;
-  private String message;
-  private Object data;
+    private LocalDateTime timestamp;
+    private String message;
+    private Object data;
 
-  public HttpResponseData() {
-  }
+    public HttpResponseData() {
 
-  void setTimestamp(LocalDateTime timestamp) {
-    this.timestamp = timestamp;
-  }
+    }
 
-  void setMessage(String message) {
-    this.message = message;
-  }
+    void setTimestamp(LocalDateTime timestamp) {
 
-  public void setData(Object data) {
-    this.data = data;
-  }
+        this.timestamp = timestamp;
+    }
 
-  public LocalDateTime getTimestamp() {
-    return timestamp;
-  }
+    void setMessage(String message) {
 
-  public String getMessage() {
-    return message;
-  }
+        this.message = message;
+    }
 
-  public Object getData() {
-    return data;
-  }
+    public void setData(Object data) {
+
+        this.data = data;
+    }
+
+    public LocalDateTime getTimestamp() {
+
+        return timestamp;
+    }
+
+    public String getMessage() {
+
+        return message;
+    }
+
+    public Object getData() {
+
+        return data;
+    }
+
 }

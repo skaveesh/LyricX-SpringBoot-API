@@ -1,7 +1,5 @@
 package com.lyricxinc.lyricx.service;
 
-import com.lyricxinc.lyricx.model.Artist;
-import com.lyricxinc.lyricx.model.Contributor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,11 +61,6 @@ public class ArtistServiceTest {
 
     @Test
     public void removeArtist() {
-        try {
 
-            artistService.removeArtist(6L);
-        }catch (Exception e){
-            System.out.println("MESSAGE : "+e.getMessage());
-        }
     }
 }

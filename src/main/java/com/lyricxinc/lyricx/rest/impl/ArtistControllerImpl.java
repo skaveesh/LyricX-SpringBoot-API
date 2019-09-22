@@ -21,12 +21,14 @@ public class ArtistControllerImpl implements ArtistController {
 
     @Autowired
     ArtistControllerImpl(ArtistService artistService, HttpResponse httpResponse) {
+
         this.artistService = artistService;
         this.httpResponse = httpResponse;
     }
 
     @Override
     public ResponseEntity<HttpResponseData> addArtist(HttpServletRequest request, String name, MultipartFile image) {
+
         artistService.addArtist(request, name, image);
 
         return httpResponse.returnResponse(HttpStatus.OK, "Artist created successfully.", null);
@@ -34,6 +36,7 @@ public class ArtistControllerImpl implements ArtistController {
 
     @Override
     public ResponseEntity<HttpResponseData> updateArtistName(HttpServletRequest request, long artistId, String name) {
+
         Artist artist = artistService.getArtistById(artistId);
         artistService.updateArtist(request, artist, name);
 
@@ -42,6 +45,7 @@ public class ArtistControllerImpl implements ArtistController {
 
     @Override
     public ResponseEntity<HttpResponseData> updateArtistImage(HttpServletRequest request, long artistId, MultipartFile image) {
+
         Artist artist = artistService.getArtistById(artistId);
         artistService.updateArtist(request, artist, image);
 
@@ -60,4 +64,5 @@ public class ArtistControllerImpl implements ArtistController {
         //TODO
         return null;
     }
+
 }

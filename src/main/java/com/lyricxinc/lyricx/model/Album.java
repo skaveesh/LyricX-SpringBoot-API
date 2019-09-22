@@ -1,9 +1,16 @@
 package com.lyricxinc.lyricx.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.Set;
@@ -17,42 +24,52 @@ public class Album {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "artistId", nullable = false)
+    @Valid
+    @JsonBackReference
     private Artist artist;
 
+    @PastOrPresent(groups = OnAlbumCreate.class)
     private Year year;
 
-    @NotBlank
+    @NotBlank(groups = OnAlbumCreate.class)
     private String name;
 
-    @NotBlank
     private String imgUrl;
 
     @Column(unique = true)
-    private String albumUrl;
+    @NotNull
+    private String surrogateKey;
 
     @CreationTimestamp
     private LocalDateTime addedDate;
 
+    @UpdateTimestamp
+    private LocalDateTime lastModifiedDate;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "contributorId", nullable = false)
+    @Valid
+    @JsonBackReference
     private Contributor addedBy;
 
     private boolean approvedStatus;
 
     @OneToMany(mappedBy = "album", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JsonManagedReference
     private Set<Song> songs;
 
     public Album() {
+
     }
 
-    public Album(Artist artist, Year year, @NotBlank String name, @NotBlank String imgUrl, Contributor addedBy, boolean approvedStatus, String albumUrl) {
+    public Album(Artist artist, Year year, @NotBlank String name, @NotBlank String imgUrl, Contributor addedBy, boolean approvedStatus) {
+
         this.artist = artist;
         this.year = year;
         this.name = name;
         this.imgUrl = imgUrl;
         this.addedBy = addedBy;
         this.approvedStatus = approvedStatus;
-        this.albumUrl = albumUrl;
     }
 
     public long getId() {
@@ -64,70 +81,93 @@ public class Album {
     }
 
     public Artist getArtist() {
+
         return artist;
     }
 
     public void setArtist(Artist artist) {
+
         this.artist = artist;
     }
 
     public Year getYear() {
+
         return year;
     }
 
     public void setYear(Year year) {
+
         this.year = year;
     }
 
     public String getName() {
+
         return name;
     }
 
     public void setName(String name) {
+
         this.name = name;
     }
 
     public String getImgUrl() {
+
         return imgUrl;
     }
 
     public void setImgUrl(String imgUrl) {
+
         this.imgUrl = imgUrl;
     }
 
-    public String getAlbumUrl() {
-        return albumUrl;
+    public String getSurrogateKey() {
+
+        return surrogateKey;
     }
 
-    public void setAlbumUrl(String albumUrl) {
-        this.albumUrl = albumUrl;
+    public void setSurrogateKey(String surrogateKey) {
+
+        this.surrogateKey = surrogateKey;
     }
 
     public LocalDateTime getAddedDate() {
+
         return addedDate;
     }
 
+    public LocalDateTime getLastModifiedDate() {
+
+        return lastModifiedDate;
+    }
+
     public Contributor getAddedBy() {
+
         return addedBy;
     }
 
     public void setAddedBy(Contributor addedBy) {
+
         this.addedBy = addedBy;
     }
 
     public boolean isApprovedStatus() {
+
         return approvedStatus;
     }
 
     public void setApprovedStatus(boolean approvedStatus) {
+
         this.approvedStatus = approvedStatus;
     }
 
     public Set<Song> getSongs() {
+
         return songs;
     }
 
     public void setSongs(Set<Song> songs) {
+
         this.songs = songs;
     }
+
 }

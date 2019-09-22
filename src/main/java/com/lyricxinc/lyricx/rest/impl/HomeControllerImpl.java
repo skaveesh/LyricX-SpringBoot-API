@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HomeControllerImpl implements HomeController {
+
     @Override
-    public String home(){
+    public String home() {
+
         return "LyricX Web Explorer";
     }
+
 }

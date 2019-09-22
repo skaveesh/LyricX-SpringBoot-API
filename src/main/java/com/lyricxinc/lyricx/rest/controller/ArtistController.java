@@ -27,4 +27,5 @@ public interface ArtistController {
 
     @DeleteMapping("delete")
     ResponseEntity<HttpResponseData> removeArtist(HttpServletRequest request, long artistId);
+
 }

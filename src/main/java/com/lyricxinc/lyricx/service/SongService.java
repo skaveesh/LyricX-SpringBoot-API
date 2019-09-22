@@ -24,6 +24,7 @@ public class SongService {
 
     @Autowired
     public SongService(SongRepository songRepository, AlbumService albumService, LanguageService languageService, ContributorService contributorService, AmazonClientService amazonClientService) {
+
         this.songRepository = songRepository;
         this.albumService = albumService;
         this.languageService = languageService;
@@ -35,7 +36,7 @@ public class SongService {
 
         Song song = songRepository.findById(id).orElse(null);
 
-        if(song == null)
+        if (song == null)
             throw new ForbiddenCustomException("Requested song cannot be found.");
 
         return song;
@@ -91,7 +92,7 @@ public class SongService {
         songRepository.save(song);
     }
 
-    public void updateSong(HttpServletRequest request, long songId, MultipartFile image){
+    public void updateSong(HttpServletRequest request, long songId, MultipartFile image) {
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
@@ -109,7 +110,7 @@ public class SongService {
         songRepository.save(song);
     }
 
-    public void removeAlbumArt(HttpServletRequest request, long songId){
+    public void removeAlbumArt(HttpServletRequest request, long songId) {
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
@@ -135,4 +136,5 @@ public class SongService {
 
         songRepository.deleteById(id);
     }
+
 }

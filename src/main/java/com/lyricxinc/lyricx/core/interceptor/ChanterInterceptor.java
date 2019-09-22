@@ -18,12 +18,15 @@ public class ChanterInterceptor implements HandlerInterceptor {
         String authToken = request.getHeader("Authorization");
         FirebaseToken decodeToken = null;
 
-        if (authToken.substring(0, 6).equals("Bearer")) {
+        if (authToken.substring(0, 6).equals("Bearer"))
+        {
             authToken = authToken.substring(7, authToken.length());
 
-            try {
+            try
+            {
                 decodeToken = FirebaseAuth.getInstance(FirebaseConfig.chanterFirebaseApp).verifyIdToken(authToken);
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 throw new ForbiddenCustomException("Provided credentials are not valid.");
             }
 
@@ -33,8 +36,11 @@ public class ChanterInterceptor implements HandlerInterceptor {
             System.out.println("email: " + email + " uid: " + uid + " issuer: " + decodeToken.getIssuer());
 
             return true;
-        } else {
+        }
+        else
+        {
             throw new ForbiddenCustomException("Provided credentials are not valid.");
         }
     }
+
 }

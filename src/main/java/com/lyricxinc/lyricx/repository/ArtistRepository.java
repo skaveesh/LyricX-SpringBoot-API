@@ -11,6 +11,7 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
 
     /**
      * find list of artists by name
+     *
      * @param name of the artist
      * @return the corresponding artists list
      */
@@ -18,9 +19,10 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
 
     /**
      * find artist by artist url
-     * @param artistUrl url of the artist
+     *
+     * @param surrogateKey url of the artist
      * @return the corresponding artist
      */
-    Artist findByArtistUrl(String artistUrl);
+    Artist findBySurrogateKey(String surrogateKey);
 
 }

@@ -1,6 +1,9 @@
 package com.lyricxinc.lyricx.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -16,6 +19,7 @@ public class Playlist {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "chanterId", nullable = false)
+    @JsonBackReference
     private Chanter chanter;
 
     @NotBlank
@@ -24,62 +28,78 @@ public class Playlist {
     @CreationTimestamp
     private LocalDateTime createdDate;
 
+    @UpdateTimestamp
+    private LocalDateTime lastModifiedDate;
+
     @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonManagedReference
     private Set<PlaylistSong> playlistSongs;
 
     public Playlist() {
+
     }
 
-    public Playlist(Chanter chanter, @NotBlank String playlistName, LocalDateTime createdDate) {
+    public Playlist(Chanter chanter, @NotBlank String playlistName) {
+
         this.chanter = chanter;
         this.playlistName = playlistName;
-        this.createdDate = createdDate;
     }
 
-    public Playlist(Chanter chanter, @NotBlank String playlistName, LocalDateTime createdDate, Set<PlaylistSong> playlistSongs) {
+    public Playlist(Chanter chanter, @NotBlank String playlistName, Set<PlaylistSong> playlistSongs) {
+
         this.chanter = chanter;
         this.playlistName = playlistName;
-        this.createdDate = createdDate;
         this.playlistSongs = playlistSongs;
     }
 
     public int getId() {
+
         return id;
     }
 
     public void setId(int id) {
+
         this.id = id;
     }
 
     public Chanter getChanter() {
+
         return chanter;
     }
 
     public void setChanter(Chanter chanter) {
+
         this.chanter = chanter;
     }
 
     public String getPlaylistName() {
+
         return playlistName;
     }
 
     public void setPlaylistName(String playlistName) {
+
         this.playlistName = playlistName;
     }
 
     public LocalDateTime getCreatedDate() {
+
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
+    public LocalDateTime getLastModifiedDate() {
+
+        return lastModifiedDate;
     }
 
     public Set<PlaylistSong> getPlaylistSongs() {
+
         return playlistSongs;
     }
 
     public void setPlaylistSongs(Set<PlaylistSong> playlistSongs) {
+
         this.playlistSongs = playlistSongs;
     }
+
 }

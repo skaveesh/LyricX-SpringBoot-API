@@ -13,17 +13,20 @@ public class ArtistGenreService {
 
     @Autowired
     public ArtistGenreService(ArtistGenreRepository artistGenreRepository, ArtistService artistService, GenreService genreService) {
+
         this.artistGenreRepository = artistGenreRepository;
         this.artistService = artistService;
         this.genreService = genreService;
     }
 
-    public void addArtistGenre(long artistId, short genreId){
+    public void addArtistGenre(long artistId, short genreId) {
         //ArtistGenre artistGenre = new ArtistGenre(artistService.getArtistById(artistId), genreService.getGenreById(genreId));
         artistGenreRepository.addArtistAndGenre(artistId, genreId);
     }
 
-    public int removeArtistGenre(long artistId, short genreId){
+    public int removeArtistGenre(long artistId, short genreId) {
+
         return artistGenreRepository.deleteByArtist_IdAndGenre_Id(artistId, genreId);
     }
+
 }

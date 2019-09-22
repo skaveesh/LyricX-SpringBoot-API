@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Repository
 public interface ArtistGenreRepository extends JpaRepository<ArtistGenre, Long> {
 
@@ -20,4 +21,5 @@ public interface ArtistGenreRepository extends JpaRepository<ArtistGenre, Long> 
     int deleteByArtist_IdAndGenre_Id(long artistId, short genreId);
 
     ArtistGenre findByArtist_IdAndGenre_Id(long artistId, short genreId);
+
 }

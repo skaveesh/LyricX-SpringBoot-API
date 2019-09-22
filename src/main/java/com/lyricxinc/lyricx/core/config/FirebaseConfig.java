@@ -25,25 +25,19 @@ public class FirebaseConfig {
 
         File adminFile = ResourceUtils.getFile("classpath:static/lyricx-admin-firebase-adminsdk.json");
         InputStream adminServiceAccount = new FileInputStream(adminFile);
-        FirebaseOptions adminOptions = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.fromStream(adminServiceAccount))
-                .build();
+        FirebaseOptions adminOptions = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(adminServiceAccount)).build();
 
         adminFirebaseApp = FirebaseApp.initializeApp(adminOptions, "admin");
 
         File contributorFile = ResourceUtils.getFile("classpath:static/lyricx-contributor-firebase-adminsdk.json");
         InputStream contributorServiceAccount = new FileInputStream(contributorFile);
-        FirebaseOptions contributorOptions = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.fromStream(contributorServiceAccount))
-                .build();
+        FirebaseOptions contributorOptions = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(contributorServiceAccount)).build();
 
         contributorFirebaseApp = FirebaseApp.initializeApp(contributorOptions, "contributor");
 
         File chanterFile = ResourceUtils.getFile("classpath:static/lyricx-chanter-firebase-adminsdk.json");
         InputStream chanterServiceAccount = new FileInputStream(chanterFile);
-        FirebaseOptions chanterOptions = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.fromStream(chanterServiceAccount))
-                .build();
+        FirebaseOptions chanterOptions = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(chanterServiceAccount)).build();
 
         chanterFirebaseApp = FirebaseApp.initializeApp(chanterOptions, "chanter");
     }

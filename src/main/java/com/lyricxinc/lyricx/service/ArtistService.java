@@ -20,16 +20,17 @@ public class ArtistService {
 
     @Autowired
     public ArtistService(ArtistRepository artistRepository, ContributorService contributorService, AmazonClientService amazonClientService) {
+
         this.artistRepository = artistRepository;
         this.contributorService = contributorService;
         this.amazonClientService = amazonClientService;
     }
 
-    public Artist getArtistById(long id){
+    public Artist getArtistById(long id) {
 
         Artist artist = artistRepository.findById(id).orElse(null);
 
-        if(artist==null)
+        if (artist == null)
             throw new ForbiddenCustomException("Requested artist cannot be found.");
 
         return artist;
@@ -43,12 +44,12 @@ public class ArtistService {
 
         Artist artist = new Artist(name, imgUrl, contributor, contributor.isSeniorContributor());
 
-        artist.setArtistUrl( UUID.randomUUID().toString().replace("-", ""));
+        artist.setSurrogateKey(UUID.randomUUID().toString().replace("-", ""));
 
         artistRepository.save(artist);
     }
 
-    public void updateArtist(HttpServletRequest request, Artist artist, String name){
+    public void updateArtist(HttpServletRequest request, Artist artist, String name) {
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
@@ -59,7 +60,7 @@ public class ArtistService {
         artistRepository.save(artist);
     }
 
-    public void updateArtist(HttpServletRequest request, Artist artist, MultipartFile image){
+    public void updateArtist(HttpServletRequest request, Artist artist, MultipartFile image) {
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
@@ -75,11 +76,13 @@ public class ArtistService {
         artistRepository.save(artist);
     }
 
-    public void removeImage(long id){
+    public void removeImage(long id) {
         //TODO
     }
 
-    public void removeArtist(long id){
+    public void removeArtist(long id) {
+
         artistRepository.deleteById(id);
     }
+
 }

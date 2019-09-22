@@ -1,15 +1,23 @@
 package com.lyricxinc.lyricx.model;
 
+import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
+import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @Entity
 public class Contributor {
 
     @Id
     @NotBlank
+    @NotNull(groups = {OnAlbumCreate.class, OnAlbumUpdate.class})
     private String id;
 
     @NotBlank
@@ -29,10 +37,18 @@ public class Contributor {
 
     private boolean seniorContributor;
 
+    @CreationTimestamp
+    private LocalDateTime addedDate;
+
+    @UpdateTimestamp
+    private LocalDateTime lastModifiedDate;
+
     public Contributor() {
+
     }
 
     public Contributor(String id, String firstName, String lastName, String imgUrl, String contactLink) {
+
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -42,58 +58,83 @@ public class Contributor {
     }
 
     public String getId() {
+
         return id;
     }
 
     public void setId(String id) {
+
         this.id = id;
     }
 
     public String getFirstName() {
+
         return firstName;
     }
 
     public void setFirstName(String firstName) {
+
         this.firstName = firstName;
     }
 
     public String getLastName() {
+
         return lastName;
     }
 
     public void setLastName(String lastName) {
+
         this.lastName = lastName;
     }
 
     public String getDescription() {
+
         return description;
     }
 
     public void setDescription(@Size(max = 500) String description) {
+
         this.description = description;
     }
 
     public String getImgUrl() {
+
         return imgUrl;
     }
 
     public void setImgUrl(String imgUrl) {
+
         this.imgUrl = imgUrl;
     }
 
     public String getContactLink() {
+
         return contactLink;
     }
 
     public void setContactLink(String contactLink) {
+
         this.contactLink = contactLink;
     }
 
     public boolean isSeniorContributor() {
+
         return seniorContributor;
     }
 
     public void setSeniorContributor(boolean seniorContributor) {
+
         this.seniorContributor = seniorContributor;
     }
+
+    public LocalDateTime getAddedDate() {
+
+        return addedDate;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+
+        return lastModifiedDate;
+    }
+
 }

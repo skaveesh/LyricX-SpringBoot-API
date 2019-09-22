@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RequestMapping("song")
 public interface SongController {
+
     @PostMapping("add")
     ResponseEntity<HttpResponseData> addSong(HttpServletRequest request, String name, long albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink);
 
@@ -26,4 +27,5 @@ public interface SongController {
 
     @DeleteMapping("remove")
     ResponseEntity<HttpResponseData> removeSong(HttpServletRequest request, long songId);
+
 }

@@ -1,5 +1,6 @@
 package com.lyricxinc.lyricx.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ public class SongModify {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "songId", nullable = false)
+    @JsonBackReference
     private Song song;
 
     @NotBlank
@@ -22,69 +24,79 @@ public class SongModify {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "contributorId", nullable = false)
+    @JsonBackReference
     private Contributor contributor;
 
     @UpdateTimestamp
-    private LocalDateTime modifiedDate;
+    private LocalDateTime lastModifiedDate;
 
     private boolean hiddenStatus;
 
     public SongModify() {
+
     }
 
-    public SongModify(Song song, @NotBlank String lyrics, Contributor contributor, LocalDateTime modifiedDate, boolean hiddenStatus) {
+    public SongModify(Song song, @NotBlank String lyrics, Contributor contributor, boolean hiddenStatus) {
+
         this.song = song;
         this.lyrics = lyrics;
         this.contributor = contributor;
-        this.modifiedDate = modifiedDate;
         this.hiddenStatus = hiddenStatus;
     }
 
     public long getId() {
+
         return id;
     }
 
     public void setId(long id) {
+
         this.id = id;
     }
 
     public Song getSong() {
+
         return song;
     }
 
     public void setSong(Song song) {
+
         this.song = song;
     }
 
     public String getLyrics() {
+
         return lyrics;
     }
 
     public void setLyrics(String lyrics) {
+
         this.lyrics = lyrics;
     }
 
     public Contributor getContributor() {
+
         return contributor;
     }
 
     public void setContributor(Contributor contributor) {
+
         this.contributor = contributor;
     }
 
-    public LocalDateTime getModifiedDate() {
-        return modifiedDate;
-    }
+    public LocalDateTime getLastModifiedDate() {
 
-    public void setModifiedDate(LocalDateTime modifiedDate) {
-        this.modifiedDate = modifiedDate;
+        return lastModifiedDate;
     }
 
     public boolean isHiddenStatus() {
+
         return hiddenStatus;
     }
 
     public void setHiddenStatus(boolean hiddenStatus) {
+
         this.hiddenStatus = hiddenStatus;
     }
+
 }

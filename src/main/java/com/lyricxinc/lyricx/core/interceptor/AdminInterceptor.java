@@ -18,14 +18,17 @@ public class AdminInterceptor implements HandlerInterceptor {
         String authToken = request.getHeader("Authorization");
         FirebaseToken decodeToken = null;
 
-        if (authToken.substring(0, 6).equals("Bearer")) {
+        if (authToken.substring(0, 6).equals("Bearer"))
+        {
             authToken = authToken.substring(7, authToken.length());
 
             boolean isEmailVerified = false;
 
-            try {
+            try
+            {
                 decodeToken = FirebaseAuth.getInstance(FirebaseConfig.adminFirebaseApp).verifyIdToken(authToken);
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 throw new ForbiddenCustomException("Provided credentials are not valid.");
             }
 
@@ -33,15 +36,19 @@ public class AdminInterceptor implements HandlerInterceptor {
             String email = decodeToken.getEmail();
             isEmailVerified = decodeToken.isEmailVerified();
 
-            if (!isEmailVerified) {
+            if (!isEmailVerified)
+            {
                 throw new ForbiddenCustomException("Your account hasn't verified yet. Please verify.");
             }
 
             System.out.println("email: " + email + " uid: " + uid + " issuer: " + decodeToken.getIssuer());
 
             return true;
-        } else {
+        }
+        else
+        {
             throw new ForbiddenCustomException("Provided credentials are not valid.");
         }
     }
+
 }
