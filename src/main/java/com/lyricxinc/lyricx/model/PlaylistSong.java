@@ -1,5 +1,7 @@
 package com.lyricxinc.lyricx.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,10 +13,12 @@ public class PlaylistSong {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "playlistId", nullable = false)
+    @JsonBackReference
     private Playlist playlist;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "songId", nullable = false)
+    @JsonBackReference
     private Song song;
 
     public PlaylistSong() {

@@ -1,5 +1,6 @@
 package com.lyricxinc.lyricx.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -17,10 +18,12 @@ public class ArtistGenre {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "artistId", nullable = false)
+    @JsonBackReference
     private Artist artist;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "genreId", nullable = false)
+    @JsonBackReference
     private Genre genre;
 
     public ArtistGenre() {

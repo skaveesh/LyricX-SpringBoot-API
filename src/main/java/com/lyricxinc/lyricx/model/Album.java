@@ -1,6 +1,7 @@
 package com.lyricxinc.lyricx.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -15,7 +16,6 @@ import java.time.Year;
 import java.util.Set;
 
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Album {
 
     @Id
@@ -25,6 +25,7 @@ public class Album {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "artistId", nullable = false)
     @Valid
+    @JsonBackReference
     private Artist artist;
 
     @PastOrPresent(groups = OnAlbumCreate.class)
@@ -48,11 +49,13 @@ public class Album {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "contributorId", nullable = false)
     @Valid
+    @JsonBackReference
     private Contributor addedBy;
 
     private boolean approvedStatus;
 
     @OneToMany(mappedBy = "album", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JsonManagedReference
     private Set<Song> songs;
 
     public Album() {

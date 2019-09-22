@@ -1,5 +1,7 @@
 package com.lyricxinc.lyricx.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,6 +19,7 @@ public class Playlist {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "chanterId", nullable = false)
+    @JsonBackReference
     private Chanter chanter;
 
     @NotBlank
@@ -29,6 +32,7 @@ public class Playlist {
     private LocalDateTime lastModifiedDate;
 
     @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonManagedReference
     private Set<PlaylistSong> playlistSongs;
 
     public Playlist() {

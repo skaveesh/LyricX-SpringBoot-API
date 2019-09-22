@@ -1,5 +1,6 @@
 package com.lyricxinc.lyricx.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -14,10 +15,12 @@ public class ChanterFriend {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "chanterId", nullable = false)
+    @JsonBackReference
     private Chanter chanter;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "friendId", nullable = false)
+    @JsonBackReference
     private Chanter friend;
 
     @CreationTimestamp

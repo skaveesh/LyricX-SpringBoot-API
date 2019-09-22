@@ -1,5 +1,7 @@
 package com.lyricxinc.lyricx.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
 import org.hibernate.annotations.CreationTimestamp;
@@ -31,6 +33,7 @@ public class Artist {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "contributorId", nullable = false)
     @Valid
+    @JsonBackReference
     private Contributor addedBy;
 
     private boolean approvedStatus;
@@ -46,12 +49,15 @@ public class Artist {
     private LocalDateTime lastModifiedDate;
 
     @OneToMany(mappedBy = "artist", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonManagedReference
     private Set<ArtistGenre> artistGenres;
 
     @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JsonManagedReference
     private Set<Album> albums;
 
     @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JsonManagedReference
     private Set<ArtistSong> artistSongs;
 
     public Artist() {

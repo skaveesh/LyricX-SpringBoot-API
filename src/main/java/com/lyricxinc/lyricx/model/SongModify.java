@@ -1,5 +1,6 @@
 package com.lyricxinc.lyricx.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ public class SongModify {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "songId", nullable = false)
+    @JsonBackReference
     private Song song;
 
     @NotBlank
@@ -22,6 +24,7 @@ public class SongModify {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "contributorId", nullable = false)
+    @JsonBackReference
     private Contributor contributor;
 
     @UpdateTimestamp

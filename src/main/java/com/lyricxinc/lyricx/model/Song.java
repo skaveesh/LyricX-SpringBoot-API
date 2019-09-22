@@ -1,5 +1,7 @@
 package com.lyricxinc.lyricx.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -22,6 +24,7 @@ public class Song {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "albumId", nullable = false)
+    @JsonBackReference
     private Album album;
 
     @Size(max = 5)
@@ -32,6 +35,7 @@ public class Song {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "languageId", nullable = false)
+    @JsonBackReference
     private Language language;
 
     private String keywords;
@@ -55,6 +59,7 @@ public class Song {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "addedById", nullable = true)
+    @JsonBackReference
     private Contributor addedBy;
 
     @CreationTimestamp
@@ -65,10 +70,12 @@ public class Song {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "lastModifiedById", nullable = true)
+    @JsonBackReference
     private Contributor lastModifiedBy;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "publishedById", nullable = true)
+    @JsonBackReference
     private Contributor publishedBy;
 
     private LocalDateTime publishedDate;
@@ -76,12 +83,15 @@ public class Song {
     private boolean publishedState;
 
     @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonManagedReference
     private Set<SongGenre> songGenres;
 
     @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonManagedReference
     private Set<ArtistSong> artistSongs;
 
     @OneToMany(mappedBy = "song", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonManagedReference
     private Set<SongModify> songModifies;
 
     public Song() {
