@@ -21,7 +21,7 @@ public class Playlist {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "chanterId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "playlistsReferenceChanter")
     private Chanter chanter;
 
     @NotBlank
@@ -34,7 +34,7 @@ public class Playlist {
     private LocalDateTime lastModifiedDate;
 
     @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "playlistSongsReferenceSong")
     private Set<PlaylistSong> playlistSongs;
 
     public Playlist() {

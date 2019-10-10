@@ -26,7 +26,7 @@ public class Song {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "albumId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "songReferenceAlbum")
     private Album album;
 
     @Size(max = 5)
@@ -37,7 +37,7 @@ public class Song {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "languageId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "referenceLanguage")
     private Language language;
 
     private String keywords;
@@ -59,10 +59,20 @@ public class Song {
     @Column(unique = true)
     private String songUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "addedById", nullable = true)
-    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "addedById", nullable = false)
+    @JsonBackReference(value = "referenceAddedBy")
     private Contributor addedBy;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "lastModifiedById", nullable = true)
+    @JsonBackReference(value = "referenceLastModifiedBy")
+    private Contributor lastModifiedBy;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "publishedById", nullable = true)
+    @JsonBackReference(value = "referencePublishedBy")
+    private Contributor publishedBy;
 
     @CreationTimestamp
     private LocalDateTime addedDate;
@@ -70,30 +80,20 @@ public class Song {
     @UpdateTimestamp
     private LocalDateTime lastModifiedDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "lastModifiedById", nullable = true)
-    @JsonBackReference
-    private Contributor lastModifiedBy;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "publishedById", nullable = true)
-    @JsonBackReference
-    private Contributor publishedBy;
-
     private LocalDateTime publishedDate;
 
     private boolean publishedState;
 
     @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "songGenresReferenceSong")
     private Set<SongGenre> songGenres;
 
     @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "artistSongsReferenceSong")
     private Set<ArtistSong> artistSongs;
 
     @OneToMany(mappedBy = "song", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "songModifiesReferenceSong")
     private Set<SongModify> songModifies;
 
     public Song() {

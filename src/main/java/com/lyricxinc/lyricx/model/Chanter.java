@@ -20,23 +20,23 @@ public class Chanter {
     private LocalDateTime addedDate;
 
     @OneToMany(mappedBy = "chanter", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "bandChantersReferenceChanter")
     private Set<BandChanter> bandChanters;
 
     @OneToMany(mappedBy = "chanter", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "favouritesReferenceChanter")
     private Set<Favourite> favourites;
 
     @OneToMany(mappedBy = "chanter", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "playlistsReferenceChanter")
     private Set<Playlist> playlists;
 
     @OneToMany(mappedBy = "chanter", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "chantersReferenceChanter")
     private Set<ChanterFriend> chanters;
 
     @OneToMany(mappedBy = "friend", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "friendsReferenceFriend")
     private Set<ChanterFriend> friends;
 
     public Chanter() {

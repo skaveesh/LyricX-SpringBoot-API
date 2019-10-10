@@ -4,6 +4,7 @@ import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
 import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.model.Contributor;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
+import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
 import com.lyricxinc.lyricx.repository.AlbumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,8 +62,11 @@ public class AlbumService {
 //        this.albumRepository.save(album);
     }
 
-    public void updateAlbum(HttpServletRequest request, Album payload) {
+    @Validated(OnAlbumUpdate.class)
+    public void updateAlbum(HttpServletRequest request, final @Valid Album payload) {
 
+        System.out.println(payload.getSurrogateKey());
+        System.out.println(payload.getName());
 //        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 //
 //        contributorService.checkNonSeniorContributorEditsVerifiedContent(contributor, payload);

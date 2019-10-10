@@ -18,7 +18,7 @@ public class VisitorCorrection {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "songId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "ReferenceSong")
     private Song song;
 
     @NotBlank

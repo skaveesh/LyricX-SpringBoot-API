@@ -20,12 +20,12 @@ public class ArtistGenre {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "artistId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "artistGenresReferenceArtist")
     private Artist artist;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "genreId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "referenceGenre")
     private Genre genre;
 
     public ArtistGenre() {

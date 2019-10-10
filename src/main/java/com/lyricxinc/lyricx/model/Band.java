@@ -28,7 +28,7 @@ public class Band {
     private LocalDateTime lastModifiedDate;
 
     @OneToMany(mappedBy = "band", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "bandChantersReferenceBand")
     private Set<BandChanter> bandChanters;
 
     public Band() {

@@ -21,26 +21,37 @@ public class Artist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull(groups = {OnAlbumCreate.class, OnAlbumUpdate.class})
+    @NotNull(groups = {OnAlbumCreate.class})
     @JsonIgnore
     private long id;
 
-    @NotBlank
+    @NotBlank(groups = OnAlbumCreate.class)
     @Size(max = 50)
     private String name;
 
-    @NotBlank
     private String imgUrl;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "contributorId", nullable = false)
     @Valid
-    @JsonBackReference
+    @JsonBackReference(value = "referenceAddedBy")
     private Contributor addedBy;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "lastModifiedById", nullable = true)
+    @JsonBackReference(value = "referenceLastModifiedBy")
+    private Contributor lastModifiedBy;
+
+    public Contributor getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(Contributor lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
 
     private boolean approvedStatus;
 
-    @NotNull
     @Column(unique = true)
     private String surrogateKey;
 
@@ -51,15 +62,15 @@ public class Artist {
     private LocalDateTime lastModifiedDate;
 
     @OneToMany(mappedBy = "artist", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "artistGenresReferenceArtist")
     private Set<ArtistGenre> artistGenres;
 
     @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JsonManagedReference
+    @JsonManagedReference(value = "albumsReferenceArtist")
     private Set<Album> albums;
 
     @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JsonManagedReference
+    @JsonManagedReference(value = "artistSongsReferenceArtist")
     private Set<ArtistSong> artistSongs;
 
     public Artist() {

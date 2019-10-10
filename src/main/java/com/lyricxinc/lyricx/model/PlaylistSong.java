@@ -15,12 +15,12 @@ public class PlaylistSong {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "playlistId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "referencePlaylist")
     private Playlist playlist;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "songId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "playlistSongsReferenceSong")
     private Song song;
 
     public PlaylistSong() {

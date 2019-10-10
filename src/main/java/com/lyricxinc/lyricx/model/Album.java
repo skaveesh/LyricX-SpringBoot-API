@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
+import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -27,7 +28,7 @@ public class Album {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "artistId", nullable = false)
     @Valid
-    @JsonBackReference
+    @JsonBackReference(value = "albumsReferenceArtist")
     private Artist artist;
 
     @PastOrPresent(groups = OnAlbumCreate.class)
@@ -39,7 +40,7 @@ public class Album {
     private String imgUrl;
 
     @Column(unique = true)
-    @NotNull
+    @NotNull(groups = OnAlbumUpdate.class)
     private String surrogateKey;
 
     @CreationTimestamp
@@ -51,13 +52,18 @@ public class Album {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "contributorId", nullable = false)
     @Valid
-    @JsonBackReference
+    @JsonBackReference(value = "referenceAddedBy")
     private Contributor addedBy;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "lastModifiedById", nullable = true)
+    @JsonBackReference(value = "referenceLastModifiedBy")
+    private Contributor lastModifiedBy;
 
     private boolean approvedStatus;
 
     @OneToMany(mappedBy = "album", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JsonManagedReference
+    @JsonManagedReference(value = "songReferenceAlbum")
     private Set<Song> songs;
 
     public Album() {
@@ -172,4 +178,11 @@ public class Album {
         this.songs = songs;
     }
 
+    public Contributor getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(Contributor lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
 }

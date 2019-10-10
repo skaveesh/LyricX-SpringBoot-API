@@ -16,6 +16,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import javax.validation.ConstraintViolationException;
+
 @ControllerAdvice
 public class ExceptionResponseEntityHandler {
 
@@ -58,6 +60,13 @@ public class ExceptionResponseEntityHandler {
     @ExceptionHandler(ForbiddenCustomException.class)
     @ResponseBody
     public ResponseEntity<HttpResponseData> handleForbiddenCustomException(RuntimeException ex) {
+
+        return httpResponse.returnResponse(HttpStatus.FORBIDDEN, ex.getMessage(), null);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseBody
+    public ResponseEntity<HttpResponseData> handleConstraintViolationException(RuntimeException ex) {
 
         return httpResponse.returnResponse(HttpStatus.FORBIDDEN, ex.getMessage(), null);
     }

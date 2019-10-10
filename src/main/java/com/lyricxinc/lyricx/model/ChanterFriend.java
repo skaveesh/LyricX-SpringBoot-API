@@ -17,12 +17,12 @@ public class ChanterFriend {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "chanterId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "chantersReferenceChanter")
     private Chanter chanter;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "friendId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "friendsReferenceFriend")
     private Chanter friend;
 
     @CreationTimestamp

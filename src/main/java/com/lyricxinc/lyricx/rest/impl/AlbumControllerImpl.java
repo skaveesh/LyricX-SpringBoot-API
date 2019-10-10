@@ -47,9 +47,9 @@ public class AlbumControllerImpl implements AlbumController {
 
         //        Album album = albumService.getAlbumById(payload.getId());
 
-        System.out.println("album id is : " + payload.getId());
-        System.out.println("album year is : " + payload.getYear());
-        System.out.println("contributor id is : " + payload.getAddedBy().getId());
+//        System.out.println("album id is : " + payload.getId());
+//        System.out.println("album year is : " + payload.getYear());
+//        System.out.println("contributor id is : " + payload.getAddedBy().getId());
 
         albumService.updateAlbum(request, payload);
 

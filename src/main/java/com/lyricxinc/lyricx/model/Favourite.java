@@ -20,12 +20,12 @@ public class Favourite {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "chanterId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "favouritesReferenceChanter")
     private Chanter chanter;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "songId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "ReferenceSong")
     private Song song;
 
     public Favourite() {

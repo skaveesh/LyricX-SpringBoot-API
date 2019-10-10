@@ -9,7 +9,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -17,16 +16,14 @@ import java.time.LocalDateTime;
 public class Contributor {
 
     @Id
-    @NotBlank
-    @NotNull(groups = {OnAlbumCreate.class, OnAlbumUpdate.class})
-    @JsonIgnore
+    @NotBlank(groups = {OnAlbumCreate.class, OnAlbumUpdate.class})
     private String id;
 
-    @NotBlank
+    @NotBlank(groups = OnAlbumCreate.class)
     @Size(min = 3, max = 50)
     private String firstName;
 
-    @NotBlank
+    @NotBlank(groups = OnAlbumCreate.class)
     @Size(min = 3, max = 50)
     private String lastName;
 
@@ -37,6 +34,7 @@ public class Contributor {
 
     private String contactLink;
 
+    @NotBlank(groups = {OnAlbumCreate.class})
     private boolean seniorContributor;
 
     @CreationTimestamp

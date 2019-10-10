@@ -18,7 +18,7 @@ public class SongModify {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "songId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "songModifiesReferenceSong")
     private Song song;
 
     @NotBlank
@@ -26,7 +26,7 @@ public class SongModify {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "contributorId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "referenceContributor")
     private Contributor contributor;
 
     @UpdateTimestamp
