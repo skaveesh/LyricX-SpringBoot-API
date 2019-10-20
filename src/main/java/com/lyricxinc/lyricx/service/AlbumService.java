@@ -43,6 +43,16 @@ public class AlbumService {
         return album;
     }
 
+    public Album getAlbumBySurrogateKey(String surrogateKey){
+
+        Album album = this.albumRepository.findBySurrogateKey(surrogateKey);
+
+        if (album == null)
+            throw new ForbiddenCustomException("Requested album cannot be found.");
+
+        return album;
+    }
+
     public List<Album> searchAlbums(String keyword) {
 
         return this.albumRepository.findTop20ByNameIgnoreCaseContainingOrderByNameAsc(keyword);
@@ -67,6 +77,16 @@ public class AlbumService {
 
         System.out.println(payload.getSurrogateKey());
         System.out.println(payload.getName());
+
+        long albumToUpdateId = getAlbumBySurrogateKey(payload.getSurrogateKey()).getId();
+
+        payload.setId(albumToUpdateId);
+
+
+        albumRepository.save(payload);
+
+
+
 //        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 //
 //        contributorService.checkNonSeniorContributorEditsVerifiedContent(contributor, payload);

@@ -11,4 +11,6 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
 
     List<Album> findTop20ByNameIgnoreCaseContainingOrderByNameAsc(String keyword);
 
+    Album findBySurrogateKey(String surrogateKey);
+
 }

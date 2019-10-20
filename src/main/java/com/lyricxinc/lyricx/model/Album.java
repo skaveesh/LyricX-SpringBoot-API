@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -18,6 +20,8 @@ import java.time.Year;
 import java.util.Set;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
 public class Album {
 
     @Id

@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -17,11 +19,12 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
+@DynamicUpdate
+@DynamicInsert
 public class Artist {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull(groups = {OnAlbumCreate.class})
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonIgnore
     private long id;
 
@@ -65,11 +68,11 @@ public class Artist {
     @JsonManagedReference(value = "artistGenresReferenceArtist")
     private Set<ArtistGenre> artistGenres;
 
-    @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference(value = "albumsReferenceArtist")
     private Set<Album> albums;
 
-    @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference(value = "artistSongsReferenceArtist")
     private Set<ArtistSong> artistSongs;
 
