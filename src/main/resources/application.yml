@@ -3,3 +3,12 @@ amazonProperties:
   accessKey: AKIAVIWLUOY4IPTSFZ3H
   secretKey: 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
   bucketName: lyricx-images
+
+#default image urls for these entities
+com:
+  lyricxinc:
+    lyricx:
+      contributor-image-url: https://www.myimage.com/contributorimage
+      album-image-url: https://www.myimage.com/albumimage
+      artist-image-url: https://www.myimage.com/artistimage
+      song-image-url: https://www.myimage.com/songimage

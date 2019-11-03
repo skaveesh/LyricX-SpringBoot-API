@@ -24,7 +24,7 @@ public class ChanterInterceptor implements HandlerInterceptor {
 
             try
             {
-                decodeToken = FirebaseAuth.getInstance(FirebaseConfig.chanterFirebaseApp).verifyIdToken(authToken);
+                decodeToken = FirebaseAuth.getInstance(FirebaseConfig.getChanterFirebaseApp()).verifyIdToken(authToken);
             } catch (Exception e)
             {
                 throw new ForbiddenCustomException("Provided credentials are not valid.");

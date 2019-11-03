@@ -13,7 +13,7 @@ public class Favourite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private int id;
+    private Integer id;
 
     @CreationTimestamp
     private LocalDateTime lastModifiedDate;
@@ -38,12 +38,12 @@ public class Favourite {
         this.song = song;
     }
 
-    public int getId() {
+    public Integer getId() {
 
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
 
         this.id = id;
     }

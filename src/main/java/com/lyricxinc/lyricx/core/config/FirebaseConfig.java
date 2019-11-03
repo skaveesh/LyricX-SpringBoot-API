@@ -16,9 +16,9 @@ import java.io.InputStream;
 @Service
 public class FirebaseConfig {
 
-    public static FirebaseApp adminFirebaseApp;
-    public static FirebaseApp contributorFirebaseApp;
-    public static FirebaseApp chanterFirebaseApp;
+    private static FirebaseApp adminFirebaseApp;
+    private static FirebaseApp contributorFirebaseApp;
+    private static FirebaseApp chanterFirebaseApp;
 
     @EventListener(ApplicationReadyEvent.class)
     public void configureFirebaseAdminSDK() throws IOException {
@@ -42,4 +42,15 @@ public class FirebaseConfig {
         chanterFirebaseApp = FirebaseApp.initializeApp(chanterOptions, "chanter");
     }
 
+    public static FirebaseApp getAdminFirebaseApp() {
+        return adminFirebaseApp;
+    }
+
+    public static FirebaseApp getContributorFirebaseApp() {
+        return contributorFirebaseApp;
+    }
+
+    public static FirebaseApp getChanterFirebaseApp() {
+        return chanterFirebaseApp;
+    }
 }

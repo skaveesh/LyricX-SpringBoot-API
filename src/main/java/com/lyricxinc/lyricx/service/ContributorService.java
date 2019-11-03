@@ -31,6 +31,9 @@ public class ContributorService {
 
     public Contributor getContributorById(String id) {
 
+        if(id == null)
+            throw new ForbiddenCustomException("User id is empty");
+
         Contributor contributor = contributorRepository.findById(id).orElse(null);
 
         if (contributor == null)
@@ -56,7 +59,7 @@ public class ContributorService {
 
         try
         {
-            userRecord = FirebaseAuth.getInstance(FirebaseConfig.contributorFirebaseApp).createUser(createRequest);
+            userRecord = FirebaseAuth.getInstance(FirebaseConfig.getContributorFirebaseApp()).createUser(createRequest);
 
             contributor = new Contributor(userRecord.getUid(), firstName, lastName, environment.getProperty("lyricx.contributor-image-url"), contactLink);
             contributorRepository.save(contributor);

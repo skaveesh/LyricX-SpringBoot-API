@@ -18,7 +18,7 @@ public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private short id;
+    private Short id;
 
     @NotBlank
     @Size(max = 30)
@@ -39,12 +39,12 @@ public class Genre {
         this.genreName = genreName;
     }
 
-    public short getId() {
+    public Short getId() {
 
         return id;
     }
 
-    public void setId(short id) {
+    public void setId(Short id) {
 
         this.id = id;
     }

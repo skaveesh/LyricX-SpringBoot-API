@@ -26,7 +26,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 
             try
             {
-                decodeToken = FirebaseAuth.getInstance(FirebaseConfig.adminFirebaseApp).verifyIdToken(authToken);
+                decodeToken = FirebaseAuth.getInstance(FirebaseConfig.getAdminFirebaseApp()).verifyIdToken(authToken);
             } catch (Exception e)
             {
                 throw new ForbiddenCustomException("Provided credentials are not valid.");

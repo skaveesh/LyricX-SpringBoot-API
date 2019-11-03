@@ -36,6 +36,16 @@ public class ArtistService {
         return artist;
     }
 
+    public Artist getAlbumBySurrogateKey(String surrogateKey) {
+
+        Artist artist = this.artistRepository.findBySurrogateKey(surrogateKey);
+
+        if (artist == null)
+            throw new ForbiddenCustomException("Requested artist cannot be found.");
+
+        return artist;
+    }
+
     public void addArtist(HttpServletRequest request, String name, MultipartFile image) {
 
         Contributor contributor = contributorService.getContributorById((String) request.getSession().getAttribute("userId"));

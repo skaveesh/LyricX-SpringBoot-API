@@ -13,7 +13,7 @@ public class ArtistGenre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private long id;
+    private Long id;
 
     @CreationTimestamp
     private LocalDateTime addedDate;
@@ -38,12 +38,12 @@ public class ArtistGenre {
         this.genre = genre;
     }
 
-    public long getId() {
+    public Long getId() {
 
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
 
         this.id = id;
     }

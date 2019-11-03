@@ -1,6 +1,5 @@
 package com.lyricxinc.lyricx.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,11 +18,9 @@ public class Contributor {
     @NotBlank(groups = {OnAlbumCreate.class, OnAlbumUpdate.class})
     private String id;
 
-    @NotBlank(groups = OnAlbumCreate.class)
     @Size(min = 3, max = 50)
     private String firstName;
 
-    @NotBlank(groups = OnAlbumCreate.class)
     @Size(min = 3, max = 50)
     private String lastName;
 
@@ -34,7 +31,6 @@ public class Contributor {
 
     private String contactLink;
 
-    @NotBlank(groups = {OnAlbumCreate.class})
     private boolean seniorContributor;
 
     @CreationTimestamp

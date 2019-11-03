@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
-import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -13,7 +12,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -28,7 +26,6 @@ public class Artist {
     @JsonIgnore
     private long id;
 
-    @NotBlank(groups = OnAlbumCreate.class)
     @Size(max = 50)
     private String name;
 
@@ -40,22 +37,15 @@ public class Artist {
     @JsonBackReference(value = "referenceAddedBy")
     private Contributor addedBy;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "lastModifiedById", nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lastModifiedById")
     @JsonBackReference(value = "referenceLastModifiedBy")
     private Contributor lastModifiedBy;
-
-    public Contributor getLastModifiedBy() {
-        return lastModifiedBy;
-    }
-
-    public void setLastModifiedBy(Contributor lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
 
     private boolean approvedStatus;
 
     @Column(unique = true)
+    @NotBlank(groups = OnAlbumCreate.class)
     private String surrogateKey;
 
     @CreationTimestamp
@@ -88,11 +78,11 @@ public class Artist {
         this.approvedStatus = approvedStatus;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -124,6 +114,14 @@ public class Artist {
     public void setAddedBy(Contributor addedBy) {
 
         this.addedBy = addedBy;
+    }
+
+    public Contributor getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(Contributor lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
     }
 
     public boolean isApprovedStatus() {

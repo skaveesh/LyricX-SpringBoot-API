@@ -7,6 +7,7 @@ import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
 import com.lyricxinc.lyricx.repository.AlbumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Validated
@@ -23,6 +25,9 @@ public class AlbumService {
     private final AmazonClientService amazonClientService;
     private final ContributorService contributorService;
     private final ArtistService artistService;
+
+    @Value("${com.lyricxinc.lyricx.album-image-url}")
+    String albumDefaultImageUrl;
 
     @Autowired
     public AlbumService(AmazonClientService amazonClientService, AlbumRepository albumRepository, ContributorService contributorService, ArtistService artistService) {
@@ -43,7 +48,7 @@ public class AlbumService {
         return album;
     }
 
-    public Album getAlbumBySurrogateKey(String surrogateKey){
+    public Album getAlbumBySurrogateKey(String surrogateKey) {
 
         Album album = this.albumRepository.findBySurrogateKey(surrogateKey);
 
@@ -58,50 +63,52 @@ public class AlbumService {
         return this.albumRepository.findTop20ByNameIgnoreCaseContainingOrderByNameAsc(keyword);
     }
 
+    private void setArtistThroughSurrogateKey(Album payload){
+
+        String artistSurrogateKey = payload.getArtist().getSurrogateKey();
+
+        if(artistSurrogateKey != null)
+            payload.setArtist(artistService.getAlbumBySurrogateKey(artistSurrogateKey));
+    }
+
     @Validated(OnAlbumCreate.class)
     public void addAlbum(HttpServletRequest request, final @Valid Album payload, MultipartFile image) {
 
-//        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
-//
-//        Artist artist = artistService.getArtistById(artistId);
-//
-//        String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
-//
-//        Album album = new Album(artist, year, name, imgUrl, contributor, contributor.isSeniorContributor(), UUID.randomUUID().toString().replace("-", ""));
-//
-//        this.albumRepository.save(album);
+        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
+
+        payload.setAddedBy(contributor);
+        payload.setSurrogateKey(UUID.randomUUID().toString().replace("-", ""));
+        payload.setLastModifiedBy(contributor);
+
+        if(image !=null) {
+            String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
+            payload.setImgUrl(imgUrl);
+        }else
+            payload.setImgUrl(albumDefaultImageUrl);
+
+        this.albumRepository.save(payload);
     }
 
     @Validated(OnAlbumUpdate.class)
-    public void updateAlbum(HttpServletRequest request, final @Valid Album payload) {
+    public void updateAlbum(HttpServletRequest request, @Valid Album payload) {
 
-        System.out.println(payload.getSurrogateKey());
-        System.out.println(payload.getName());
+        Album oldAlbum = getAlbumBySurrogateKey(payload.getSurrogateKey());
+        payload.setId(oldAlbum.getId());
 
-        long albumToUpdateId = getAlbumBySurrogateKey(payload.getSurrogateKey()).getId();
+        if (payload.getArtist() == null || payload.getArtist().getId() == null)
+            payload.setArtist(oldAlbum.getArtist());
+        else
+            this.setArtistThroughSurrogateKey(payload);
 
-        payload.setId(albumToUpdateId);
+        if (payload.getAddedBy() == null || payload.getAddedBy().getId() == null)
+            payload.setAddedBy(oldAlbum.getAddedBy());
 
+        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
+        contributorService.checkNonSeniorContributorEditsVerifiedContent(contributor, payload);
+
+        payload.setLastModifiedBy(contributor);
 
         albumRepository.save(payload);
-
-
-
-//        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
-//
-//        contributorService.checkNonSeniorContributorEditsVerifiedContent(contributor, payload);
-//
-//
-//
-//        Artist artist = artistService.getArtistById(payload.getArtist().getId());
-//
-//        Album album = getAlbumById(payload.getId());
-//
-//        album.setArtist(artist);
-//        album.setName(name);
-//        album.setYear(year);
-//
-//        albumRepository.save(album);
     }
 
     public void updateAlbum(HttpServletRequest request, Album payload, MultipartFile payloadImage) {

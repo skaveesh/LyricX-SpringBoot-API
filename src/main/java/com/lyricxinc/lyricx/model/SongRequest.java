@@ -16,7 +16,7 @@ public class SongRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private long id;
+    private Long id;
 
     @NotBlank
     private String songName;
@@ -47,12 +47,12 @@ public class SongRequest {
         this.requesterEmail = requesterEmail;
     }
 
-    public long getId() {
+    public Long getId() {
 
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
 
         this.id = id;
     }

@@ -5,6 +5,7 @@ import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
 import com.lyricxinc.lyricx.core.exception.NotFoundCustomException;
 import com.lyricxinc.lyricx.core.response.HttpResponse;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import org.apache.tomcat.util.http.fileupload.FileUploadBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -69,6 +70,13 @@ public class ExceptionResponseEntityHandler {
     public ResponseEntity<HttpResponseData> handleConstraintViolationException(RuntimeException ex) {
 
         return httpResponse.returnResponse(HttpStatus.FORBIDDEN, ex.getMessage(), null);
+    }
+
+    @ExceptionHandler(MySQLIntegrityConstraintViolationException.class)
+    @ResponseBody
+    public ResponseEntity<HttpResponseData> handleMySQLIntegrityConstraintViolationException(RuntimeException ex) {
+
+        return httpResponse.returnResponse(HttpStatus.FORBIDDEN, "Server Database Error Occurred.", null);
     }
 
 }
