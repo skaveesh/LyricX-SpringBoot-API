@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.Set;
@@ -38,6 +39,7 @@ public class Album {
     @PastOrPresent(groups = OnAlbumCreate.class)
     private Year year;
 
+    @Size(max = 50)
     @NotBlank(groups = OnAlbumCreate.class)
     private String name;
 
@@ -61,7 +63,6 @@ public class Album {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lastModifiedById")
-    @Valid
     @JsonBackReference(value = "referenceLastModifiedBy")
     private Contributor lastModifiedBy;
 

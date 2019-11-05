@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
+import com.lyricxinc.lyricx.model.validator.group.OnArtistCreate;
+import com.lyricxinc.lyricx.model.validator.group.OnArtistUpdate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -24,9 +26,10 @@ public class Artist {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonIgnore
-    private long id;
+    private Long id;
 
     @Size(max = 50)
+    @NotBlank(groups = OnArtistCreate.class)
     private String name;
 
     private String imgUrl;
@@ -45,7 +48,7 @@ public class Artist {
     private boolean approvedStatus;
 
     @Column(unique = true)
-    @NotBlank(groups = OnAlbumCreate.class)
+    @NotBlank(groups = {OnAlbumCreate.class, OnArtistUpdate.class})
     private String surrogateKey;
 
     @CreationTimestamp

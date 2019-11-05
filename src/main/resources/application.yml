@@ -1,14 +1,14 @@
-amazonProperties:
-  endpointUrl: https://s3.us-east-2.amazonaws.com
-  accessKey: AKIAVIWLUOY4IPTSFZ3H
-  secretKey: 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
-  bucketName: lyricx-images
-
-#default image urls for these entities
 com:
+  amazonaws:
+    s3:
+      amazonProperties:
+        endpointUrl: https://s3.us-east-2.amazonaws.com
+        accessKey: AKIAVIWLUOY4IPTSFZ3H
+        secretKey: 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
+        bucketName: lyricx-images
   lyricxinc:
     lyricx:
-      contributor-image-url: https://www.myimage.com/contributorimage
-      album-image-url: https://www.myimage.com/albumimage
-      artist-image-url: https://www.myimage.com/artistimage
-      song-image-url: https://www.myimage.com/songimage
+      contributorImageUrl: https://www.myimage.com/contributorimage
+      albumImageUrl: https://www.myimage.com/albumimage
+      artistImageUrl: https://www.myimage.com/artistimage
+      songImageUrl: https://www.myimage.com/songimage

@@ -30,9 +30,10 @@ public class AlbumControllerImpl implements AlbumController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> addAlbum(HttpServletRequest request, long artistId, String name, String year, MultipartFile image) {
+    public ResponseEntity<HttpResponseData> addAlbum(HttpServletRequest request, @Valid @RequestBody Album payload, MultipartFile image) {
 
-//        albumService.addAlbum(request, artistId, name, parseYear(year, true), image);
+        albumService.addAlbum(request, payload, image);
+
         return httpResponse.returnResponse(HttpStatus.OK, "Album created successfully.", null);
     }
 
@@ -45,32 +46,25 @@ public class AlbumControllerImpl implements AlbumController {
     @Override
     public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, final @Valid @RequestBody Album payload) {
 
-        //        Album album = albumService.getAlbumById(payload.getId());
-
-//        System.out.println("album id is : " + payload.getId());
-//        System.out.println("album year is : " + payload.getYear());
-//        System.out.println("contributor id is : " + payload.getAddedBy().getId());
-
         albumService.updateAlbum(request, payload);
 
         return httpResponse.returnResponse(HttpStatus.OK, "Album updated successfully.", null);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, long albumId, MultipartFile image) {
+    public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, final @Valid @RequestBody Album payload, MultipartFile image) {
 
-        Album album = albumService.getAlbumById(albumId);
-
-        albumService.updateAlbum(request, album, image);
+        albumService.updateAlbum(request, payload, image);
 
         return httpResponse.returnResponse(HttpStatus.OK, "Album artwork updated successfully.", null);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, long albumId) {
+    public ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, final @Valid @RequestBody Album payload) {
 
-        //TODO
-        return null;
+        albumService.resetAlbumArt(request, payload);
+
+        return httpResponse.returnResponse(HttpStatus.OK, "Album artwork removed successfully.", null);
     }
 
     @Override

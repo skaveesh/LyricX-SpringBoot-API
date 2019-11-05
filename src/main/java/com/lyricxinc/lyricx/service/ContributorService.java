@@ -11,6 +11,7 @@ import com.lyricxinc.lyricx.model.Contributor;
 import com.lyricxinc.lyricx.model.Song;
 import com.lyricxinc.lyricx.repository.ContributorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +20,15 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public class ContributorService {
 
-    private final Environment environment;
     private final ContributorRepository contributorRepository;
 
+    @Value("${com.lyricxinc.lyricx.contributorImageUrl}")
+    String contributorDefaultImageUrl;
+
     @Autowired
-    public ContributorService(ContributorRepository contributorRepository, Environment environment) {
+    public ContributorService(ContributorRepository contributorRepository) {
 
         this.contributorRepository = contributorRepository;
-        this.environment = environment;
     }
 
     public Contributor getContributorById(String id) {
@@ -61,7 +63,7 @@ public class ContributorService {
         {
             userRecord = FirebaseAuth.getInstance(FirebaseConfig.getContributorFirebaseApp()).createUser(createRequest);
 
-            contributor = new Contributor(userRecord.getUid(), firstName, lastName, environment.getProperty("lyricx.contributor-image-url"), contactLink);
+            contributor = new Contributor(userRecord.getUid(), firstName, lastName, contributorDefaultImageUrl, contactLink);
             contributorRepository.save(contributor);
 
         } catch (Exception e)

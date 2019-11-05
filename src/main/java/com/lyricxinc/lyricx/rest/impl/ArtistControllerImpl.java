@@ -8,10 +8,13 @@ import com.lyricxinc.lyricx.service.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
 public class ArtistControllerImpl implements ArtistController {
@@ -27,27 +30,25 @@ public class ArtistControllerImpl implements ArtistController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> addArtist(HttpServletRequest request, String name, MultipartFile image) {
+    public ResponseEntity<HttpResponseData> addArtist(final HttpServletRequest request, @Valid @RequestBody Artist payload, MultipartFile image) {
 
-        artistService.addArtist(request, name, image);
+        artistService.addArtist(request, payload, image);
 
         return httpResponse.returnResponse(HttpStatus.OK, "Artist created successfully.", null);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateArtistName(HttpServletRequest request, long artistId, String name) {
+    public ResponseEntity<HttpResponseData> updateArtist(HttpServletRequest request, @Valid @RequestBody Artist payload) {
 
-        Artist artist = artistService.getArtistById(artistId);
-        artistService.updateArtist(request, artist, name);
+        artistService.updateArtist(request, payload);
 
         return httpResponse.returnResponse(HttpStatus.OK, "Artist updated successfully.", null);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateArtistImage(HttpServletRequest request, long artistId, MultipartFile image) {
+    public ResponseEntity<HttpResponseData> updateArtistImage(HttpServletRequest request, @Valid @RequestBody Artist payload, MultipartFile image) {
 
-        Artist artist = artistService.getArtistById(artistId);
-        artistService.updateArtist(request, artist, image);
+        artistService.updateArtist(request, payload, image);
 
         return httpResponse.returnResponse(HttpStatus.OK, "Artist image updated successfully.", null);
     }

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 @Service
 @Validated
@@ -26,7 +27,7 @@ public class AlbumService {
     private final ContributorService contributorService;
     private final ArtistService artistService;
 
-    @Value("${com.lyricxinc.lyricx.album-image-url}")
+    @Value("${com.lyricxinc.lyricx.albumImageUrl}")
     String albumDefaultImageUrl;
 
     @Autowired
@@ -38,7 +39,7 @@ public class AlbumService {
         this.artistService = artistService;
     }
 
-    public Album getAlbumById(long id) {
+    public Album getAlbumById(final Long id) {
 
         Album album = this.albumRepository.findById(id).orElse(null);
 
@@ -48,7 +49,7 @@ public class AlbumService {
         return album;
     }
 
-    public Album getAlbumBySurrogateKey(String surrogateKey) {
+    public Album getAlbumBySurrogateKey(final String surrogateKey) {
 
         Album album = this.albumRepository.findBySurrogateKey(surrogateKey);
 
@@ -58,21 +59,13 @@ public class AlbumService {
         return album;
     }
 
-    public List<Album> searchAlbums(String keyword) {
+    public List<Album> searchAlbums(final String keyword) {
 
         return this.albumRepository.findTop20ByNameIgnoreCaseContainingOrderByNameAsc(keyword);
     }
 
-    private void setArtistThroughSurrogateKey(Album payload){
-
-        String artistSurrogateKey = payload.getArtist().getSurrogateKey();
-
-        if(artistSurrogateKey != null)
-            payload.setArtist(artistService.getAlbumBySurrogateKey(artistSurrogateKey));
-    }
-
     @Validated(OnAlbumCreate.class)
-    public void addAlbum(HttpServletRequest request, final @Valid Album payload, MultipartFile image) {
+    public void addAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile image) {
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
@@ -80,17 +73,67 @@ public class AlbumService {
         payload.setSurrogateKey(UUID.randomUUID().toString().replace("-", ""));
         payload.setLastModifiedBy(contributor);
 
-        if(image !=null) {
+        if (image != null) {
             String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
             payload.setImgUrl(imgUrl);
-        }else
+        } else
             payload.setImgUrl(albumDefaultImageUrl);
 
         this.albumRepository.save(payload);
     }
 
     @Validated(OnAlbumUpdate.class)
-    public void updateAlbum(HttpServletRequest request, @Valid Album payload) {
+    public void updateAlbum(final HttpServletRequest request, final @Valid Album payload) {
+
+        updateAlbumDetails(request, payload, (cont) -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
+
+        albumRepository.save(payload);
+    }
+
+    @Validated(OnAlbumUpdate.class)
+    public void updateAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile payloadImage) {
+
+        updateAlbumDetails(request, payload, (cont) -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
+
+        String imgUrl = this.amazonClientService.uploadFile(payloadImage, AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
+
+        //delete old album image from S3 bucket
+        amazonClientService.deleteFileFromS3Bucket(payload.getImgUrl(), AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
+
+        payload.setImgUrl(imgUrl);
+
+        albumRepository.save(payload);
+    }
+
+    public void removeAlbumArt(Long id) {
+        //TODO
+    }
+
+    public void removeAlbum(Long id) {
+//
+//        albumRepository.deleteById(id);
+    }
+
+    @Validated(OnAlbumUpdate.class)
+    public void resetAlbumArt(final HttpServletRequest request, final @Valid Album payload) {
+
+        updateAlbumDetails(request, payload, (cont) -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
+
+        payload.setImgUrl(albumDefaultImageUrl);
+
+        albumRepository.save(payload);
+
+    }
+
+    private void setArtistThroughSurrogateKey(final Album payload) {
+
+        String artistSurrogateKey = payload.getArtist().getSurrogateKey();
+
+        if (artistSurrogateKey != null)
+            payload.setArtist(artistService.getArtistBySurrogateKey(artistSurrogateKey));
+    }
+
+    private void updateAlbumDetails(final HttpServletRequest request, final Album payload, Consumer<Contributor> contributorStatus) {
 
         Album oldAlbum = getAlbumBySurrogateKey(payload.getSurrogateKey());
         payload.setId(oldAlbum.getId());
@@ -104,36 +147,8 @@ public class AlbumService {
             payload.setAddedBy(oldAlbum.getAddedBy());
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
-        contributorService.checkNonSeniorContributorEditsVerifiedContent(contributor, payload);
-
+        contributorStatus.accept(contributor);
         payload.setLastModifiedBy(contributor);
-
-        albumRepository.save(payload);
-    }
-
-    public void updateAlbum(HttpServletRequest request, Album payload, MultipartFile payloadImage) {
-
-        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
-
-        contributorService.checkNonSeniorContributorEditsVerifiedContent(contributor, payload);
-
-        String imgUrl = this.amazonClientService.uploadFile(payloadImage, AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
-
-        //delete old album image from S3 bucket
-        amazonClientService.deleteFileFromS3Bucket(payload.getImgUrl(), AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
-
-        payload.setImgUrl(imgUrl);
-
-        albumRepository.save(payload);
-    }
-
-    public void removeAlbumArt(long id) {
-        //TODO
-    }
-
-    public void removeAlbum(long id) {
-//
-//        albumRepository.deleteById(id);
     }
 
 }

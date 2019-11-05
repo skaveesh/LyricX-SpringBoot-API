@@ -1,11 +1,9 @@
 package com.lyricxinc.lyricx.rest.controller;
 
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
+import com.lyricxinc.lyricx.model.Artist;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,13 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 public interface ArtistController {
 
     @PostMapping("add")
-    ResponseEntity<HttpResponseData> addArtist(HttpServletRequest request, String name, MultipartFile image);
+    ResponseEntity<HttpResponseData> addArtist(HttpServletRequest request, @RequestBody Artist payload, MultipartFile image);
 
     @PutMapping("update/details")
-    ResponseEntity<HttpResponseData> updateArtistName(HttpServletRequest request, long artistId, String name);
+    ResponseEntity<HttpResponseData> updateArtist(HttpServletRequest request, @RequestBody Artist payload);
 
     @PutMapping("update/image")
-    ResponseEntity<HttpResponseData> updateArtistImage(HttpServletRequest request, long artistId, MultipartFile image);
+    ResponseEntity<HttpResponseData> updateArtistImage(HttpServletRequest request, @RequestBody Artist payload, MultipartFile image);
 
     @DeleteMapping("delete/image")
     ResponseEntity<HttpResponseData> removeArtistImage(HttpServletRequest request, long artistId);

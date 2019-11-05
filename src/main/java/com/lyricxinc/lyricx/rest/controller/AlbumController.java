@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 public interface AlbumController {
 
     @PostMapping("add")
-    ResponseEntity<HttpResponseData> addAlbum(HttpServletRequest request, long artistId, String name, String year, MultipartFile image);
+    ResponseEntity<HttpResponseData> addAlbum(HttpServletRequest request, @RequestBody Album payload, MultipartFile image);
 
     @GetMapping("search")
     ResponseEntity<HttpResponseData> searchAlbums(String keyword);
@@ -21,10 +21,10 @@ public interface AlbumController {
     ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, @RequestBody Album payload);
 
     @PutMapping("update/image")
-    ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, long albumId, MultipartFile image);
+    ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, @RequestBody Album payload, MultipartFile image);
 
     @DeleteMapping("remove/albumart")
-    ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, long albumId);
+    ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, @RequestBody Album payload);
 
     @DeleteMapping("remove")
     ResponseEntity<HttpResponseData> removeAlbum(HttpServletRequest request, long albumId);

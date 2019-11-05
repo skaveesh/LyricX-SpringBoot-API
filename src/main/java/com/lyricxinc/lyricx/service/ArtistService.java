@@ -3,13 +3,19 @@ package com.lyricxinc.lyricx.service;
 import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
 import com.lyricxinc.lyricx.model.Artist;
 import com.lyricxinc.lyricx.model.Contributor;
+import com.lyricxinc.lyricx.model.validator.group.OnArtistCreate;
+import com.lyricxinc.lyricx.model.validator.group.OnArtistUpdate;
 import com.lyricxinc.lyricx.repository.ArtistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 @Service
 public class ArtistService {
@@ -17,6 +23,9 @@ public class ArtistService {
     private final ArtistRepository artistRepository;
     private final ContributorService contributorService;
     private final AmazonClientService amazonClientService;
+
+    @Value("${com.lyricxinc.lyricx.artistImageUrl}")
+    String artistDefaultImageUrl;
 
     @Autowired
     public ArtistService(ArtistRepository artistRepository, ContributorService contributorService, AmazonClientService amazonClientService) {
@@ -36,7 +45,7 @@ public class ArtistService {
         return artist;
     }
 
-    public Artist getAlbumBySurrogateKey(String surrogateKey) {
+    public Artist getArtistBySurrogateKey(String surrogateKey) {
 
         Artist artist = this.artistRepository.findBySurrogateKey(surrogateKey);
 
@@ -46,44 +55,45 @@ public class ArtistService {
         return artist;
     }
 
-    public void addArtist(HttpServletRequest request, String name, MultipartFile image) {
-
-        Contributor contributor = contributorService.getContributorById((String) request.getSession().getAttribute("userId"));
-
-        String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ARTIST_FOLDER);
-
-        Artist artist = new Artist(name, imgUrl, contributor, contributor.isSeniorContributor());
-
-        artist.setSurrogateKey(UUID.randomUUID().toString().replace("-", ""));
-
-        artistRepository.save(artist);
-    }
-
-    public void updateArtist(HttpServletRequest request, Artist artist, String name) {
+    @Validated(OnArtistCreate.class)
+    public void addArtist(final HttpServletRequest request, final @Valid Artist payload, final MultipartFile image) {
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
-        contributorService.checkNonSeniorContributorEditsVerifiedContent(contributor, artist);
+        payload.setAddedBy(contributor);
+        payload.setSurrogateKey(UUID.randomUUID().toString().replace("-", ""));
+        payload.setLastModifiedBy(contributor);
 
-        artist.setName(name);
+        if (image != null) {
+            String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ARTIST_FOLDER);
+            payload.setImgUrl(imgUrl);
+        } else
+            payload.setImgUrl(artistDefaultImageUrl);
 
-        artistRepository.save(artist);
+        this.artistRepository.save(payload);
     }
 
-    public void updateArtist(HttpServletRequest request, Artist artist, MultipartFile image) {
+    @Validated(OnArtistUpdate.class)
+    public void updateArtist(final HttpServletRequest request, final @Valid Artist payload) {
 
-        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
+        updateAlbumDetails(request, payload, (cont) -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
 
-        contributorService.checkNonSeniorContributorEditsVerifiedContent(contributor, artist);
+        artistRepository.save(payload);
+    }
+
+    @Validated(OnArtistUpdate.class)
+    public void updateArtist(final HttpServletRequest request, final @Valid Artist payload, final MultipartFile image) {
+
+        updateAlbumDetails(request, payload, (cont) -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
 
         String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ARTIST_FOLDER);
 
         //delete old artist image from S3 bucket
-        this.amazonClientService.deleteFileFromS3Bucket(artist.getImgUrl(), AmazonClientService.S3BucketFolders.ARTIST_FOLDER);
+        this.amazonClientService.deleteFileFromS3Bucket(payload.getImgUrl(), AmazonClientService.S3BucketFolders.ARTIST_FOLDER);
 
-        artist.setImgUrl(imgUrl);
+        payload.setImgUrl(imgUrl);
 
-        artistRepository.save(artist);
+        artistRepository.save(payload);
     }
 
     public void removeImage(long id) {
@@ -93,6 +103,19 @@ public class ArtistService {
     public void removeArtist(long id) {
 
         artistRepository.deleteById(id);
+    }
+
+    private void updateAlbumDetails(final HttpServletRequest request, final Artist payload, Consumer<Contributor> contributorStatus) {
+
+        Artist oldArtist = this.getArtistBySurrogateKey(payload.getSurrogateKey());
+        payload.setId(oldArtist.getId());
+
+        if (payload.getAddedBy() == null || payload.getAddedBy().getId() == null)
+            payload.setAddedBy(oldArtist.getAddedBy());
+
+        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
+        contributorStatus.accept(contributor);
+        payload.setLastModifiedBy(contributor);
     }
 
 }
