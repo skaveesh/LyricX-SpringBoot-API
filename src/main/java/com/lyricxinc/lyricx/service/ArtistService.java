@@ -76,7 +76,7 @@ public class ArtistService {
     @Validated(OnArtistUpdate.class)
     public void updateArtist(final HttpServletRequest request, final @Valid Artist payload) {
 
-        updateAlbumDetails(request, payload, (cont) -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
+        updateAlbumDetails(request, payload, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
 
         artistRepository.save(payload);
     }
@@ -84,7 +84,7 @@ public class ArtistService {
     @Validated(OnArtistUpdate.class)
     public void updateArtist(final HttpServletRequest request, final @Valid Artist payload, final MultipartFile image) {
 
-        updateAlbumDetails(request, payload, (cont) -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
+        updateAlbumDetails(request, payload, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
 
         String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ARTIST_FOLDER);
 

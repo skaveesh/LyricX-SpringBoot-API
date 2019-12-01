@@ -70,7 +70,6 @@ public class AlbumService {
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
         payload.setAddedBy(contributor);
-        payload.setSurrogateKey(UUID.randomUUID().toString().replace("-", ""));
         payload.setLastModifiedBy(contributor);
 
         if (image != null) {
@@ -85,7 +84,7 @@ public class AlbumService {
     @Validated(OnAlbumUpdate.class)
     public void updateAlbum(final HttpServletRequest request, final @Valid Album payload) {
 
-        updateAlbumDetails(request, payload, (cont) -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
+        updateAlbumDetails(request, payload, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
 
         albumRepository.save(payload);
     }
@@ -93,7 +92,7 @@ public class AlbumService {
     @Validated(OnAlbumUpdate.class)
     public void updateAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile payloadImage) {
 
-        updateAlbumDetails(request, payload, (cont) -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
+        updateAlbumDetails(request, payload, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
 
         String imgUrl = this.amazonClientService.uploadFile(payloadImage, AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
 

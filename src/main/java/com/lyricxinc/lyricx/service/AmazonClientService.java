@@ -114,7 +114,7 @@ public class AmazonClientService {
 
     public String deleteFileFromS3Bucket(String fileUrl, S3BucketFolders s3BucketFolder) {
 
-        String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+        String fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
         s3client.deleteObject(new DeleteObjectRequest(bucketName, s3BucketFolder + "/" + fileName));
         return "Successfully deleted";
     }

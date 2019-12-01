@@ -19,6 +19,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @DynamicInsert
@@ -82,8 +83,10 @@ public class Album {
         this.year = year;
         this.name = name;
         this.imgUrl = imgUrl;
+        this.surrogateKey = UUID.randomUUID().toString().replace("-", "");
         this.addedBy = addedBy;
         this.approvedStatus = approvedStatus;
+
     }
 
     public Long getId() {
