@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-@Service
 @Validated
+@Service
 public class AlbumService {
 
     private final AlbumRepository albumRepository;
@@ -109,8 +109,8 @@ public class AlbumService {
     }
 
     public void removeAlbum(Long id) {
-//
-//        albumRepository.deleteById(id);
+        //
+        //        albumRepository.deleteById(id);
     }
 
     @Validated(OnAlbumUpdate.class)

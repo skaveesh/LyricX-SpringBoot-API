@@ -2,15 +2,18 @@ package com.lyricxinc.lyricx.rest.impl;
 
 import com.lyricxinc.lyricx.core.response.HttpResponse;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
+import com.lyricxinc.lyricx.model.Song;
 import com.lyricxinc.lyricx.rest.controller.SongController;
 import com.lyricxinc.lyricx.service.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
 public class SongControllerImpl implements SongController {
@@ -26,7 +29,7 @@ public class SongControllerImpl implements SongController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> addSong(HttpServletRequest request, String name, long albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink) {
+    public ResponseEntity<HttpResponseData> addSong(HttpServletRequest request, final @Valid @RequestBody Song payload) {
 
         songService.addSong(request, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
 
@@ -34,7 +37,7 @@ public class SongControllerImpl implements SongController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, long songId, String name, long albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink) {
+    public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @Valid @RequestBody Song payload) {
 
         songService.updateSong(request, songId, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
 
@@ -42,7 +45,7 @@ public class SongControllerImpl implements SongController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, long songId, MultipartFile image) {
+    public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @Valid @RequestBody Song payload, MultipartFile image) {
 
         songService.updateSong(request, songId, image);
 
@@ -50,17 +53,19 @@ public class SongControllerImpl implements SongController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, long songId) {
+    public ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, final @Valid @RequestBody Song payload) {
 
-        songService.removeAlbumArt(request, songId);
+        //        todo
+        //         songService.removeAlbumArt(request, songId);
 
         return httpResponse.returnResponse(HttpStatus.OK, "Album art removed successfully.", null);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> removeSong(HttpServletRequest request, long songId) {
+    public ResponseEntity<HttpResponseData> removeSong(HttpServletRequest request, final @Valid @RequestBody Song payload) {
 
-        songService.removeSong(request, songId);
+//        todo
+        //        songService.removeSong(request, songId);
 
         return httpResponse.returnResponse(HttpStatus.OK, "Song removed successfully.", null);
     }
