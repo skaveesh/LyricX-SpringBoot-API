@@ -1,31 +1,30 @@
 package com.lyricxinc.lyricx.rest.controller;
 
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
+import com.lyricxinc.lyricx.model.Song;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RequestMapping("song")
 public interface SongController {
 
     @PostMapping("add")
-    ResponseEntity<HttpResponseData> addSong(HttpServletRequest request, String name, long albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink);
+    ResponseEntity<HttpResponseData> addSong(HttpServletRequest request, final @Valid @RequestBody Song payload);
 
     @PutMapping("update/details")
-    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, long songId, String name, long albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink);
+    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @Valid @RequestBody Song payload);
 
     @PutMapping("update/albumart")
-    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, long songId, MultipartFile image);
+    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @Valid @RequestBody Song payload, MultipartFile image);
 
     @DeleteMapping("remove/albumart")
-    ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, long songId);
+    ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, final @Valid @RequestBody Song payload);
 
     @DeleteMapping("remove")
-    ResponseEntity<HttpResponseData> removeSong(HttpServletRequest request, long songId);
+    ResponseEntity<HttpResponseData> removeSong(HttpServletRequest request, final @Valid @RequestBody Song payload);
 
 }
