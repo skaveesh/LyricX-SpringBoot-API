@@ -40,7 +40,7 @@ public class ArtistServiceTest {
 
         MockMultipartFile mockMultipartFile = new MockMultipartFile("eminem image", "imagemin.jpeg", "image/jpeg", bytes);
 
-        artistService.addArtist(mock, "EMINEM", mockMultipartFile);
+//        artistService.addArtist(mock, "EMINEM", mockMultipartFile);
     }
 
 //    @Test

@@ -31,7 +31,7 @@ public class SongControllerImpl implements SongController {
     @Override
     public ResponseEntity<HttpResponseData> addSong(HttpServletRequest request, final @Valid @RequestBody Song payload) {
 
-        songService.addSong(request, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
+//        songService.addSong(request, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
 
         return httpResponse.returnResponse(HttpStatus.OK, "Song added successfully.", null);
     }
@@ -39,7 +39,7 @@ public class SongControllerImpl implements SongController {
     @Override
     public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @Valid @RequestBody Song payload) {
 
-        songService.updateSong(request, songId, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
+//        songService.updateSong(request, songId, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
 
         return httpResponse.returnResponse(HttpStatus.OK, "Song updated successfully.", null);
     }
@@ -47,7 +47,7 @@ public class SongControllerImpl implements SongController {
     @Override
     public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @Valid @RequestBody Song payload, MultipartFile image) {
 
-        songService.updateSong(request, songId, image);
+//        songService.updateSong(request, songId, image);
 
         return httpResponse.returnResponse(HttpStatus.OK, "Album art updated successfully.", null);
     }

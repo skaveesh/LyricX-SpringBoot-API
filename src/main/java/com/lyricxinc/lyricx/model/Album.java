@@ -5,12 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -19,7 +18,6 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @DynamicInsert
@@ -30,6 +28,12 @@ public class Album {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long id;
+
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(unique = true, updatable = false, nullable = false)
+    @NotNull(groups = OnAlbumUpdate.class)
+    private String surrogateKey;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "artistId", nullable = false)
@@ -45,10 +49,6 @@ public class Album {
     private String name;
 
     private String imgUrl;
-
-    @Column(unique = true)
-    @NotNull(groups = OnAlbumUpdate.class)
-    private String surrogateKey;
 
     @CreationTimestamp
     private LocalDateTime addedDate;
@@ -83,7 +83,6 @@ public class Album {
         this.year = year;
         this.name = name;
         this.imgUrl = imgUrl;
-        this.surrogateKey = UUID.randomUUID().toString().replace("-", "");
         this.addedBy = addedBy;
         this.approvedStatus = approvedStatus;
 
@@ -95,6 +94,16 @@ public class Album {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getSurrogateKey() {
+
+        return surrogateKey;
+    }
+
+    public void setSurrogateKey(String surrogateKey) {
+
+        this.surrogateKey = surrogateKey;
     }
 
     public Artist getArtist() {
@@ -135,16 +144,6 @@ public class Album {
     public void setImgUrl(String imgUrl) {
 
         this.imgUrl = imgUrl;
-    }
-
-    public String getSurrogateKey() {
-
-        return surrogateKey;
-    }
-
-    public void setSurrogateKey(String surrogateKey) {
-
-        this.surrogateKey = surrogateKey;
     }
 
     public LocalDateTime getAddedDate() {

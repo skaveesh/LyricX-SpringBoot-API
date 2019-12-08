@@ -3,6 +3,8 @@ package com.lyricxinc.lyricx.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.lyricxinc.lyricx.model.validator.group.OnSongCreate;
+import com.lyricxinc.lyricx.model.validator.group.OnSongUpdate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -21,7 +23,11 @@ public class Song {
     @JsonIgnore
     private Long id;
 
-    @NotBlank
+    @Column(unique = true)
+    @NotNull(groups = OnSongUpdate.class)
+    private String surrogateKey;
+
+    @NotBlank(groups = {OnSongCreate.class})
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,7 +31,7 @@ public class AlbumControllerImpl implements AlbumController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> addAlbum(HttpServletRequest request, @Valid @RequestBody Album payload, MultipartFile image) {
+    public ResponseEntity<HttpResponseData> addAlbum(HttpServletRequest request, @RequestPart("payload") Album payload, @RequestPart("image") MultipartFile image) {
 
         albumService.addAlbum(request, payload, image);
 

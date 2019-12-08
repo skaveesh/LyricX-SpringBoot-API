@@ -72,11 +72,16 @@ public class AlbumService {
         payload.setAddedBy(contributor);
         payload.setLastModifiedBy(contributor);
 
+        //todo
+        payload.setArtist(artistService.getArtistBySurrogateKey(payload.getArtist().getSurrogateKey()));
+
         if (image != null) {
             String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
             payload.setImgUrl(imgUrl);
         } else
+        {
             payload.setImgUrl(albumDefaultImageUrl);
+        }
 
         this.albumRepository.save(payload);
     }

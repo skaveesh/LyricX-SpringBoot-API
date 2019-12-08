@@ -11,16 +11,16 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("album")
 public interface AlbumController {
 
-    @PostMapping("add")
-    ResponseEntity<HttpResponseData> addAlbum(HttpServletRequest request, @RequestBody Album payload, MultipartFile image);
+    @PutMapping("add")
+    ResponseEntity<HttpResponseData> addAlbum(HttpServletRequest request, @RequestPart("payload") Album payload, @RequestPart("image") MultipartFile image);
 
     @GetMapping("search")
     ResponseEntity<HttpResponseData> searchAlbums(String keyword);
 
-    @PutMapping("update/details")
+    @PostMapping("update/details")
     ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, @RequestBody Album payload);
 
-    @PutMapping("update/image")
+    @PostMapping("update/image")
     ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, @RequestBody Album payload, MultipartFile image);
 
     @DeleteMapping("remove/albumart")

@@ -37,6 +37,13 @@ public class ExceptionResponseEntityHandler {
         return httpResponse.returnResponse(HttpStatus.NOT_FOUND, "Requested API Method Doesn't Exists.", null);
     }
 
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    public ResponseEntity<HttpResponseData> handleException() {
+
+        return httpResponse.returnResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error.", null);
+    }
+
     @ExceptionHandler(NotFoundCustomException.class)
     @ResponseBody
     public ResponseEntity<HttpResponseData> handleNotFoundCustomException() {
