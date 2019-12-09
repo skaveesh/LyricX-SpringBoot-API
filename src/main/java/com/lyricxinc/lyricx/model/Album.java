@@ -3,8 +3,10 @@ package com.lyricxinc.lyricx.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
+import com.lyricxinc.lyricx.model.validator.group.OnArtistUpdate;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
@@ -38,6 +40,7 @@ public class Album {
     @JoinColumn(name = "artistId", nullable = false)
     @Valid
     @JsonBackReference(value = "albumsReferenceArtist")
+    @NotNull(groups = {OnAlbumCreate.class, OnArtistUpdate.class})
     private Artist artist;
 
     @PastOrPresent(groups = OnAlbumCreate.class)
@@ -47,12 +50,15 @@ public class Album {
     @NotBlank(groups = OnAlbumCreate.class)
     private String name;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String imgUrl;
 
     @CreationTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime addedDate;
 
     @UpdateTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime lastModifiedDate;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -66,6 +72,7 @@ public class Album {
     @JsonBackReference(value = "referenceLastModifiedBy")
     private Contributor lastModifiedBy;
 
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private boolean approvedStatus;
 
     @OneToMany(mappedBy = "album", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)

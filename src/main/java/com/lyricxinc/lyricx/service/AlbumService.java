@@ -72,7 +72,7 @@ public class AlbumService {
         payload.setAddedBy(contributor);
         payload.setLastModifiedBy(contributor);
 
-        //todo
+        //todo qa test
         payload.setArtist(artistService.getArtistBySurrogateKey(payload.getArtist().getSurrogateKey()));
 
         if (image != null) {
