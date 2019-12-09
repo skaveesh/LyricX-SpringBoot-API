@@ -18,6 +18,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @DynamicInsert
@@ -29,8 +30,6 @@ public class Album {
     @JsonIgnore
     private Long id;
 
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(unique = true, updatable = false, nullable = false)
     @NotNull(groups = OnAlbumUpdate.class)
     private String surrogateKey;
@@ -72,6 +71,11 @@ public class Album {
     @OneToMany(mappedBy = "album", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JsonManagedReference(value = "songReferenceAlbum")
     private Set<Song> songs;
+
+    @PrePersist
+    private void onCreate(){
+        setSurrogateKey(UUID.randomUUID().toString());
+    }
 
     public Album() {
 
