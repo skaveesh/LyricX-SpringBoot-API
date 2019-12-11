@@ -3,6 +3,7 @@ package com.lyricxinc.lyricx.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lyricxinc.lyricx.model.validator.group.OnSongCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnSongUpdate;
 import org.hibernate.annotations.CreationTimestamp;
@@ -23,7 +24,7 @@ public class Song {
     @JsonIgnore
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, updatable = false, nullable = false)
     @NotNull(groups = OnSongUpdate.class)
     private String surrogateKey;
 
@@ -67,27 +68,34 @@ public class Song {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "addedById", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonBackReference(value = "referenceAddedBy")
     private Contributor addedBy;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "lastModifiedById", nullable = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonBackReference(value = "referenceLastModifiedBy")
     private Contributor lastModifiedBy;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "publishedById", nullable = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonBackReference(value = "referencePublishedBy")
     private Contributor publishedBy;
 
     @CreationTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime addedDate;
 
     @UpdateTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime lastModifiedDate;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime publishedDate;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private boolean publishedState;
 
     @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)

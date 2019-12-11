@@ -3,6 +3,7 @@ package com.lyricxinc.lyricx.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnArtistCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnArtistUpdate;
@@ -37,17 +38,19 @@ public class Artist {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "contributorId", nullable = false)
     @Valid
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonBackReference(value = "referenceAddedBy")
     private Contributor addedBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lastModifiedById")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonBackReference(value = "referenceLastModifiedBy")
     private Contributor lastModifiedBy;
 
     private boolean approvedStatus;
 
-    @Column(unique = true)
+    @Column(unique = true, updatable = false, nullable = false)
     @NotBlank(groups = {OnAlbumCreate.class, OnArtistUpdate.class})
     private String surrogateKey;
 

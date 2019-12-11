@@ -40,7 +40,7 @@ public class Album {
     @JoinColumn(name = "artistId", nullable = false)
     @Valid
     @JsonBackReference(value = "albumsReferenceArtist")
-    @NotNull(groups = {OnAlbumCreate.class, OnArtistUpdate.class})
+    @NotNull(groups = {OnAlbumCreate.class})
     private Artist artist;
 
     @PastOrPresent(groups = OnAlbumCreate.class)
@@ -61,18 +61,21 @@ public class Album {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime lastModifiedDate;
 
+    //todo getting contributor through session?
+    @Valid
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "contributorId", nullable = false)
-    @Valid
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonBackReference(value = "referenceAddedBy")
     private Contributor addedBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lastModifiedById")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonBackReference(value = "referenceLastModifiedBy")
     private Contributor lastModifiedBy;
 
-//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private boolean approvedStatus;
 
     @OneToMany(mappedBy = "album", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)

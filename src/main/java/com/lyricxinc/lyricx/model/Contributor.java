@@ -1,5 +1,6 @@
 package com.lyricxinc.lyricx.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
 import org.hibernate.annotations.CreationTimestamp;
@@ -31,12 +32,15 @@ public class Contributor {
 
     private String contactLink;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private boolean seniorContributor;
 
     @CreationTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime addedDate;
 
     @UpdateTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime lastModifiedDate;
 
     public Contributor() {
