@@ -18,6 +18,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @DynamicUpdate
@@ -33,6 +34,7 @@ public class Artist {
     @NotBlank(groups = OnArtistCreate.class)
     private String name;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String imgUrl;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -55,9 +57,11 @@ public class Artist {
     private String surrogateKey;
 
     @CreationTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime addedDate;
 
     @UpdateTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime lastModifiedDate;
 
     @OneToMany(mappedBy = "artist", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
@@ -71,6 +75,11 @@ public class Artist {
     @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference(value = "artistSongsReferenceArtist")
     private Set<ArtistSong> artistSongs;
+
+    @PrePersist
+    private void onCreate(){
+        setSurrogateKey(UUID.randomUUID().toString());
+    }
 
     public Artist() {
 

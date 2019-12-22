@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Entity;
@@ -13,12 +15,14 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
 public class Contributor {
 
+    //    @NotBlank(groups = {OnAlbumCreate.class, OnAlbumUpdate.class})
     @Id
-    @NotBlank(groups = {OnAlbumCreate.class, OnAlbumUpdate.class})
+    @NotBlank
     private String id;
-
     @Size(min = 3, max = 50)
     private String firstName;
 

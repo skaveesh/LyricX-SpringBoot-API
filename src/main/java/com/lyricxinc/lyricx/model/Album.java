@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
-import com.lyricxinc.lyricx.model.validator.group.OnArtistUpdate;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;

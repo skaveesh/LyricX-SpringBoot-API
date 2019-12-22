@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lyricxinc.lyricx.model.validator.group.OnSongCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnSongUpdate;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -15,8 +17,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
 public class Song {
 
     @Id
@@ -66,6 +71,8 @@ public class Song {
     @Column(unique = true)
     private String songUrl;
 
+    private boolean isExplicit;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "addedById", nullable = false)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -95,7 +102,7 @@ public class Song {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime publishedDate;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    //@JsonProperty(access = JsonProperty.Access.READ_ONLY) this is commented because contributor can make this true. but check before update if the contributor is senior
     private boolean publishedState;
 
     @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
@@ -109,6 +116,11 @@ public class Song {
     @OneToMany(mappedBy = "song", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonManagedReference(value = "songModifiesReferenceSong")
     private Set<SongModify> songModifies;
+
+    @PrePersist
+    private void onCreate(){
+        setSurrogateKey(UUID.randomUUID().toString());
+    }
 
     public Song() {
 
@@ -139,6 +151,16 @@ public class Song {
     public void setId(Long id) {
 
         this.id = id;
+    }
+
+    public String getSurrogateKey() {
+
+        return surrogateKey;
+    }
+
+    public void setSurrogateKey(String surrogateKey) {
+
+        this.surrogateKey = surrogateKey;
     }
 
     public String getName() {
@@ -259,6 +281,16 @@ public class Song {
     public void setSongUrl(String songUrl) {
 
         this.songUrl = songUrl;
+    }
+
+    public boolean isExplicit() {
+
+        return isExplicit;
+    }
+
+    public void setExplicit(boolean explicit) {
+
+        isExplicit = explicit;
     }
 
     public Contributor getAddedBy() {

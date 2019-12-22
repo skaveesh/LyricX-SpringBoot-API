@@ -88,6 +88,7 @@ public class AlbumService {
     @Validated(OnAlbumUpdate.class)
     public void updateAlbum(final HttpServletRequest request, final @Valid Album payload) {
 
+        System.out.println("inside service");
         updateAlbumDetails(request, payload, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
 
         albumRepository.save(payload);

@@ -31,7 +31,7 @@ public class AlbumControllerImpl implements AlbumController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> addAlbum(HttpServletRequest request, @RequestPart("payload") Album payload, @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<HttpResponseData> addAlbum(final HttpServletRequest request, @RequestPart("payload") Album payload, @RequestPart("image") MultipartFile image) {
 
         albumService.addAlbum(request, payload, image);
 
@@ -39,7 +39,7 @@ public class AlbumControllerImpl implements AlbumController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> searchAlbums(String keyword) {
+    public ResponseEntity<HttpResponseData> searchAlbums(final String keyword) {
 
         return httpResponse.returnResponse(HttpStatus.OK, "Success", albumService.searchAlbums(keyword));
     }
@@ -47,13 +47,14 @@ public class AlbumControllerImpl implements AlbumController {
     @Override
     public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, final @Valid @RequestBody Album payload) {
 
+        System.out.println("inside controller");
         albumService.updateAlbum(request, payload);
 
         return httpResponse.returnResponse(HttpStatus.OK, "Album updated successfully.", null);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, final @Valid @RequestBody Album payload, MultipartFile image) {
+    public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, @RequestPart("payload") Album payload, @RequestPart("image") MultipartFile image) {
 
         albumService.updateAlbum(request, payload, image);
 
@@ -61,7 +62,7 @@ public class AlbumControllerImpl implements AlbumController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, final @Valid @RequestBody Album payload) {
+    public ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, final @RequestBody Album payload) {
 
         albumService.resetAlbumArt(request, payload);
 
