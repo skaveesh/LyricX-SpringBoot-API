@@ -1,15 +1,18 @@
-package com.lyricxinc.lyricx.core.validator;
+package com.lyricxinc.lyricx.core.util;
 
-import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
+import com.lyricxinc.lyricx.core.exception.ForbiddenException;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.commons.validator.routines.UrlValidator;
 
-public class StringValidator {
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
+
+public class StringValidatorUtil {
 
     private static void nullCheck(String string) {
 
         if (string == null)
-            throw new ForbiddenCustomException("Required one or more property is empty.");
+            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_20, ErrorCode.LYRICX_ERR_20);
     }
 
     public static String validateEmailAddress(String email) {
@@ -19,7 +22,7 @@ public class StringValidator {
         email = email.trim();
 
         if (!EmailValidator.getInstance().isValid(email))
-            throw new ForbiddenCustomException("Provided E-Mail address is wrong.");
+            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_21, ErrorCode.LYRICX_ERR_21);
 
         return email;
     }
@@ -31,7 +34,7 @@ public class StringValidator {
         name = name.trim();
 
         if (name.matches(".*\\d+.*"))
-            throw new ForbiddenCustomException("Name should not contain any numbers.");
+            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_22, ErrorCode.LYRICX_ERR_22);
 
         return name;
     }
@@ -43,7 +46,7 @@ public class StringValidator {
         url = url.trim();
 
         if (!UrlValidator.getInstance().isValid(url))
-            throw new ForbiddenCustomException("Entered contact link not valid.");
+            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_23, ErrorCode.LYRICX_ERR_23);
 
         return url;
     }

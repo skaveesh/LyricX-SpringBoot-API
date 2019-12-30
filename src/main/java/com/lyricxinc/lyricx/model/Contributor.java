@@ -19,10 +19,11 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 public class Contributor {
 
-    //    @NotBlank(groups = {OnAlbumCreate.class, OnAlbumUpdate.class})
+    //todo    @NotBlank(groups = {OnAlbumCreate.class, OnAlbumUpdate.class})
     @Id
     @NotBlank
     private String id;
+
     @Size(min = 3, max = 50)
     private String firstName;
 

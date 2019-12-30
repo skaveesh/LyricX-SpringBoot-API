@@ -1,14 +1,13 @@
 package com.lyricxinc.lyricx.core.interceptor;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseToken;
-import com.lyricxinc.lyricx.core.config.FirebaseConfig;
-import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
 
 public class ContributorInterceptor implements HandlerInterceptor {
 
@@ -22,11 +21,11 @@ public class ContributorInterceptor implements HandlerInterceptor {
 //        try {
 //            decodeToken = FirebaseAuth.getInstance(FirebaseConfig.getContributorFirebaseApp()).verifyIdToken(authToken);
 //        } catch (Exception e) {
-//            throw new ForbiddenCustomException("Provided credentials are not valid.");
+//            throw new ForbiddenCustomException(ErrorMessage.LYRICX_ERR_17, ErrorCode.LYRICX_ERR_17);
 //        }
 //
 //        if (!decodeToken.isEmailVerified())
-//            throw new ForbiddenCustomException("Your account hasn't verified yet. Please verify.");
+//            throw new ForbiddenCustomException(ErrorMessage.LYRICX_ERR_19, ErrorCode.LYRICX_ERR_19);
 //
 //        HttpSession session = request.getSession();
 //        session.setAttribute("userId", decodeToken.getUid());

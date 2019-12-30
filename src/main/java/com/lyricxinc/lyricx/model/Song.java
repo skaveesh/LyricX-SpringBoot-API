@@ -36,6 +36,7 @@ public class Song {
     @NotBlank(groups = {OnSongCreate.class})
     private String name;
 
+    //todo valid here?
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "albumId", nullable = false)
     @JsonBackReference(value = "songReferenceAlbum")
@@ -47,6 +48,7 @@ public class Song {
     @Size(max = 5)
     private String beat;
 
+    //todo valid here
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "languageId", nullable = false)
     @JsonBackReference(value = "referenceLanguage")
@@ -65,11 +67,8 @@ public class Song {
 
     private String deezerLink;
 
-    @NotBlank
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String imgUrl;
-
-    @Column(unique = true)
-    private String songUrl;
 
     private boolean isExplicit;
 
@@ -102,7 +101,7 @@ public class Song {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime publishedDate;
 
-    //@JsonProperty(access = JsonProperty.Access.READ_ONLY) this is commented because contributor can make this true. but check before update if the contributor is senior
+    //todo @JsonProperty(access = JsonProperty.Access.READ_ONLY) this is commented because contributor can make this true. but check before update if the contributor is senior
     private boolean publishedState;
 
     @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
@@ -126,7 +125,7 @@ public class Song {
 
     }
 
-    public Song(@NotBlank String name, Album album, @Size(max = 5) String guitarKey, @Size(max = 5) String beat, Language language, String keywords, @NotBlank byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, String imgUrl, Contributor addedBy, boolean publishedState) {
+    public Song(@NotBlank String name, Album album, @Size(max = 5) String guitarKey, @Size(max = 5) String beat, Language language, String keywords, @NotBlank byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, String imgUrl, boolean isExplicit, Contributor addedBy, boolean publishedState) {
 
         this.name = name;
         this.album = album;
@@ -139,6 +138,7 @@ public class Song {
         this.spotifyLink = spotifyLink;
         this.deezerLink = deezerLink;
         this.imgUrl = imgUrl;
+        this.isExplicit = isExplicit;
         this.addedBy = addedBy;
         this.publishedState = publishedState;
     }
@@ -271,16 +271,6 @@ public class Song {
     public void setImgUrl(String imgUrl) {
 
         this.imgUrl = imgUrl;
-    }
-
-    public String getSongUrl() {
-
-        return songUrl;
-    }
-
-    public void setSongUrl(String songUrl) {
-
-        this.songUrl = songUrl;
     }
 
     public boolean isExplicit() {

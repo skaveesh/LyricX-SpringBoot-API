@@ -19,7 +19,7 @@ public interface SongController {
     ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @Valid @RequestBody Song payload);
 
     @PutMapping("update/albumart")
-    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @Valid @RequestBody Song payload, MultipartFile image);
+    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @Valid @RequestPart Song payload, MultipartFile image);
 
     @DeleteMapping("remove/albumart")
     ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, final @Valid @RequestBody Song payload);

@@ -1,9 +1,6 @@
 package com.lyricxinc.lyricx.core.filter;
 
-import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
-
 import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 public class AuthFilter implements Filter {

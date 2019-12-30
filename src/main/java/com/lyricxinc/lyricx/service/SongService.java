@@ -1,6 +1,6 @@
 package com.lyricxinc.lyricx.service;
 
-import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
+import com.lyricxinc.lyricx.core.exception.ForbiddenException;
 import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.model.Contributor;
 import com.lyricxinc.lyricx.model.Language;
@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.UUID;
+
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
 
 @Service
 public class SongService {
@@ -33,13 +35,7 @@ public class SongService {
     }
 
     public Song getSongById(long id) {
-
-        Song song = songRepository.findById(id).orElse(null);
-
-        if (song == null)
-            throw new ForbiddenCustomException("Requested song cannot be found.");
-
-        return song;
+        return songRepository.findById(id).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_10, ErrorCode.LYRICX_ERR_10));
     }
 
     public void addSong(HttpServletRequest request, String name, long albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink) {
@@ -48,10 +44,10 @@ public class SongService {
 
         Album album = albumService.getAlbumById(albumId);
 
-        Song song = new Song(name, album, guitarKey, beat, languageService.getLanguageById(languageId), keywords, lyrics, youTubeLink, spotifyLink, deezerLink, album.getImgUrl(), contributor, false);
-        song.setSongUrl(UUID.randomUUID().toString().replace("-", ""));
+//        Song song = new Song(name, album, guitarKey, beat, languageService.getLanguageById(languageId), keywords, lyrics, youTubeLink, spotifyLink, deezerLink, album.getImgUrl(), contributor, false);
 
-        songRepository.save(song);
+
+//        songRepository.save(song);
     }
 
     public void addSong(HttpServletRequest request, String name, long albumId, String guitarKey, String beat, String languageName, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, MultipartFile image) {
@@ -60,10 +56,10 @@ public class SongService {
 
         String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.SONG_FOLDER);
 
-        Song song = new Song(name, albumService.getAlbumById(albumId), guitarKey, beat, languageService.findLanguageByName(languageName), keywords, lyrics, youTubeLink, spotifyLink, deezerLink, imgUrl, contributor, false);
-        song.setSongUrl(UUID.randomUUID().toString().replace("-", ""));
+//        Song song = new Song(name, albumService.getAlbumById(albumId), guitarKey, beat, languageService.findLanguageByName(languageName), keywords, lyrics, youTubeLink, spotifyLink, deezerLink, imgUrl, contributor, false);
 
-        songRepository.save(song);
+
+//        songRepository.save(song);
     }
 
     public void updateSong(HttpServletRequest request, long songId, String name, long albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink) {

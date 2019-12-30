@@ -12,10 +12,12 @@ public class HttpResponseData {
 
     private LocalDateTime timestamp;
     private String message;
+    private String code;
     private Object data;
 
-    public HttpResponseData() {
 
+    public HttpResponseData() {
+        // Empty constructor for Spring initialization
     }
 
     void setTimestamp(LocalDateTime timestamp) {
@@ -26,6 +28,11 @@ public class HttpResponseData {
     void setMessage(String message) {
 
         this.message = message;
+    }
+
+    public void setCode(String code) {
+
+        this.code = code;
     }
 
     public void setData(Object data) {
@@ -41,6 +48,11 @@ public class HttpResponseData {
     public String getMessage() {
 
         return message;
+    }
+
+    public String getCode() {
+
+        return code;
     }
 
     public Object getData() {

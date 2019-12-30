@@ -1,10 +1,13 @@
 package com.lyricxinc.lyricx.service;
 
-import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
+import com.lyricxinc.lyricx.core.exception.ForbiddenException;
 import com.lyricxinc.lyricx.model.Language;
 import com.lyricxinc.lyricx.repository.LanguageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
 
 @Service
 public class LanguageService {
@@ -22,7 +25,7 @@ public class LanguageService {
         Language language = languageRepository.findById(id).orElse(null);
 
         if (language == null)
-            throw new ForbiddenCustomException("Requested language cannot be found.");
+            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_14, ErrorCode.LYRICX_ERR_14);
 
         return language;
     }

@@ -1,6 +1,6 @@
 package com.lyricxinc.lyricx.service;
 
-import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
+import com.lyricxinc.lyricx.core.exception.ForbiddenException;
 import com.lyricxinc.lyricx.model.Artist;
 import com.lyricxinc.lyricx.model.Contributor;
 import com.lyricxinc.lyricx.model.validator.group.OnArtistCreate;
@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.UUID;
 import java.util.function.Consumer;
+
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
 
 @Service
 public class ArtistService {
@@ -36,13 +39,7 @@ public class ArtistService {
     }
 
     public Artist getArtistById(long id) {
-
-        Artist artist = artistRepository.findById(id).orElse(null);
-
-        if (artist == null)
-            throw new ForbiddenCustomException("Requested artist cannot be found.");
-
-        return artist;
+        return artistRepository.findById(id).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_12, ErrorCode.LYRICX_ERR_12));
     }
 
     public Artist getArtistBySurrogateKey(String surrogateKey) {
@@ -50,7 +47,7 @@ public class ArtistService {
         Artist artist = this.artistRepository.findBySurrogateKey(surrogateKey);
 
         if (artist == null)
-            throw new ForbiddenCustomException("Requested artist cannot be found.");
+            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_12, ErrorCode.LYRICX_ERR_12);
 
         return artist;
     }

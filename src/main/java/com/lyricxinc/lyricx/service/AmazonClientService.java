@@ -9,7 +9,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.lyricxinc.lyricx.core.exception.FileUploadErrorCustomException;
+import com.lyricxinc.lyricx.core.exception.FileUploadException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +19,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
+
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
 
 @Service
 public class AmazonClientService {
@@ -47,6 +50,7 @@ public class AmazonClientService {
     public enum S3BucketFolders {
         ARTIST_FOLDER
                 {
+                    @Override
                     public String toString() {
 
                         return "artist";
@@ -55,6 +59,7 @@ public class AmazonClientService {
 
         ALBUM_FOLDER
                 {
+                    @Override
                     public String toString() {
 
                         return "album";
@@ -63,6 +68,7 @@ public class AmazonClientService {
 
         SONG_FOLDER
                 {
+                    @Override
                     public String toString() {
 
                         return "song";
@@ -71,6 +77,7 @@ public class AmazonClientService {
 
         CONTRIBUTOR_FOLDER
                 {
+                    @Override
                     public String toString() {
 
                         return "contributor";
@@ -92,7 +99,7 @@ public class AmazonClientService {
         } catch (Exception e)
         {
             e.printStackTrace();
-            throw new FileUploadErrorCustomException("Error while uploading the file. Try again.");
+            throw new FileUploadException(ErrorMessage.LYRICX_ERR_13, ErrorCode.LYRICX_ERR_13);
         }
 
         return fileUrl;

@@ -3,11 +3,14 @@ package com.lyricxinc.lyricx.core.interceptor;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
 import com.lyricxinc.lyricx.core.config.FirebaseConfig;
-import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
+import com.lyricxinc.lyricx.core.exception.ForbiddenException;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
 
 public class AdminInterceptor implements HandlerInterceptor {
 
@@ -29,7 +32,7 @@ public class AdminInterceptor implements HandlerInterceptor {
                 decodeToken = FirebaseAuth.getInstance(FirebaseConfig.getAdminFirebaseApp()).verifyIdToken(authToken);
             } catch (Exception e)
             {
-                throw new ForbiddenCustomException("Provided credentials are not valid.");
+                throw new ForbiddenException(ErrorMessage.LYRICX_ERR_16, ErrorCode.LYRICX_ERR_16);
             }
 
             String uid = decodeToken.getUid();
@@ -38,7 +41,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 
             if (!isEmailVerified)
             {
-                throw new ForbiddenCustomException("Your account hasn't verified yet. Please verify.");
+                throw new ForbiddenException(ErrorMessage.LYRICX_ERR_19, ErrorCode.LYRICX_ERR_19);
             }
 
             System.out.println("email: " + email + " uid: " + uid + " issuer: " + decodeToken.getIssuer());
@@ -47,7 +50,7 @@ public class AdminInterceptor implements HandlerInterceptor {
         }
         else
         {
-            throw new ForbiddenCustomException("Provided credentials are not valid.");
+            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_16, ErrorCode.LYRICX_ERR_16);
         }
     }
 

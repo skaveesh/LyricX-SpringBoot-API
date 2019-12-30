@@ -1,6 +1,6 @@
 package com.lyricxinc.lyricx.service;
 
-import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
+import com.lyricxinc.lyricx.core.exception.ForbiddenException;
 import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.model.Contributor;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
@@ -15,8 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 import java.util.function.Consumer;
+
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
 
 @Validated
 @Service
@@ -44,7 +46,7 @@ public class AlbumService {
         Album album = this.albumRepository.findById(id).orElse(null);
 
         if (album == null)
-            throw new ForbiddenCustomException("Requested album cannot be found.");
+            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_11, ErrorCode.LYRICX_ERR_11);
 
         return album;
     }
@@ -54,7 +56,7 @@ public class AlbumService {
         Album album = this.albumRepository.findBySurrogateKey(surrogateKey);
 
         if (album == null)
-            throw new ForbiddenCustomException("Requested album cannot be found.");
+            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_11, ErrorCode.LYRICX_ERR_11);
 
         return album;
     }
@@ -88,7 +90,6 @@ public class AlbumService {
     @Validated(OnAlbumUpdate.class)
     public void updateAlbum(final HttpServletRequest request, final @Valid Album payload) {
 
-        System.out.println("inside service");
         updateAlbumDetails(request, payload, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
 
         albumRepository.save(payload);
@@ -121,7 +122,7 @@ public class AlbumService {
     @Validated(OnAlbumUpdate.class)
     public void resetAlbumArt(final HttpServletRequest request, final @Valid Album payload) {
 
-        updateAlbumDetails(request, payload, (cont) -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
+        updateAlbumDetails(request, payload, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
 
         payload.setImgUrl(albumDefaultImageUrl);
 

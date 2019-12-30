@@ -15,6 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import static com.lyricxinc.lyricx.core.constant.Constants.SuccessCode;
+import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage;
+
 @RestController
 public class SongControllerImpl implements SongController {
 
@@ -30,10 +33,12 @@ public class SongControllerImpl implements SongController {
 
     @Override
     public ResponseEntity<HttpResponseData> addSong(HttpServletRequest request, final @Valid @RequestBody Song payload) {
+/* TODO: 12/30/2019  when adding a song, set imgurl to null. when ui displaying song image, display album's one. when user uploading a custom album art of the song
+                     then remove the null of imgurl of the song and add the user uploaded one */
 
 //        songService.addSong(request, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
 
-        return httpResponse.returnResponse(HttpStatus.OK, "Song added successfully.", null);
+        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SONG_CREATE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
     }
 
     @Override
@@ -41,7 +46,7 @@ public class SongControllerImpl implements SongController {
 
 //        songService.updateSong(request, songId, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
 
-        return httpResponse.returnResponse(HttpStatus.OK, "Song updated successfully.", null);
+        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SONG_UPDATE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
     }
 
     @Override
@@ -49,7 +54,7 @@ public class SongControllerImpl implements SongController {
 
 //        songService.updateSong(request, songId, image);
 
-        return httpResponse.returnResponse(HttpStatus.OK, "Album art updated successfully.", null);
+        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SONG_ALBUM_ART_UPDATE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
     }
 
     @Override
@@ -58,7 +63,7 @@ public class SongControllerImpl implements SongController {
         //        todo
         //         songService.removeAlbumArt(request, songId);
 
-        return httpResponse.returnResponse(HttpStatus.OK, "Album art removed successfully.", null);
+        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SONG_ALBUM_ART_REMOVE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
     }
 
     @Override
@@ -67,7 +72,7 @@ public class SongControllerImpl implements SongController {
 //        todo
         //        songService.removeSong(request, songId);
 
-        return httpResponse.returnResponse(HttpStatus.OK, "Song removed successfully.", null);
+        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SONG_REMOVE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
     }
 
 }
