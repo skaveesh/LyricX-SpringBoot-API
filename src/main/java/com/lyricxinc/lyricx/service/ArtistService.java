@@ -58,7 +58,6 @@ public class ArtistService {
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
         payload.setAddedBy(contributor);
-        payload.setSurrogateKey(UUID.randomUUID().toString().replace("-", ""));
         payload.setLastModifiedBy(contributor);
 
         if (image != null) {

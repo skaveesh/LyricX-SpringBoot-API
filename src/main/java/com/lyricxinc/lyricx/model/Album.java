@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
+import com.lyricxinc.lyricx.model.validator.group.OnSongCreate;
+import com.lyricxinc.lyricx.model.validator.group.OnSongUpdate;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
@@ -32,7 +34,7 @@ public class Album {
     private Long id;
 
     @Column(unique = true, updatable = false, nullable = false)
-    @NotNull(groups = OnAlbumUpdate.class)
+    @NotNull(groups = {OnAlbumUpdate.class, OnSongCreate.class, OnSongUpdate.class})
     private String surrogateKey;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
