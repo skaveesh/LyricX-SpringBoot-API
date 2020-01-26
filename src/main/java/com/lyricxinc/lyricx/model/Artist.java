@@ -38,7 +38,6 @@ public class Artist {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "contributorId", nullable = false)
-    @Valid
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonBackReference(value = "referenceAddedBy")
     private Contributor addedBy;

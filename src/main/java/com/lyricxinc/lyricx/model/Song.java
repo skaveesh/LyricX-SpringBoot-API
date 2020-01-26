@@ -12,6 +12,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -36,7 +37,7 @@ public class Song {
     @NotBlank(groups = {OnSongCreate.class})
     private String name;
 
-    //todo valid here?
+    @Valid
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "albumId", nullable = false)
     @JsonBackReference(value = "songReferenceAlbum")
@@ -48,7 +49,7 @@ public class Song {
     @Size(max = 5)
     private String beat;
 
-    //todo valid here
+    @Valid
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "languageId", nullable = false)
     @JsonBackReference(value = "referenceLanguage")
@@ -57,7 +58,7 @@ public class Song {
     private String keywords;
 
     @Lob
-    @NotNull
+    @NotNull(groups = {OnSongCreate.class})
     @Column(length = 100000)
     private byte[] lyrics;
 

@@ -12,13 +12,13 @@ import javax.validation.Valid;
 @RequestMapping("song")
 public interface SongController {
 
-    @PostMapping("add")
+    @PutMapping("add")
     ResponseEntity<HttpResponseData> addSong(HttpServletRequest request, final @Valid @RequestBody Song payload);
 
-    @PutMapping("update/details")
+    @PostMapping("update/details")
     ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @Valid @RequestBody Song payload);
 
-    @PutMapping("update/albumart")
+    @PostMapping("update/albumart")
     ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @Valid @RequestPart Song payload, MultipartFile image);
 
     @DeleteMapping("remove/albumart")

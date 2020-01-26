@@ -5,16 +5,20 @@ import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.model.Contributor;
 import com.lyricxinc.lyricx.model.Language;
 import com.lyricxinc.lyricx.model.Song;
+import com.lyricxinc.lyricx.model.validator.group.OnSongCreate;
 import com.lyricxinc.lyricx.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
 
+@Validated
 @Service
 public class SongService {
 
@@ -38,16 +42,21 @@ public class SongService {
         return songRepository.findById(id).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_10, ErrorCode.LYRICX_ERR_10));
     }
 
-    public void addSong(HttpServletRequest request, String name, long albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink) {
+    @Validated(OnSongCreate.class)
+    public void addSong(final HttpServletRequest request, final @Valid Song payload) {
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
-        Album album = albumService.getAlbumById(albumId);
+        payload.setAddedBy(contributor);
+        payload.setLastModifiedBy(contributor);
 
-//        Song song = new Song(name, album, guitarKey, beat, languageService.getLanguageById(languageId), keywords, lyrics, youTubeLink, spotifyLink, deezerLink, album.getImgUrl(), contributor, false);
+        payload.setAlbum(albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey()));
 
+        payload.setLanguage(languageService.findLanguageByLanguageCode(payload.getLanguage().getLanguageCode()));
 
-//        songRepository.save(song);
+        payload.setPublishedState(false);
+
+        songRepository.save(payload);
     }
 
     public void addSong(HttpServletRequest request, String name, long albumId, String guitarKey, String beat, String languageName, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, MultipartFile image) {

@@ -30,9 +30,9 @@ public class LanguageService {
         return language;
     }
 
-    public Language findLanguageByName(String name) {
+    public Language findLanguageByLanguageCode(String languageCode) {
 
-        return languageRepository.findByLanguage(name);
+        return languageRepository.findByLanguageCode(languageCode.toUpperCase());
     }
 
     public void addLanguage(Language language) {

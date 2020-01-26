@@ -24,7 +24,7 @@ public class SongServiceTest {
 
         System.out.println(new String(song.getLyrics(), StandardCharsets.UTF_8));
         System.out.println(song.getAddedBy().getFirstName());
-        System.out.println(song.getLanguage().getLanguage());
+        System.out.println(song.getLanguage().getLanguageName());
     }
 
     @Test

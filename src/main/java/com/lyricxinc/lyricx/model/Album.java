@@ -34,7 +34,7 @@ public class Album {
     private Long id;
 
     @Column(unique = true, updatable = false, nullable = false)
-    @NotNull(groups = {OnAlbumUpdate.class, OnSongCreate.class, OnSongUpdate.class})
+    @NotBlank(groups = {OnAlbumUpdate.class, OnSongCreate.class, OnSongUpdate.class})
     private String surrogateKey;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
@@ -63,7 +63,6 @@ public class Album {
     private LocalDateTime lastModifiedDate;
 
     //todo getting contributor through session?
-    @Valid
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "contributorId", nullable = false)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)

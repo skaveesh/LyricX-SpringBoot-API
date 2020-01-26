@@ -1,11 +1,10 @@
 package com.lyricxinc.lyricx.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lyricxinc.lyricx.model.validator.group.OnLanguageCreate;
+import com.lyricxinc.lyricx.model.validator.group.OnSongCreate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -17,17 +16,22 @@ public class Language {
     @JsonIgnore
     private Short id;
 
-    @NotBlank
     @Size(max = 30)
-    private String language;
+    @NotBlank(groups = {OnLanguageCreate.class})
+    private String languageName;
+
+    @Column(unique = true, nullable = false)
+    @NotBlank(groups = {OnSongCreate.class, OnLanguageCreate.class})
+    @Size(max = 2, min = 2)
+    private String languageCode;
 
     public Language() {
 
     }
 
-    public Language(@NotBlank @Size(max = 30) String language) {
+    public Language(@NotBlank @Size(max = 30) String languageName) {
 
-        this.language = language;
+        this.languageName = languageName;
     }
 
     public Short getId() {
@@ -40,14 +44,24 @@ public class Language {
         this.id = id;
     }
 
-    public String getLanguage() {
+    public String getLanguageName() {
 
-        return language;
+        return languageName;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguageName(String languageName) {
 
-        this.language = language;
+        this.languageName = languageName;
+    }
+
+    public String getLanguageCode() {
+
+        return languageCode;
+    }
+
+    public void setLanguageCode(String languageCode) {
+
+        this.languageCode = languageCode;
     }
 
 }
