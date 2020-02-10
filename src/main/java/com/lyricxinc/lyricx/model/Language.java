@@ -59,6 +59,10 @@ public class Language {
         return languageCode;
     }
 
+    /**
+     *
+     * @param languageCode should be ISO 639-1:2002 which is a two characters code
+     */
     public void setLanguageCode(String languageCode) {
 
         this.languageCode = languageCode;
