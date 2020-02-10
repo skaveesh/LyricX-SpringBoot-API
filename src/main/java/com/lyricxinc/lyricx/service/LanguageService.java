@@ -20,14 +20,10 @@ public class LanguageService {
         this.languageRepository = languageRepository;
     }
 
-    public Language getLanguageById(short id) {
+    public Language getLanguageById(final Short id) {
 
-        Language language = languageRepository.findById(id).orElse(null);
-
-        if (language == null)
-            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_14, ErrorCode.LYRICX_ERR_14);
-
-        return language;
+        return languageRepository.findById(id).orElseThrow(() ->
+                new ForbiddenException(ErrorMessage.LYRICX_ERR_14, ErrorCode.LYRICX_ERR_14));
     }
 
     public Language findLanguageByLanguageCode(String languageCode) {

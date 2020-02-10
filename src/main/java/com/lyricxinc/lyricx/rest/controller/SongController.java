@@ -7,24 +7,23 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 @RequestMapping("song")
 public interface SongController {
 
-    @PutMapping("add")
-    ResponseEntity<HttpResponseData> addSong(HttpServletRequest request, final @Valid @RequestBody Song payload);
+    @PostMapping("add")
+    ResponseEntity<HttpResponseData> addSong(HttpServletRequest request, @RequestBody Song payload);
 
-    @PostMapping("update/details")
-    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @Valid @RequestBody Song payload);
+    @PutMapping("update/details")
+    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, @RequestBody Song payload);
 
-    @PostMapping("update/albumart")
-    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @Valid @RequestPart Song payload, MultipartFile image);
+    @PutMapping("update/albumart")
+    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, @RequestPart Song payload, MultipartFile image);
 
     @DeleteMapping("remove/albumart")
-    ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, final @Valid @RequestBody Song payload);
+    ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, @RequestBody Song payload);
 
     @DeleteMapping("remove")
-    ResponseEntity<HttpResponseData> removeSong(HttpServletRequest request, final @Valid @RequestBody Song payload);
+    ResponseEntity<HttpResponseData> removeSong(HttpServletRequest request, @RequestBody Song payload);
 
 }

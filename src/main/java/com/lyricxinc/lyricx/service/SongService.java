@@ -10,6 +10,7 @@ import com.lyricxinc.lyricx.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,16 +40,23 @@ public class SongService {
     }
 
     public Song getSongById(long id) {
-        return songRepository.findById(id).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_10, ErrorCode.LYRICX_ERR_10));
+        return songRepository.findById(id).orElseThrow(() ->
+                new ForbiddenException(ErrorMessage.LYRICX_ERR_10, ErrorCode.LYRICX_ERR_10));
     }
 
     @Validated(OnSongCreate.class)
     public void addSong(final HttpServletRequest request, final @Valid Song payload) {
 
-        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
+        payload.setAddedBy(contributorService.getContributorByHttpServletRequest(request));
+        payload.setLastModifiedBy(contributorService.getContributorByHttpServletRequest(request));
 
-        payload.setAddedBy(contributor);
-        payload.setLastModifiedBy(contributor);
+        payload.setLanguage(languageService.getLanguageById(payload.getLanguage().getId()));
+
+        payload.setAlbum(albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey()));
+
+        payload.setPublishedState(false);
+        payload.setPublishedBy(null);
+        payload.setPublishedDate(null);
 
         payload.setAlbum(albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey()));
 

@@ -32,17 +32,19 @@ public class SongControllerImpl implements SongController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> addSong(final HttpServletRequest request, final @Valid @RequestBody Song payload) {
+    public ResponseEntity<HttpResponseData> addSong(HttpServletRequest request, final @RequestBody Song payload) {
 /* TODO: 12/30/2019  when adding a song, set imgurl to null. when ui displaying song image, display album's one. when user uploading a custom album art of the song
                      then remove the null of imgurl of the song and add the user uploaded one */
 
         songService.addSong(request, payload);
 
+//        songService.addSong(request, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
+
         return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SONG_CREATE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @Valid @RequestBody Song payload) {
+    public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @RequestBody Song payload) {
 
 //        songService.updateSong(request, songId, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
 
@@ -50,7 +52,7 @@ public class SongControllerImpl implements SongController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @Valid @RequestBody Song payload, MultipartFile image) {
+    public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @RequestBody Song payload, MultipartFile image) {
 
 //        songService.updateSong(request, songId, image);
 
@@ -58,7 +60,7 @@ public class SongControllerImpl implements SongController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, final @Valid @RequestBody Song payload) {
+    public ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, final @RequestBody Song payload) {
 
         //        todo
         //         songService.removeAlbumArt(request, songId);
@@ -67,7 +69,7 @@ public class SongControllerImpl implements SongController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> removeSong(HttpServletRequest request, final @Valid @RequestBody Song payload) {
+    public ResponseEntity<HttpResponseData> removeSong(HttpServletRequest request, final @RequestBody Song payload) {
 
 //        todo
         //        songService.removeSong(request, songId);
