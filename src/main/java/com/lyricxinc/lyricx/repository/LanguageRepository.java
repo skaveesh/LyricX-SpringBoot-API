@@ -4,11 +4,13 @@ import com.lyricxinc.lyricx.model.Language;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface LanguageRepository extends JpaRepository<Language, Short> {
 
-    Language findByLanguageName(String languageName);
+    Optional<Language> findByLanguageName(String languageName);
 
-    Language findByLanguageCode(String languageCode);
+    Optional<Language> findByLanguageCode(String languageCode);
 
 }

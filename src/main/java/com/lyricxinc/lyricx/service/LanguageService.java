@@ -26,9 +26,10 @@ public class LanguageService {
                 new ForbiddenException(ErrorMessage.LYRICX_ERR_14, ErrorCode.LYRICX_ERR_14));
     }
 
-    public Language findLanguageByLanguageCode(String languageCode) {
+    public Language getLanguageByLanguageCode(String languageCode) {
 
-        return languageRepository.findByLanguageCode(languageCode.toUpperCase());
+        return languageRepository.findByLanguageCode(languageCode.toUpperCase()).orElseThrow(() ->
+                new ForbiddenException(ErrorMessage.LYRICX_ERR_14, ErrorCode.LYRICX_ERR_14));
     }
 
     public void addLanguage(Language language) {

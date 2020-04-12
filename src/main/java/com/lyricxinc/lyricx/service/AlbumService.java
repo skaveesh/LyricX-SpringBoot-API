@@ -1,6 +1,7 @@
 package com.lyricxinc.lyricx.service;
 
 import com.lyricxinc.lyricx.core.exception.ForbiddenException;
+import com.lyricxinc.lyricx.core.exception.NotFoundException;
 import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.model.Contributor;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
@@ -42,30 +43,28 @@ public class AlbumService {
     }
 
     public Album getAlbumById(final Long id) {
-
-        Album album = this.albumRepository.findById(id).orElse(null);
-
-        if (album == null)
-            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_11, ErrorCode.LYRICX_ERR_11);
-
-        return album;
+        return albumRepository.findById(id).orElseThrow(() ->
+                new ForbiddenException(ErrorMessage.LYRICX_ERR_11, ErrorCode.LYRICX_ERR_11));
     }
 
     public Album getAlbumBySurrogateKey(final String surrogateKey) {
-
-        Album album = this.albumRepository.findBySurrogateKey(surrogateKey);
-
-        if (album == null)
-            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_11, ErrorCode.LYRICX_ERR_11);
-
-        return album;
+        return albumRepository.findBySurrogateKey(surrogateKey).orElseThrow(() ->
+                new ForbiddenException(ErrorMessage.LYRICX_ERR_11, ErrorCode.LYRICX_ERR_11));
     }
 
+    /**
+     * @param keyword
+     * @return
+     */
     public List<Album> searchAlbums(final String keyword) {
-
         return this.albumRepository.findTop20ByNameIgnoreCaseContainingOrderByNameAsc(keyword);
     }
 
+    /**
+     * @param request
+     * @param payload
+     * @param image
+     */
     @Validated(OnAlbumCreate.class)
     public void addAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile image) {
 
@@ -102,9 +101,19 @@ public class AlbumService {
 
         String imgUrl = this.amazonClientService.uploadFile(payloadImage, AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
 
-        //delete old album image from S3 bucket
-        amazonClientService.deleteFileFromS3Bucket(payload.getImgUrl(), AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
+        String oldImgUrl = null;
 
+        try
+        {
+            oldImgUrl = getAlbumImgUrl(payload.getSurrogateKey());
+        } finally
+        {
+            //delete old song image from S3 bucket
+            if (oldImgUrl != null)
+            {
+                this.amazonClientService.deleteFileFromS3Bucket(oldImgUrl, AmazonClientService.S3BucketFolders.SONG_FOLDER);
+            }
+        }
         payload.setImgUrl(imgUrl);
 
         albumRepository.save(payload);
@@ -127,7 +136,6 @@ public class AlbumService {
         payload.setImgUrl(albumDefaultImageUrl);
 
         albumRepository.save(payload);
-
     }
 
     private void setArtistThroughSurrogateKey(final Album payload) {
@@ -135,7 +143,14 @@ public class AlbumService {
         String artistSurrogateKey = payload.getArtist().getSurrogateKey();
 
         if (artistSurrogateKey != null)
+        {
             payload.setArtist(artistService.getArtistBySurrogateKey(artistSurrogateKey));
+        }
+    }
+
+    private String getAlbumImgUrl(String surrogateKey){
+        return albumRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() ->
+                new NotFoundException(ErrorMessage.LYRICX_ERR_25, ErrorCode.LYRICX_ERR_25));
     }
 
     private void updateAlbumDetails(final HttpServletRequest request, final Album payload, Consumer<Contributor> contributorStatus) {
@@ -144,12 +159,17 @@ public class AlbumService {
         payload.setId(oldAlbum.getId());
 
         if (payload.getArtist() == null || payload.getArtist().getId() == null)
+        {
             payload.setArtist(oldAlbum.getArtist());
-        else
+        }else
+        {
             this.setArtistThroughSurrogateKey(payload);
+        }
 
         if (payload.getAddedBy() == null || payload.getAddedBy().getId() == null)
+        {
             payload.setAddedBy(oldAlbum.getAddedBy());
+        }
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
         contributorStatus.accept(contributor);

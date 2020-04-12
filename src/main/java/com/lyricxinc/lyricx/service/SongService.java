@@ -1,20 +1,23 @@
 package com.lyricxinc.lyricx.service;
 
 import com.lyricxinc.lyricx.core.exception.ForbiddenException;
+import com.lyricxinc.lyricx.core.exception.NotFoundException;
 import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.model.Contributor;
 import com.lyricxinc.lyricx.model.Language;
 import com.lyricxinc.lyricx.model.Song;
 import com.lyricxinc.lyricx.model.validator.group.OnSongCreate;
+import com.lyricxinc.lyricx.model.validator.group.OnSongUpdate;
 import com.lyricxinc.lyricx.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import java.util.function.Consumer;
 
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
@@ -44,83 +47,58 @@ public class SongService {
                 new ForbiddenException(ErrorMessage.LYRICX_ERR_10, ErrorCode.LYRICX_ERR_10));
     }
 
+    public Song getSongBySurrogateKey(String surrogateKey) {
+        return songRepository.findBySurrogateKey(surrogateKey).orElseThrow(() ->
+                new ForbiddenException(ErrorMessage.LYRICX_ERR_10, ErrorCode.LYRICX_ERR_10));
+    }
+
     @Validated(OnSongCreate.class)
     public void addSong(final HttpServletRequest request, final @Valid Song payload) {
 
-        payload.setAddedBy(contributorService.getContributorByHttpServletRequest(request));
-        payload.setLastModifiedBy(contributorService.getContributorByHttpServletRequest(request));
+        convertPayloadToSong(payload, request);
+        songRepository.save(payload);
+    }
 
-        payload.setLanguage(languageService.getLanguageById(payload.getLanguage().getId()));
+    @Validated(OnSongCreate.class)
+    public void addSong(HttpServletRequest request, final @Valid Song payload, MultipartFile image) {
 
-        payload.setAlbum(albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey()));
+        convertPayloadToSong(payload, request);
+        String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.SONG_FOLDER);
+        payload.setImgUrl(imgUrl);
+        songRepository.save(payload);
+    }
 
-        payload.setPublishedState(false);
-        payload.setPublishedBy(null);
-        payload.setPublishedDate(null);
+    @Validated(OnSongUpdate.class)
+    public void updateSong(final HttpServletRequest request, final @Valid Song payload) {
 
-        payload.setAlbum(albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey()));
-
-        payload.setLanguage(languageService.findLanguageByLanguageCode(payload.getLanguage().getLanguageCode()));
-
-        payload.setPublishedState(false);
+        updateSongDetails(request, payload, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
 
         songRepository.save(payload);
     }
 
-    public void addSong(HttpServletRequest request, String name, long albumId, String guitarKey, String beat, String languageName, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, MultipartFile image) {
+    @Validated(OnSongUpdate.class)
+    public void updateSong(final HttpServletRequest request, final @Valid Song payload, MultipartFile image) {
 
-        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
-
-        String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.SONG_FOLDER);
-
-//        Song song = new Song(name, albumService.getAlbumById(albumId), guitarKey, beat, languageService.findLanguageByName(languageName), keywords, lyrics, youTubeLink, spotifyLink, deezerLink, imgUrl, contributor, false);
-
-
-//        songRepository.save(song);
-    }
-
-    public void updateSong(HttpServletRequest request, long songId, String name, long albumId, String guitarKey, String beat, short languageId, String keywords, byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink) {
-
-        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
-
-        Song song = this.getSongById(songId);
-
-        contributorService.checkNonSeniorContributorEditsVerifiedContent(contributor, song);
-
-        Album album = albumService.getAlbumById(albumId);
-
-        Language language = languageService.getLanguageById(languageId);
-
-        song.setName(name);
-        song.setAlbum(album);
-        song.setGuitarKey(guitarKey);
-        song.setBeat(beat);
-        song.setLanguage(language);
-        song.setKeywords(keywords);
-        song.setLyrics(lyrics);
-        song.setYouTubeLink(youTubeLink);
-        song.setSpotifyLink(spotifyLink);
-        song.setDeezerLink(deezerLink);
-
-        songRepository.save(song);
-    }
-
-    public void updateSong(HttpServletRequest request, long songId, MultipartFile image) {
-
-        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
-
-        Song song = this.getSongById(songId);
-
-        contributorService.checkNonSeniorContributorEditsVerifiedContent(contributor, song);
+        updateSongDetails(request, payload, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
 
         String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.SONG_FOLDER);
 
-        //delete old song image from S3 bucket
-        this.amazonClientService.deleteFileFromS3Bucket(song.getImgUrl(), AmazonClientService.S3BucketFolders.SONG_FOLDER);
+        String oldImgUrl = null;
 
-        song.setImgUrl(imgUrl);
+        try{
+            oldImgUrl = getSongImgUrl(payload.getSurrogateKey());
+        } finally
+        {
+            //delete old song image from S3 bucket
+            if (oldImgUrl != null)
+            {
+                this.amazonClientService.deleteFileFromS3Bucket(oldImgUrl, AmazonClientService.S3BucketFolders.SONG_FOLDER);
+            }
+        }
 
-        songRepository.save(song);
+        payload.setImgUrl(imgUrl);
+
+        songRepository.save(payload);
     }
 
     public void removeAlbumArt(HttpServletRequest request, long songId) {
@@ -150,4 +128,55 @@ public class SongService {
         songRepository.deleteById(id);
     }
 
+    private String getSongImgUrl(String surrogateKey) {
+        return songRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() ->
+                new NotFoundException(ErrorMessage.LYRICX_ERR_24, ErrorCode.LYRICX_ERR_24));
+    }
+
+    private void convertPayloadToSong(Song payload, HttpServletRequest request){
+        payload.setAddedBy(contributorService.getContributorByHttpServletRequest(request));
+        payload.setLastModifiedBy(contributorService.getContributorByHttpServletRequest(request));
+
+        payload.setLanguage(languageService.getLanguageById(payload.getLanguage().getId()));
+
+        payload.setAlbum(albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey()));
+
+        payload.setPublishedState(false);
+        payload.setPublishedBy(null);
+        payload.setPublishedDate(null);
+
+        payload.setAlbum(albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey()));
+
+        payload.setLanguage(languageService.getLanguageByLanguageCode(payload.getLanguage().getLanguageCode()));
+
+        payload.setPublishedState(false);
+    }
+
+    private void updateSongDetails(final HttpServletRequest request, final Song payload, Consumer<Contributor> contributorStatus) {
+
+        Song oldSong = getSongBySurrogateKey(payload.getSurrogateKey());
+        payload.setId(oldSong.getId());
+
+        if(payload.getAlbum() == null || payload.getAlbum().getSurrogateKey() == null)
+        {
+            payload.setAlbum(oldSong.getAlbum());
+        }else
+        {
+            Album newAlbum = albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey());
+            payload.setAlbum(newAlbum);
+        }
+
+        if (payload.getLanguage() == null || payload.getLanguage().getLanguageCode() == null)
+        {
+            payload.setLanguage(oldSong.getLanguage());
+        } else
+        {
+            Language newLanguage = languageService.getLanguageByLanguageCode(payload.getLanguage().getLanguageCode());
+            payload.setLanguage(newLanguage);
+        }
+
+        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
+        contributorStatus.accept(contributor);
+        payload.setLastModifiedBy(contributor);
+    }
 }

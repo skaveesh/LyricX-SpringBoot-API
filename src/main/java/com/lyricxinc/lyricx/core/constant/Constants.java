@@ -49,6 +49,9 @@ public final class Constants {
         public static final String LYRICX_ERR_21 = "Provided E-Mail address is incorrect.";
         public static final String LYRICX_ERR_22 = "Name should not contain any numbers.";
         public static final String LYRICX_ERR_23 = "Entered contact link not valid.";
+        public static final String LYRICX_ERR_24 = "Could not find image url for the song.";
+        public static final String LYRICX_ERR_25 = "Could not find image url for the album.";
+        public static final String LYRICX_ERR_26 = "Could not find image url for the artist.";
 
     }
 
@@ -83,6 +86,9 @@ public final class Constants {
         public static final String LYRICX_ERR_21 = "LYRICX_ERR_21";
         public static final String LYRICX_ERR_22 = "LYRICX_ERR_22";
         public static final String LYRICX_ERR_23 = "LYRICX_ERR_23";
+        public static final String LYRICX_ERR_24 = "LYRICX_ERR_24";
+        public static final String LYRICX_ERR_25 = "LYRICX_ERR_25";
+        public static final String LYRICX_ERR_26 = "LYRICX_ERR_26";
 
     }
 
