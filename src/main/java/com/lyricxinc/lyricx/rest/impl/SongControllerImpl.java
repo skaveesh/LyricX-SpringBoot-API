@@ -13,17 +13,25 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 import static com.lyricxinc.lyricx.core.constant.Constants.SuccessCode;
 import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage;
 
+/**
+ * The type Song controller.
+ */
 @RestController
 public class SongControllerImpl implements SongController {
 
     private final SongService songService;
     private final HttpResponse httpResponse;
 
+    /**
+     * Instantiates a new Song controller.
+     *
+     * @param httpResponse the http response
+     * @param songService  the song service
+     */
     @Autowired
     public SongControllerImpl(HttpResponse httpResponse, SongService songService) {
 
@@ -38,7 +46,7 @@ public class SongControllerImpl implements SongController {
 
         songService.addSong(request, payload);
 
-//        songService.addSong(request, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
+        //        songService.addSong(request, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
 
         return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SONG_CREATE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
     }
@@ -46,7 +54,7 @@ public class SongControllerImpl implements SongController {
     @Override
     public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @RequestBody Song payload) {
 
-//        songService.updateSong(request, songId, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
+        //        songService.updateSong(request, songId, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
 
         return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SONG_UPDATE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
     }
@@ -54,7 +62,7 @@ public class SongControllerImpl implements SongController {
     @Override
     public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @RequestBody Song payload, MultipartFile image) {
 
-//        songService.updateSong(request, songId, image);
+        //        songService.updateSong(request, songId, image);
 
         return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SONG_ALBUM_ART_UPDATE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
     }
@@ -71,7 +79,7 @@ public class SongControllerImpl implements SongController {
     @Override
     public ResponseEntity<HttpResponseData> removeSong(HttpServletRequest request, final @RequestBody Song payload) {
 
-//        todo
+        //        todo
         //        songService.removeSong(request, songId);
 
         return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SONG_REMOVE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);

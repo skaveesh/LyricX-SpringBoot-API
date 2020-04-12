@@ -16,12 +16,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
 import java.util.function.Consumer;
 
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
 
+/**
+ * The type Song service.
+ */
 @Validated
 @Service
 public class SongService {
@@ -32,6 +34,15 @@ public class SongService {
     private final ContributorService contributorService;
     private final AmazonClientService amazonClientService;
 
+    /**
+     * Instantiates a new Song service.
+     *
+     * @param songRepository      the song repository
+     * @param albumService        the album service
+     * @param languageService     the language service
+     * @param contributorService  the contributor service
+     * @param amazonClientService the amazon client service
+     */
     @Autowired
     public SongService(SongRepository songRepository, AlbumService albumService, LanguageService languageService, ContributorService contributorService, AmazonClientService amazonClientService) {
 
@@ -42,16 +53,34 @@ public class SongService {
         this.amazonClientService = amazonClientService;
     }
 
+    /**
+     * Gets song by id.
+     *
+     * @param id the id
+     * @return the song by id
+     */
     public Song getSongById(long id) {
-        return songRepository.findById(id).orElseThrow(() ->
-                new ForbiddenException(ErrorMessage.LYRICX_ERR_10, ErrorCode.LYRICX_ERR_10));
+
+        return songRepository.findById(id).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_10, ErrorCode.LYRICX_ERR_10));
     }
 
+    /**
+     * Gets song by surrogate key.
+     *
+     * @param surrogateKey the surrogate key
+     * @return the song by surrogate key
+     */
     public Song getSongBySurrogateKey(String surrogateKey) {
-        return songRepository.findBySurrogateKey(surrogateKey).orElseThrow(() ->
-                new ForbiddenException(ErrorMessage.LYRICX_ERR_10, ErrorCode.LYRICX_ERR_10));
+
+        return songRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_10, ErrorCode.LYRICX_ERR_10));
     }
 
+    /**
+     * Add song.
+     *
+     * @param request the request
+     * @param payload the payload
+     */
     @Validated(OnSongCreate.class)
     public void addSong(final HttpServletRequest request, final @Valid Song payload) {
 
@@ -59,6 +88,13 @@ public class SongService {
         songRepository.save(payload);
     }
 
+    /**
+     * Add song.
+     *
+     * @param request the request
+     * @param payload the payload
+     * @param image   the image
+     */
     @Validated(OnSongCreate.class)
     public void addSong(HttpServletRequest request, final @Valid Song payload, MultipartFile image) {
 
@@ -68,6 +104,12 @@ public class SongService {
         songRepository.save(payload);
     }
 
+    /**
+     * Update song.
+     *
+     * @param request the request
+     * @param payload the payload
+     */
     @Validated(OnSongUpdate.class)
     public void updateSong(final HttpServletRequest request, final @Valid Song payload) {
 
@@ -76,6 +118,13 @@ public class SongService {
         songRepository.save(payload);
     }
 
+    /**
+     * Update song.
+     *
+     * @param request the request
+     * @param payload the payload
+     * @param image   the image
+     */
     @Validated(OnSongUpdate.class)
     public void updateSong(final HttpServletRequest request, final @Valid Song payload, MultipartFile image) {
 
@@ -85,7 +134,8 @@ public class SongService {
 
         String oldImgUrl = null;
 
-        try{
+        try
+        {
             oldImgUrl = getSongImgUrl(payload.getSurrogateKey());
         } finally
         {
@@ -101,6 +151,12 @@ public class SongService {
         songRepository.save(payload);
     }
 
+    /**
+     * Remove album art.
+     *
+     * @param request the request
+     * @param songId  the song id
+     */
     public void removeAlbumArt(HttpServletRequest request, long songId) {
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
@@ -117,6 +173,12 @@ public class SongService {
         songRepository.save(song);
     }
 
+    /**
+     * Remove song.
+     *
+     * @param request the request
+     * @param id      the id
+     */
     public void removeSong(HttpServletRequest request, long id) {
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
@@ -129,11 +191,12 @@ public class SongService {
     }
 
     private String getSongImgUrl(String surrogateKey) {
-        return songRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() ->
-                new NotFoundException(ErrorMessage.LYRICX_ERR_24, ErrorCode.LYRICX_ERR_24));
+
+        return songRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(ErrorMessage.LYRICX_ERR_24, ErrorCode.LYRICX_ERR_24));
     }
 
-    private void convertPayloadToSong(Song payload, HttpServletRequest request){
+    private void convertPayloadToSong(Song payload, HttpServletRequest request) {
+
         payload.setAddedBy(contributorService.getContributorByHttpServletRequest(request));
         payload.setLastModifiedBy(contributorService.getContributorByHttpServletRequest(request));
 
@@ -157,10 +220,11 @@ public class SongService {
         Song oldSong = getSongBySurrogateKey(payload.getSurrogateKey());
         payload.setId(oldSong.getId());
 
-        if(payload.getAlbum() == null || payload.getAlbum().getSurrogateKey() == null)
+        if (payload.getAlbum() == null || payload.getAlbum().getSurrogateKey() == null)
         {
             payload.setAlbum(oldSong.getAlbum());
-        }else
+        }
+        else
         {
             Album newAlbum = albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey());
             payload.setAlbum(newAlbum);
@@ -169,7 +233,8 @@ public class SongService {
         if (payload.getLanguage() == null || payload.getLanguage().getLanguageCode() == null)
         {
             payload.setLanguage(oldSong.getLanguage());
-        } else
+        }
+        else
         {
             Language newLanguage = languageService.getLanguageByLanguageCode(payload.getLanguage().getLanguageCode());
             payload.setLanguage(newLanguage);
@@ -179,4 +244,5 @@ public class SongService {
         contributorStatus.accept(contributor);
         payload.setLastModifiedBy(contributor);
     }
+
 }

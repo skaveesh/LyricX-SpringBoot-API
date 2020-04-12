@@ -21,6 +21,9 @@ import java.util.function.Consumer;
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
 
+/**
+ * The type Album service.
+ */
 @Validated
 @Service
 public class AlbumService {
@@ -30,9 +33,20 @@ public class AlbumService {
     private final ContributorService contributorService;
     private final ArtistService artistService;
 
+    /**
+     * The Album default image url.
+     */
     @Value("${com.lyricxinc.lyricx.albumImageUrl}")
     String albumDefaultImageUrl;
 
+    /**
+     * Instantiates a new Album service.
+     *
+     * @param amazonClientService the amazon client service
+     * @param albumRepository     the album repository
+     * @param contributorService  the contributor service
+     * @param artistService       the artist service
+     */
     @Autowired
     public AlbumService(AmazonClientService amazonClientService, AlbumRepository albumRepository, ContributorService contributorService, ArtistService artistService) {
 
@@ -42,28 +56,45 @@ public class AlbumService {
         this.artistService = artistService;
     }
 
+    /**
+     * Gets album by id.
+     *
+     * @param id the id
+     * @return the album by id
+     */
     public Album getAlbumById(final Long id) {
-        return albumRepository.findById(id).orElseThrow(() ->
-                new ForbiddenException(ErrorMessage.LYRICX_ERR_11, ErrorCode.LYRICX_ERR_11));
-    }
 
-    public Album getAlbumBySurrogateKey(final String surrogateKey) {
-        return albumRepository.findBySurrogateKey(surrogateKey).orElseThrow(() ->
-                new ForbiddenException(ErrorMessage.LYRICX_ERR_11, ErrorCode.LYRICX_ERR_11));
+        return albumRepository.findById(id).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_11, ErrorCode.LYRICX_ERR_11));
     }
 
     /**
-     * @param keyword
-     * @return
+     * Gets album by surrogate key.
+     *
+     * @param surrogateKey the surrogate key
+     * @return the album by surrogate key
+     */
+    public Album getAlbumBySurrogateKey(final String surrogateKey) {
+
+        return albumRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_11, ErrorCode.LYRICX_ERR_11));
+    }
+
+    /**
+     * Search albums list.
+     *
+     * @param keyword the keyword
+     * @return list list
      */
     public List<Album> searchAlbums(final String keyword) {
+
         return this.albumRepository.findTop20ByNameIgnoreCaseContainingOrderByNameAsc(keyword);
     }
 
     /**
-     * @param request
-     * @param payload
-     * @param image
+     * Add album.
+     *
+     * @param request the request
+     * @param payload the payload
+     * @param image   the image
      */
     @Validated(OnAlbumCreate.class)
     public void addAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile image) {
@@ -75,10 +106,12 @@ public class AlbumService {
 
         payload.setArtist(artistService.getArtistBySurrogateKey(payload.getArtist().getSurrogateKey()));
 
-        if (image != null) {
+        if (image != null)
+        {
             String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
             payload.setImgUrl(imgUrl);
-        } else
+        }
+        else
         {
             payload.setImgUrl(albumDefaultImageUrl);
         }
@@ -86,6 +119,12 @@ public class AlbumService {
         this.albumRepository.save(payload);
     }
 
+    /**
+     * Update album.
+     *
+     * @param request the request
+     * @param payload the payload
+     */
     @Validated(OnAlbumUpdate.class)
     public void updateAlbum(final HttpServletRequest request, final @Valid Album payload) {
 
@@ -94,6 +133,13 @@ public class AlbumService {
         albumRepository.save(payload);
     }
 
+    /**
+     * Update album.
+     *
+     * @param request      the request
+     * @param payload      the payload
+     * @param payloadImage the payload image
+     */
     @Validated(OnAlbumUpdate.class)
     public void updateAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile payloadImage) {
 
@@ -119,15 +165,31 @@ public class AlbumService {
         albumRepository.save(payload);
     }
 
+    /**
+     * Remove album art.
+     *
+     * @param id the id
+     */
     public void removeAlbumArt(Long id) {
         //TODO
     }
 
+    /**
+     * Remove album.
+     *
+     * @param id the id
+     */
     public void removeAlbum(Long id) {
         //
         //        albumRepository.deleteById(id);
     }
 
+    /**
+     * Reset album art.
+     *
+     * @param request the request
+     * @param payload the payload
+     */
     @Validated(OnAlbumUpdate.class)
     public void resetAlbumArt(final HttpServletRequest request, final @Valid Album payload) {
 
@@ -148,9 +210,9 @@ public class AlbumService {
         }
     }
 
-    private String getAlbumImgUrl(String surrogateKey){
-        return albumRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() ->
-                new NotFoundException(ErrorMessage.LYRICX_ERR_25, ErrorCode.LYRICX_ERR_25));
+    private String getAlbumImgUrl(String surrogateKey) {
+
+        return albumRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(ErrorMessage.LYRICX_ERR_25, ErrorCode.LYRICX_ERR_25));
     }
 
     private void updateAlbumDetails(final HttpServletRequest request, final Album payload, Consumer<Contributor> contributorStatus) {
@@ -161,7 +223,8 @@ public class AlbumService {
         if (payload.getArtist() == null || payload.getArtist().getId() == null)
         {
             payload.setArtist(oldAlbum.getArtist());
-        }else
+        }
+        else
         {
             this.setArtistThroughSurrogateKey(payload);
         }

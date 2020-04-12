@@ -20,6 +20,9 @@ import java.util.function.Consumer;
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
 
+/**
+ * The type Artist service.
+ */
 @Service
 public class ArtistService {
 
@@ -27,9 +30,19 @@ public class ArtistService {
     private final ContributorService contributorService;
     private final AmazonClientService amazonClientService;
 
+    /**
+     * The Artist default image url.
+     */
     @Value("${com.lyricxinc.lyricx.artistImageUrl}")
     String artistDefaultImageUrl;
 
+    /**
+     * Instantiates a new Artist service.
+     *
+     * @param artistRepository    the artist repository
+     * @param contributorService  the contributor service
+     * @param amazonClientService the amazon client service
+     */
     @Autowired
     public ArtistService(ArtistRepository artistRepository, ContributorService contributorService, AmazonClientService amazonClientService) {
 
@@ -38,16 +51,35 @@ public class ArtistService {
         this.amazonClientService = amazonClientService;
     }
 
+    /**
+     * Gets artist by id.
+     *
+     * @param id the id
+     * @return the artist by id
+     */
     public Artist getArtistById(long id) {
 
         return artistRepository.findById(id).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_12, ErrorCode.LYRICX_ERR_12));
     }
 
+    /**
+     * Gets artist by surrogate key.
+     *
+     * @param surrogateKey the surrogate key
+     * @return the artist by surrogate key
+     */
     public Artist getArtistBySurrogateKey(String surrogateKey) {
 
         return artistRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_12, ErrorCode.LYRICX_ERR_12));
     }
 
+    /**
+     * Add artist.
+     *
+     * @param request the request
+     * @param payload the payload
+     * @param image   the image
+     */
     @Validated(OnArtistCreate.class)
     public void addArtist(final HttpServletRequest request, final @Valid Artist payload, final MultipartFile image) {
 
@@ -67,6 +99,12 @@ public class ArtistService {
         this.artistRepository.save(payload);
     }
 
+    /**
+     * Update artist.
+     *
+     * @param request the request
+     * @param payload the payload
+     */
     @Validated(OnArtistUpdate.class)
     public void updateArtist(final HttpServletRequest request, final @Valid Artist payload) {
 
@@ -75,6 +113,13 @@ public class ArtistService {
         artistRepository.save(payload);
     }
 
+    /**
+     * Update artist.
+     *
+     * @param request the request
+     * @param payload the payload
+     * @param image   the image
+     */
     @Validated(OnArtistUpdate.class)
     public void updateArtist(final HttpServletRequest request, final @Valid Artist payload, final MultipartFile image) {
 
@@ -84,7 +129,8 @@ public class ArtistService {
 
         String oldImgUrl = null;
 
-        try{
+        try
+        {
             oldImgUrl = getArtistImgUrl(payload.getSurrogateKey());
         } finally
         {
@@ -100,18 +146,28 @@ public class ArtistService {
         artistRepository.save(payload);
     }
 
+    /**
+     * Remove image.
+     *
+     * @param id the id
+     */
     public void removeImage(long id) {
         //TODO
     }
 
+    /**
+     * Remove artist.
+     *
+     * @param id the id
+     */
     public void removeArtist(long id) {
 
         artistRepository.deleteById(id);
     }
 
-    private String getArtistImgUrl(String surrogateKey){
-        return artistRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() ->
-                new NotFoundException(ErrorMessage.LYRICX_ERR_26, ErrorCode.LYRICX_ERR_26));
+    private String getArtistImgUrl(String surrogateKey) {
+
+        return artistRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(ErrorMessage.LYRICX_ERR_26, ErrorCode.LYRICX_ERR_26));
     }
 
     private void updateAlbumDetails(final HttpServletRequest request, final Artist payload, Consumer<Contributor> contributorStatus) {

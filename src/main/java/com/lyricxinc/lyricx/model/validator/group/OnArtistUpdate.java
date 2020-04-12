@@ -1,4 +1,6 @@
 package com.lyricxinc.lyricx.model.validator.group;
 
-public interface OnArtistUpdate {
-}
+/**
+ * The interface On artist update.
+ */
+public interface OnArtistUpdate {}

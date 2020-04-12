@@ -37,9 +37,7 @@ public class ContributorService {
     public Contributor getContributorById(String id) {
 
         //todo validate id in similar scenarios
-        return contributorRepository.findById(Optional.ofNullable(id).orElseThrow(
-                () -> new ForbiddenException(ErrorMessage.LYRICX_ERR_04, ErrorCode.LYRICX_ERR_04))).orElseThrow(
-                        () -> new ForbiddenException(ErrorMessage.LYRICX_ERR_05, ErrorCode.LYRICX_ERR_05));
+        return contributorRepository.findById(Optional.ofNullable(id).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_04, ErrorCode.LYRICX_ERR_04))).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_05, ErrorCode.LYRICX_ERR_05));
     }
 
     public void addContributor(String email, char[] password, String firstName, String lastName, String contactLink) {

@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -18,6 +19,9 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * The type Artist.
+ */
 @Entity
 @DynamicUpdate
 @DynamicInsert
@@ -74,14 +78,26 @@ public class Artist {
     private Set<ArtistSong> artistSongs;
 
     @PrePersist
-    private void onCreate(){
+    private void onCreate() {
+
         setSurrogateKey(UUID.randomUUID().toString());
     }
 
+    /**
+     * Instantiates a new Artist.
+     */
     public Artist() {
 
     }
 
+    /**
+     * Instantiates a new Artist.
+     *
+     * @param name           the name
+     * @param imgUrl         the img url
+     * @param addedBy        the added by
+     * @param approvedStatus the approved status
+     */
     public Artist(@NotBlank @Size(max = 50) String name, @NotBlank String imgUrl, Contributor addedBy, boolean approvedStatus) {
 
         this.name = name;
@@ -90,107 +106,221 @@ public class Artist {
         this.approvedStatus = approvedStatus;
     }
 
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
     public Long getId() {
+
         return id;
     }
 
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
     public void setId(Long id) {
+
         this.id = id;
     }
 
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
     public String getName() {
 
         return name;
     }
 
+    /**
+     * Sets name.
+     *
+     * @param name the name
+     */
     public void setName(String name) {
 
         this.name = name;
     }
 
+    /**
+     * Gets img url.
+     *
+     * @return the img url
+     */
     public String getImgUrl() {
 
         return imgUrl;
     }
 
+    /**
+     * Sets img url.
+     *
+     * @param imgUrl the img url
+     */
     public void setImgUrl(String imgUrl) {
 
         this.imgUrl = imgUrl;
     }
 
+    /**
+     * Gets added by.
+     *
+     * @return the added by
+     */
     public Contributor getAddedBy() {
 
         return addedBy;
     }
 
+    /**
+     * Sets added by.
+     *
+     * @param addedBy the added by
+     */
     public void setAddedBy(Contributor addedBy) {
 
         this.addedBy = addedBy;
     }
 
+    /**
+     * Gets last modified by.
+     *
+     * @return the last modified by
+     */
     public Contributor getLastModifiedBy() {
+
         return lastModifiedBy;
     }
 
+    /**
+     * Sets last modified by.
+     *
+     * @param lastModifiedBy the last modified by
+     */
     public void setLastModifiedBy(Contributor lastModifiedBy) {
+
         this.lastModifiedBy = lastModifiedBy;
     }
 
+    /**
+     * Is approved status boolean.
+     *
+     * @return the boolean
+     */
     public boolean isApprovedStatus() {
 
         return approvedStatus;
     }
 
+    /**
+     * Sets approved status.
+     *
+     * @param approvedStatus the approved status
+     */
     public void setApprovedStatus(boolean approvedStatus) {
 
         this.approvedStatus = approvedStatus;
     }
 
+    /**
+     * Gets surrogate key.
+     *
+     * @return the surrogate key
+     */
     public String getSurrogateKey() {
 
         return surrogateKey;
     }
 
+    /**
+     * Sets surrogate key.
+     *
+     * @param surrogateKey the surrogate key
+     */
     public void setSurrogateKey(String surrogateKey) {
 
         this.surrogateKey = surrogateKey;
     }
 
+    /**
+     * Gets added date.
+     *
+     * @return the added date
+     */
     public LocalDateTime getAddedDate() {
 
         return addedDate;
     }
 
+    /**
+     * Gets last modified date.
+     *
+     * @return the last modified date
+     */
     public LocalDateTime getLastModifiedDate() {
 
         return lastModifiedDate;
     }
 
+    /**
+     * Gets artist genres.
+     *
+     * @return the artist genres
+     */
     public Set<ArtistGenre> getArtistGenres() {
 
         return artistGenres;
     }
 
+    /**
+     * Sets artist genres.
+     *
+     * @param artistGenres the artist genres
+     */
     public void setArtistGenres(Set<ArtistGenre> artistGenres) {
 
         this.artistGenres = artistGenres;
     }
 
+    /**
+     * Gets albums.
+     *
+     * @return the albums
+     */
     public Set<Album> getAlbums() {
 
         return albums;
     }
 
+    /**
+     * Sets albums.
+     *
+     * @param albums the albums
+     */
     public void setAlbums(Set<Album> albums) {
 
         this.albums = albums;
     }
 
+    /**
+     * Gets artist songs.
+     *
+     * @return the artist songs
+     */
     public Set<ArtistSong> getArtistSongs() {
 
         return artistSongs;
     }
 
+    /**
+     * Sets artist songs.
+     *
+     * @param artistSongs the artist songs
+     */
     public void setArtistSongs(Set<ArtistSong> artistSongs) {
 
         this.artistSongs = artistSongs;

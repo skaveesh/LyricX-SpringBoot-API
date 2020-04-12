@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The interface Artist repository.
+ */
 @Repository
 public interface ArtistRepository extends JpaRepository<Artist, Long> {
 
@@ -28,6 +31,12 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
      */
     Optional<Artist> findBySurrogateKey(String surrogateKey);
 
+    /**
+     * Find img url using surrogate key optional.
+     *
+     * @param surrogateKey the surrogate key
+     * @return the optional
+     */
     @Query(value = "SELECT img_url FROM artist WHERE surrogate_key=:surrogateKey LIMIT 1", nativeQuery = true)
     Optional<String> findImgUrlUsingSurrogateKey(@Param("surrogateKey") String surrogateKey);
 
