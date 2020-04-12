@@ -15,13 +15,16 @@ public class BandChanterServiceTest {
 
     @Test
     public void addBandUser() {
-        bandChanterService.addBandChanter(1L,3L);
-        bandChanterService.addBandChanter(2L,3L);
+
+        bandChanterService.addBandChanter(1L, 3L);
+        bandChanterService.addBandChanter(2L, 3L);
 
         //bandChanterService.addBandChanter(2L,2L);
     }
 
     @Test
     public void removeBandUser() {
+
     }
+
 }

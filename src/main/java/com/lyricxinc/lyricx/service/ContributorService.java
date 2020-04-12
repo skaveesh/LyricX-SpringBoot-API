@@ -3,8 +3,8 @@ package com.lyricxinc.lyricx.service;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 import com.lyricxinc.lyricx.core.config.FirebaseConfig;
-import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
-import com.lyricxinc.lyricx.core.validator.StringValidator;
+import com.lyricxinc.lyricx.core.exception.ForbiddenException;
+import com.lyricxinc.lyricx.core.util.StringValidatorUtil;
 import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.model.Artist;
 import com.lyricxinc.lyricx.model.Contributor;
@@ -12,10 +12,13 @@ import com.lyricxinc.lyricx.model.Song;
 import com.lyricxinc.lyricx.repository.ContributorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
+
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
 
 @Service
 public class ContributorService {
@@ -33,23 +36,16 @@ public class ContributorService {
 
     public Contributor getContributorById(String id) {
 
-        if(id == null)
-            throw new ForbiddenCustomException("User id is empty");
-
-        Contributor contributor = contributorRepository.findById(id).orElse(null);
-
-        if (contributor == null)
-            throw new ForbiddenCustomException("Contributor cannot be found.");
-
-        return contributor;
+        //todo validate id in similar scenarios
+        return contributorRepository.findById(Optional.ofNullable(id).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_04, ErrorCode.LYRICX_ERR_04))).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_05, ErrorCode.LYRICX_ERR_05));
     }
 
     public void addContributor(String email, char[] password, String firstName, String lastName, String contactLink) {
 
-        email = StringValidator.validateEmailAddress(email);
-        firstName = StringValidator.validateName(firstName);
-        lastName = StringValidator.validateName(lastName);
-        contactLink = StringValidator.validateContactLink(contactLink);
+        email = StringValidatorUtil.validateEmailAddress(email);
+        firstName = StringValidatorUtil.validateName(firstName);
+        lastName = StringValidatorUtil.validateName(lastName);
+        contactLink = StringValidatorUtil.validateContactLink(contactLink);
 
         UserRecord.CreateRequest createRequest = new UserRecord.CreateRequest();
         createRequest.setEmail(email);
@@ -68,7 +64,7 @@ public class ContributorService {
 
         } catch (Exception e)
         {
-            throw new ForbiddenCustomException("Something went wrong while creating your account. " + e.getMessage());
+            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_06 + e.getMessage(), ErrorCode.LYRICX_ERR_06);
         }
     }
 
@@ -97,7 +93,7 @@ public class ContributorService {
     public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Song song) {
 
         if (!contributor.isSeniorContributor() && song.isPublishedState())
-            throw new ForbiddenCustomException("Only senior contributors can update verified artist.");
+            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_07, ErrorCode.LYRICX_ERR_07);
     }
 
     /**
@@ -110,7 +106,7 @@ public class ContributorService {
     public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Artist artist) {
 
         if (!contributor.isSeniorContributor() && artist.isApprovedStatus())
-            throw new ForbiddenCustomException("Only senior contributors can update verified artist.");
+            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_08, ErrorCode.LYRICX_ERR_08);
     }
 
     /**
@@ -123,7 +119,7 @@ public class ContributorService {
     public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Album album) {
 
         if (!contributor.isSeniorContributor() && album.isApprovedStatus())
-            throw new ForbiddenCustomException("Only senior contributors can update verified album.");
+            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_09, ErrorCode.LYRICX_ERR_09);
     }
 
 }

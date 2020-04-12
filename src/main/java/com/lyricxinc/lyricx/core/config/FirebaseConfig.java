@@ -13,6 +13,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * The type Firebase config.
+ */
 @Service
 public class FirebaseConfig {
 
@@ -20,6 +23,11 @@ public class FirebaseConfig {
     private static FirebaseApp contributorFirebaseApp;
     private static FirebaseApp chanterFirebaseApp;
 
+    /**
+     * Configure firebase admin sdk.
+     *
+     * @throws IOException the io exception
+     */
     @EventListener(ApplicationReadyEvent.class)
     public void configureFirebaseAdminSDK() throws IOException {
 
@@ -42,15 +50,34 @@ public class FirebaseConfig {
         chanterFirebaseApp = FirebaseApp.initializeApp(chanterOptions, "chanter");
     }
 
+    /**
+     * Gets admin firebase app.
+     *
+     * @return the admin firebase app
+     */
     public static FirebaseApp getAdminFirebaseApp() {
+
         return adminFirebaseApp;
     }
 
+    /**
+     * Gets contributor firebase app.
+     *
+     * @return the contributor firebase app
+     */
     public static FirebaseApp getContributorFirebaseApp() {
+
         return contributorFirebaseApp;
     }
 
+    /**
+     * Gets chanter firebase app.
+     *
+     * @return the chanter firebase app
+     */
     public static FirebaseApp getChanterFirebaseApp() {
+
         return chanterFirebaseApp;
     }
+
 }

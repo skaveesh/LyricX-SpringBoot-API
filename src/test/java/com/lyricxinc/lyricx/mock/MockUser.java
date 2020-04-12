@@ -6,7 +6,8 @@ import javax.servlet.http.HttpSession;
 
 public class MockUser {
 
-    public MockHttpServletRequest getMockHttpServletRequestForContributor(String userId){
+    public MockHttpServletRequest getMockHttpServletRequestForContributor(String userId) {
+
         MockHttpServletRequest mock = new MockHttpServletRequest();
 
         HttpSession session = mock.getSession();
@@ -14,4 +15,5 @@ public class MockUser {
 
         return mock;
     }
+
 }

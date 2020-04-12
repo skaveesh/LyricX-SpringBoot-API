@@ -1,14 +1,23 @@
 package com.lyricxinc.lyricx;
 
-import com.lyricxinc.lyricx.core.LyricxUrlProperties;
+//import com.lyricxinc.lyricx.core.LyricxUrlProperties;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
+/**
+ * The type Lyricx application.
+ */
+//TODO
 @SpringBootApplication
-@EnableConfigurationProperties(LyricxUrlProperties.class)
+//@EnableConfigurationProperties(LyricxUrlProperties.class)
 public class LyricxApplication {
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
 
         SpringApplication.run(LyricxApplication.class, args);

@@ -9,7 +9,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.lyricxinc.lyricx.core.exception.FileUploadErrorCustomException;
+import com.lyricxinc.lyricx.core.exception.FileUploadException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +20,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
+
 @Service
 public class AmazonClientService {
 
@@ -28,13 +31,13 @@ public class AmazonClientService {
     @Value("${com.amazonaws.s3.amazonProperties.endpointUrl}")
     private String endpointUrl;
 
-    @Value("${amazonProperties.bucketName}")
+    @Value("${com.amazonaws.s3.amazonProperties.bucketName}")
     private String bucketName;
 
-    @Value("${amazonProperties.accessKey}")
+    @Value("${com.amazonaws.s3.amazonProperties.accessKey}")
     private String accessKey;
 
-    @Value("${amazonProperties.secretKey}")
+    @Value("${com.amazonaws.s3.amazonProperties.secretKey}")
     private String secretKey;
 
     @PostConstruct
@@ -47,6 +50,7 @@ public class AmazonClientService {
     public enum S3BucketFolders {
         ARTIST_FOLDER
                 {
+                    @Override
                     public String toString() {
 
                         return "artist";
@@ -55,6 +59,7 @@ public class AmazonClientService {
 
         ALBUM_FOLDER
                 {
+                    @Override
                     public String toString() {
 
                         return "album";
@@ -63,6 +68,7 @@ public class AmazonClientService {
 
         SONG_FOLDER
                 {
+                    @Override
                     public String toString() {
 
                         return "song";
@@ -71,6 +77,7 @@ public class AmazonClientService {
 
         CONTRIBUTOR_FOLDER
                 {
+                    @Override
                     public String toString() {
 
                         return "contributor";
@@ -92,7 +99,7 @@ public class AmazonClientService {
         } catch (Exception e)
         {
             e.printStackTrace();
-            throw new FileUploadErrorCustomException("Error while uploading the file. Try again.");
+            throw new FileUploadException(ErrorMessage.LYRICX_ERR_13, ErrorCode.LYRICX_ERR_13);
         }
 
         return fileUrl;

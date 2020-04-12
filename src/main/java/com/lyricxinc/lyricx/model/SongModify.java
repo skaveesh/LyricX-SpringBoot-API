@@ -2,6 +2,7 @@ package com.lyricxinc.lyricx.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -30,6 +31,7 @@ public class SongModify {
     private Contributor contributor;
 
     @UpdateTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime lastModifiedDate;
 
     private boolean hiddenStatus;
