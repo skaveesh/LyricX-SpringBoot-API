@@ -22,6 +22,7 @@ public class FirebaseConfig {
     private static FirebaseApp adminFirebaseApp;
     private static FirebaseApp contributorFirebaseApp;
     private static FirebaseApp chanterFirebaseApp;
+    private static FirebaseApp suggestDBFirebaseApp;
 
     /**
      * Configure firebase admin sdk.
@@ -48,6 +49,12 @@ public class FirebaseConfig {
         FirebaseOptions chanterOptions = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(chanterServiceAccount)).build();
 
         chanterFirebaseApp = FirebaseApp.initializeApp(chanterOptions, "chanter");
+
+        File suggestDbFile = ResourceUtils.getFile("classpath:static/lyricx-suggestdb-firebase-adminsdk.json");
+        InputStream suggestDbServiceAccount = new FileInputStream(suggestDbFile);
+        FirebaseOptions suggestDbOptions = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(suggestDbServiceAccount)).build();
+
+        suggestDBFirebaseApp = FirebaseApp.initializeApp(suggestDbOptions, "chanter");
     }
 
     /**
@@ -78,6 +85,16 @@ public class FirebaseConfig {
     public static FirebaseApp getChanterFirebaseApp() {
 
         return chanterFirebaseApp;
+    }
+
+    /**
+     * Get suggest db firebase app firebase app.
+     *
+     * @return the firebase app
+     */
+    public static FirebaseApp getSuggestDBFirebaseApp(){
+
+        return suggestDBFirebaseApp;
     }
 
 }
