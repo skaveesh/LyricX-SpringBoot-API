@@ -1,4 +1,4 @@
-package com.lyricxinc.lyricx.service.firebase;
+package com.lyricxinc.lyricx.service.suggest;
 
 /**
  * The type Media suggest factory.
@@ -8,12 +8,12 @@ public class MediaSuggestFactory {
     /**
      * Get media suggestion media suggest operation.
      *
-     * @param media the media
+     * @param mediaType the media
      * @return the media suggest operation
      */
-    public MediaSuggestOperation getMediaSuggestion(Media media){
+    public MediaSuggestOperation getMediaSuggestion(MediaType mediaType){
 
-        if(media == Media.ALBUM){
+        if(mediaType == MediaType.ALBUM){
             return new AlbumSuggestOperation();
         }
 
@@ -23,7 +23,7 @@ public class MediaSuggestFactory {
     /**
      * The enum Media.
      */
-    public enum Media{
+    public enum MediaType {
         /**
          * Album media.
          */

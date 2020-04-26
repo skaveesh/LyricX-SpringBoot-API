@@ -1,5 +1,6 @@
 package com.lyricxinc.lyricx.service;
 
+import com.lyricxinc.lyricx.model.socket.inbound.AlbumSuggest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,12 @@ public class AlbumServiceTest {
     @Test
     public void removeAlbum() {
 
+    }
+
+    @Test
+    public void suggestAlbums(){
+
+        albumService.suggestAlbums(new AlbumSuggest("mock")).forEach((x)-> System.out.println(x.getAlbumName() + " " + x.getSurrogateKey()));
     }
 
 }

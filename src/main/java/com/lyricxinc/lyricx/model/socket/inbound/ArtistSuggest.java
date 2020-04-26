@@ -1,4 +1,4 @@
-package com.lyricxinc.lyricx.model.socket.model.inbound;
+package com.lyricxinc.lyricx.model.socket.inbound;
 
 /**
  * The type Artist suggest.

@@ -1,4 +1,4 @@
-package com.lyricxinc.lyricx.model.socket.model.inbound;
+package com.lyricxinc.lyricx.model.socket.inbound;
 
 /**
  * The type Album suggest.
@@ -15,6 +15,10 @@ public class AlbumSuggest {
     public AlbumSuggest(String albumName) {
 
         this.albumName = albumName;
+    }
+
+    public AlbumSuggest() {
+
     }
 
     /**
