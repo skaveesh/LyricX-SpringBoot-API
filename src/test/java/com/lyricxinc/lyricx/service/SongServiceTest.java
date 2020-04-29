@@ -1,6 +1,6 @@
 package com.lyricxinc.lyricx.service;
 
-import com.lyricxinc.lyricx.model.Song;
+import com.lyricxinc.lyricx.model.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.servlet.http.HttpSession;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -18,18 +19,37 @@ public class SongServiceTest {
     @Autowired
     SongService songService;
 
+    @Autowired
+    AlbumService albumService;
+
+    @Autowired
+    ArtistService artistService;
+
+    @Autowired
+    LanguageService languageService;
+
+    @Autowired
+    ContributorService contributorService;
+
     @Test
     public void getSong() {
 
         Song song = songService.getSongById(1L);
 
-        System.out.println(new String(song.getLyrics(), StandardCharsets.UTF_8));
-        System.out.println(song.getAddedBy().getFirstName());
+        System.out.println(song.getLyrics());
         System.out.println(song.getLanguage().getLanguageName());
     }
 
     @Test
     public void addSong() {
+
+        Album album = albumService.getAlbumById(1L);
+
+        Artist artist = artistService.getArtistById(1);
+
+        Language language = languageService.getLanguageByLanguageCode("en");
+
+        Contributor contributor = contributorService.getContributorById("gjzXThtgTsUBcZMw0eSADOI3Fs73");
 
         String lyrics = "Lately I been, I been losing sleep\\nDreaming about the things that we could be\\nBut baby I been, I been prayin' hard\\nSaid no more counting dollars\\nWe'll be counting stars\\nYeah, we'll be counting stars\\nI see this life\\nLike a swinging vine\\nSwing my heart across the line\\nIn my faces flashing signs\\nSeek it out and ye shall find\\nThe old, but I'm not that old\\nYoung, but I'm not that bold\\nAnd I don't think the world is sold\\nI'm just doing what we're told\\nI, feel something so right\\nDoing the wrong thing\\nI, feel something so wrong\\nBut doing the right thing\\nI could lie, could lie, could lie\\nEverything that kills me makes me feel alive\\nLately I been, I been losing sleep\\nDreaming 'bout the things that we could be\\nBaby I been, I been prayin' hard\\nSaid no more counting dollars\\nWe'll be counting stars\\nLately I been, I been losing sleep\\nDreaming 'bout the things that we could be\\nBut baby I been, I been prayin' hard\\nSaid no more counting dollars\\nWe'll be, we'll be counting stars\\nI feel the love\\nAnd I feel it burn\\nDown this river every turn\\nHope is a four letter word\\nMake that money\\nWatch it burn\\nOld, but I'm not that old\\nYoung, but I'm not that bold\\nAnd I don't think the world is sold\\nI'm just doing what we're told\\nI, feel something so wrong\\nBut doing the right thing\\nI could lie, could lie, could lie\\nEverything that drowns me makes me wanna fly\\nLately I been, I been losing sleep\\nDreaming about the things that we could be\\nBaby I been, I been prayin' hard\\nSaid no more counting dollars\\nWe'll be counting stars\\nLately I been, I been losing sleep\\nDreaming 'bout the things that we could be\\nBut baby I been, I been prayin' hard\\nSaid no more counting dollars\\nWe'll be, we'll be counting stars\\nTake that money and watch it burn\\nSink in the river the lessons I learned\\nTake that money and watch it burn\\nSink in the river the lessons I learned\\nTake that money and watch it burn\\nSink in the river the lessons I learned\\nTake that money and watch it burn\\nSink in the river the lessons I learned\\nEverything that kills me makes me feel alive\\nLately I been, I been losing sleep\\nDreaming 'bout the things that we could be\\nBaby I been, I been prayin' hard\\nSaid no more counting dollars\\nWe'll be counting stars\\nLately I been, I been losing sleep\\nDreaming 'bout the things that we could be\\nBaby I been, I been prayin' hard\\nSaid no more counting dollars\\nWe'll be, we'll be counting stars";
 
@@ -38,7 +58,8 @@ public class SongServiceTest {
         HttpSession session = mock.getSession();
         session.setAttribute("userId", "gjzXThtgTsUBcZMw0eSADOI3Fs73");
 
-        //        songService.addSong(mock, "Counting Stars",,"G","6x4", (short)1, "Native\n Counting stars", lyrics.getBytes(), "https://www.youtube.com/watch?v=hT_nvWreIhg", "https://open.spotify.com/track/6sy3LkhNFjJWlaeSMNwQ62", "https://www.deezer.com/us/track/65759979");
+        songService.addSong(mock, new Song("Counting Stars",album,"G","6x4", language, "Native\n Counting stars", lyrics, "https://www.youtube.com/watch?v=hT_nvWreIhg", "https://open.spotify.com/track/6sy3LkhNFjJWlaeSMNwQ62", "https://www.deezer.com/us/track/65759979", "img url", true, contributor, false));
+
     }
 
     //    @Test

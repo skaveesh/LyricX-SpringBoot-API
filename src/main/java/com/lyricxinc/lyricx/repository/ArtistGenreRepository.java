@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface ArtistGenreRepository extends JpaRepository<ArtistGenre, Long> {
 
     @Modifying
-    @Query(value = "insert into artist_genre (artist_id, genre_id) values(:artist_id, :genre_id)", nativeQuery = true)
+    @Query(value = "INSERT INTO artist_genre (artist_id, genre_id) VALUES (:artist_id, :genre_id)", nativeQuery = true)
     @Transactional
     int addArtistAndGenre(@Param("artist_id") Long artistId, @Param("genre_id") Short genreId);
 
