@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -151,7 +152,7 @@ public class Song {
      * @param addedBy        the added by
      * @param publishedState the published state
      */
-    public Song(@NotBlank String name, Album album, @Size(max = 5) String guitarKey, @Size(max = 5) String beat, Language language, String keywords, @NotBlank byte[] lyrics, String youTubeLink, String spotifyLink, String deezerLink, String imgUrl, boolean isExplicit, Contributor addedBy, boolean publishedState) {
+    public Song(@NotBlank String name, Album album, @Size(max = 5) String guitarKey, @Size(max = 5) String beat, Language language, String keywords, @NotBlank String lyrics, String youTubeLink, String spotifyLink, String deezerLink, String imgUrl, boolean isExplicit, Contributor addedBy, boolean publishedState) {
 
         this.name = name;
         this.album = album;
@@ -159,7 +160,7 @@ public class Song {
         this.beat = beat;
         this.language = language;
         this.keywords = keywords;
-        this.lyrics = lyrics;
+        this.lyrics = lyrics.getBytes();
         this.youTubeLink = youTubeLink;
         this.spotifyLink = spotifyLink;
         this.deezerLink = deezerLink;
@@ -330,13 +331,13 @@ public class Song {
     }
 
     /**
-     * Get lyrics byte [ ].
+     * Gets lyrics.
      *
-     * @return the byte [ ]
+     * @return the lyrics
      */
-    public byte[] getLyrics() {
+    public String getLyrics() {
 
-        return lyrics;
+        return new String(lyrics, StandardCharsets.UTF_8);
     }
 
     /**
@@ -344,9 +345,9 @@ public class Song {
      *
      * @param lyrics the lyrics
      */
-    public void setLyrics(byte[] lyrics) {
+    public void setLyrics(String lyrics) {
 
-        this.lyrics = lyrics;
+        this.lyrics = lyrics.getBytes();
     }
 
     /**

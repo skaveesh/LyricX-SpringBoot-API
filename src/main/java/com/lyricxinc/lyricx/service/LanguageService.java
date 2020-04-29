@@ -47,7 +47,7 @@ public class LanguageService {
      */
     public Language getLanguageByLanguageCode(String languageCode) {
 
-        return languageRepository.findByLanguageCode(languageCode.toUpperCase()).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_14, ErrorCode.LYRICX_ERR_14));
+        return languageRepository.findByLanguageCode(languageCode.toLowerCase()).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_14, ErrorCode.LYRICX_ERR_14));
     }
 
     /**

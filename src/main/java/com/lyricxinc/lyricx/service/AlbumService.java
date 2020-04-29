@@ -4,22 +4,31 @@ import com.lyricxinc.lyricx.core.exception.ForbiddenException;
 import com.lyricxinc.lyricx.core.exception.NotFoundException;
 import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.model.Contributor;
+import com.lyricxinc.lyricx.model.socket.inbound.AlbumSuggest;
+import com.lyricxinc.lyricx.model.socket.outbound.AlbumSuggestedItem;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
 import com.lyricxinc.lyricx.repository.AlbumRepository;
+import com.lyricxinc.lyricx.service.suggest.MediaSuggestFactory;
+import com.lyricxinc.lyricx.service.suggest.MediaSuggestOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Comparator;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.function.Consumer;
 
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
+import static com.lyricxinc.lyricx.service.suggest.MediaSuggestFactory.MediaType.ALBUM;
 
 /**
  * The type Album service.
@@ -32,6 +41,9 @@ public class AlbumService {
     private final AmazonClientService amazonClientService;
     private final ContributorService contributorService;
     private final ArtistService artistService;
+
+    private final MediaSuggestFactory mediaSuggestFactory;
+
 
     /**
      * The Album default image url.
@@ -54,6 +66,7 @@ public class AlbumService {
         this.albumRepository = albumRepository;
         this.contributorService = contributorService;
         this.artistService = artistService;
+        this.mediaSuggestFactory = new MediaSuggestFactory();
     }
 
     /**
@@ -198,6 +211,34 @@ public class AlbumService {
         payload.setImgUrl(albumDefaultImageUrl);
 
         albumRepository.save(payload);
+    }
+
+    /**
+     * Suggest albums sorted set.
+     *
+     * @param albumSuggest the album suggest
+     * @return the sorted set
+     */
+    public SortedSet<AlbumSuggestedItem> suggestAlbums(final AlbumSuggest albumSuggest) {
+
+        MediaSuggestOperation albumSuggestOperation = mediaSuggestFactory.getMediaSuggestion(ALBUM);
+
+        TreeSet<AlbumSuggestedItem> albumSuggestedItemTreeSet = new TreeSet<>(Comparator.comparing(AlbumSuggestedItem::getAlbumName));
+        albumSuggestedItemTreeSet.addAll(albumSuggestOperation.readMedia(HtmlUtils.htmlEscape(albumSuggest.getAlbumName())));
+
+        if (albumSuggestedItemTreeSet.size() < 6)
+        {
+            albumSuggestedItemTreeSet.clear();
+            albumSuggestedItemTreeSet.addAll(albumRepository.findAlbumSuggestionUsingAlbumName(albumSuggest.getAlbumName()));
+            albumSuggestOperation.createMedia(albumSuggestedItemTreeSet);
+
+            while (albumSuggestedItemTreeSet.size() > 6)
+            {
+                albumSuggestedItemTreeSet.pollLast();
+            }
+        }
+
+        return albumSuggestedItemTreeSet;
     }
 
     private void setArtistThroughSurrogateKey(final Album payload) {

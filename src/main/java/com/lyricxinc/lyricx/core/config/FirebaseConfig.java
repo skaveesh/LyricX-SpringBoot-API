@@ -48,6 +48,7 @@ public class FirebaseConfig {
         FirebaseOptions chanterOptions = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(chanterServiceAccount)).build();
 
         chanterFirebaseApp = FirebaseApp.initializeApp(chanterOptions, "chanter");
+
     }
 
     /**
