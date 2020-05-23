@@ -167,6 +167,11 @@ public final class Constants {
          */
         public static final String LYRICX_ERR_26 = "Could not find image url for the artist.";
 
+        /**
+         * The constant LYRICX_ERR_27.
+         */
+        public static final String LYRICX_ERR_27 = "Type of suggestion could not be found.";
+
     }
 
 
@@ -287,6 +292,10 @@ public final class Constants {
          * The constant LYRICX_ERR_26.
          */
         public static final String LYRICX_ERR_26 = "LYRICX_ERR_26";
+        /**
+         * The constant LYRICX_ERR_26.
+         */
+        public static final String LYRICX_ERR_27 = "LYRICX_ERR_27";
 
     }
 

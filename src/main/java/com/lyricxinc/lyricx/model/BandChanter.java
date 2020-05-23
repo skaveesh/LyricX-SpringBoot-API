@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 public class BandChanter {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "band_chanter_id_seq", sequenceName = "band_chanter_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "band_chanter_id_seq")
     @JsonIgnore
     private Long id;
 

@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 public class VisitorCorrection {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "visitor_correction_id_seq", sequenceName = "visitor_correction_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "visitor_correction_id_seq")
     @JsonIgnore
     private Long id;
 

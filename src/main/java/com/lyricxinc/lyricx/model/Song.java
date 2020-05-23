@@ -30,7 +30,8 @@ import java.util.UUID;
 public class Song {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "song_id_seq", sequenceName = "song_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "song_id_seq")
     @JsonIgnore
     private Long id;
 
@@ -597,6 +598,7 @@ public class Song {
      */
     public Set<ArtistSong> getArtistSongs() {
 
+        System.out.println("getter song");
         return artistSongs;
     }
 
@@ -606,6 +608,7 @@ public class Song {
      * @param artistSongs the artist songs
      */
     public void setArtistSongs(Set<ArtistSong> artistSongs) {
+        System.out.println("getter song");
 
         this.artistSongs = artistSongs;
     }

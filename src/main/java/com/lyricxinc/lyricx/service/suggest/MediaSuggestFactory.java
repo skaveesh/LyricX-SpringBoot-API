@@ -1,5 +1,8 @@
 package com.lyricxinc.lyricx.service.suggest;
 
+import com.lyricxinc.lyricx.core.constant.Constants;
+import com.lyricxinc.lyricx.core.exception.LyricxBaseException;
+
 /**
  * The type Media suggest factory.
  */
@@ -11,22 +14,37 @@ public class MediaSuggestFactory {
      * @param mediaType the media
      * @return the media suggest operation
      */
-    public MediaSuggestOperation getMediaSuggestion(MediaType mediaType){
+    public MediaSuggestOperation getMediaSuggestion(MediaType mediaType) {
 
-        if(mediaType == MediaType.ALBUM){
+        if (mediaType == MediaType.ALBUM)
+        {
             return new AlbumSuggestOperation();
         }
 
-        return null;
+        throw new LyricxBaseException(Constants.ErrorMessage.LYRICX_ERR_27, Constants.ErrorCode.LYRICX_ERR_27);
     }
 
     /**
      * The enum Media.
      */
     public enum MediaType {
+
         /**
-         * Album media.
+         * Album media type.
          */
-        ALBUM
+        ALBUM,
+        /**
+         * Artist media type.
+         */
+        ARTIST,
+        /**
+         * Song media type.
+         */
+        SONG,
+        /**
+         * All media types.
+         */
+        ALL
     }
+
 }

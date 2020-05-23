@@ -15,7 +15,8 @@ import java.util.Set;
 public class Band {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "band_id_seq", sequenceName = "band_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "band_id_seq")
     @JsonIgnore
     private Long id;
 

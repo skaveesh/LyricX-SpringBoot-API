@@ -15,7 +15,8 @@ import javax.validation.constraints.Size;
 public class Language {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "language_id_seq", sequenceName = "language_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "language_id_seq")
     @JsonIgnore
     private Short id;
 

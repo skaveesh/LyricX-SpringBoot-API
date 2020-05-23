@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 public class ArtistSong {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "artist_song_id_seq", sequenceName = "artist_song_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "artist_song_id_seq")
     @JsonIgnore
     private Long id;
 

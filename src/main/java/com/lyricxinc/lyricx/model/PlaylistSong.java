@@ -9,7 +9,8 @@ import javax.persistence.*;
 public class PlaylistSong {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "playlist_song_id_seq", sequenceName = "playlist_song_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "playlist_song_id_seq")
     @JsonIgnore
     private Long id;
 

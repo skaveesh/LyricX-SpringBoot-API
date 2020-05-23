@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 public class Favourite {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "favourite_id_seq", sequenceName = "favourite_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "favourite_id_seq")
     @JsonIgnore
     private Integer id;
 

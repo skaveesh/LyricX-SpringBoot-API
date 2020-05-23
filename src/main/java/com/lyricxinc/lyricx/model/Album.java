@@ -31,11 +31,12 @@ import java.util.UUID;
 @DynamicInsert
 @DynamicUpdate
 @SqlResultSetMapping(name = "albumSuggestionUsingAlbumNameMapping", classes = {@ConstructorResult(targetClass = AlbumSuggestedItem.class, columns = {@ColumnResult(name = "surrogate_key"), @ColumnResult(name = "name")})})
-@NamedNativeQuery(name = "Album.findAlbumSuggestionUsingAlbumName", query = "SELECT a.surrogate_key, a.name FROM album a WHERE a.name LIKE CONCAT('%', :name, '%') ORDER BY a.name LIMIT 2", resultSetMapping = "albumSuggestionUsingAlbumNameMapping")
+@NamedNativeQuery(name = "Album.findAlbumSuggestionUsingAlbumName", query = "SELECT a.surrogate_key, a.name FROM album a WHERE a.name ILIKE CONCAT('%', :name, '%') ORDER BY a.name LIMIT 50", resultSetMapping = "albumSuggestionUsingAlbumNameMapping")
 public class Album {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "album_id_seq", sequenceName = "album_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "album_id_seq")
     @JsonIgnore
     private Long id;
 
@@ -309,6 +310,8 @@ public class Album {
      */
     public Set<Song> getSongs() {
 
+        System.out.println("getter songs in album");
+        songs.forEach(x -> System.out.println(x.getName()));
         return songs;
     }
 
