@@ -88,21 +88,29 @@ public class AmazonClientService {
     public String uploadFile(MultipartFile multipartFile, S3BucketFolders s3BucketFolder) {
 
         String fileUrl;
+        //TODO uncomment when AWS account is acquired
+        //        try
+        //        {
+        //            File file = convertMultiPartToFile(multipartFile);
+        //            String fileName = UUID.randomUUID().toString().replace("-", "") + ".jpg";
+        //            fileUrl = endpointUrl + "/" + bucketName + "/" + s3BucketFolder + "/" + fileName;
+        //            uploadFileTos3bucket(fileName, s3BucketFolder, file);
+        //            file.delete();
+        //        } catch (Exception e)
+        //        {
+        //            e.printStackTrace();
+        //            throw new FileUploadException(ErrorMessage.LYRICX_ERR_13, ErrorCode.LYRICX_ERR_13);
+        //        }
+        //        return fileUrl;
 
-        try
-        {
-            File file = convertMultiPartToFile(multipartFile);
-            String fileName = UUID.randomUUID().toString().replace("-", "") + ".jpg";
-            fileUrl = endpointUrl + "/" + bucketName + "/" + s3BucketFolder + "/" + fileName;
-            uploadFileTos3bucket(fileName, s3BucketFolder, file);
-            file.delete();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-            throw new FileUploadException(ErrorMessage.LYRICX_ERR_13, ErrorCode.LYRICX_ERR_13);
-        }
-
-        return fileUrl;
+        if(S3BucketFolders.SONG_FOLDER.equals(s3BucketFolder))
+            return "https://i.imgur.com/L1jxnoA.png";
+        else if(S3BucketFolders.ARTIST_FOLDER.equals(s3BucketFolder))
+            return "https://i.imgur.com/BhuLwuq.jpg";
+        else if(S3BucketFolders.ALBUM_FOLDER.equals(s3BucketFolder))
+            return "https://i.imgur.com/6N9NtBs.jpg";
+        else
+            return "https://i.imgur.com/koV4MZK.png";
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
@@ -121,8 +129,9 @@ public class AmazonClientService {
 
     public String deleteFileFromS3Bucket(String fileUrl, S3BucketFolders s3BucketFolder) {
 
-        String fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
-        s3client.deleteObject(new DeleteObjectRequest(bucketName, s3BucketFolder + "/" + fileName));
+        //TODO uncomment when AWS account is acquired
+        // String fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+        // s3client.deleteObject(new DeleteObjectRequest(bucketName, s3BucketFolder + "/" + fileName));
         return "Successfully deleted";
     }
 

@@ -9,6 +9,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
+import java.util.SortedSet;
+
 /**
  * The type Album suggest controller.
  */
@@ -31,11 +33,9 @@ public class AlbumSuggestControllerImpl implements AlbumSuggestController {
     @Override
     @MessageMapping("/suggest/album")
     @SendToUser("/suggested/album")
-    public AlbumSuggestedItem suggestAlbum(AlbumSuggest albumSuggest) {
+    public SortedSet<AlbumSuggestedItem> suggestAlbum(AlbumSuggest albumSuggest) {
 
-        albumService.suggestAlbums(albumSuggest);
-
-        return null;
+        return albumService.suggestAlbums(albumSuggest);
     }
 
 }
