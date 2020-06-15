@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lyricxinc.lyricx.model.validator.group.OnSongCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnSongUpdate;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -16,7 +19,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -27,6 +29,9 @@ import java.util.UUID;
 @Entity
 @DynamicInsert
 @DynamicUpdate
+@Getter
+@Setter
+@NoArgsConstructor
 public class Song {
 
     @Id
@@ -76,7 +81,7 @@ public class Song {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String imgUrl;
 
-    private boolean isExplicit;
+    private Boolean isExplicit;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "addedById", nullable = false)
@@ -130,13 +135,6 @@ public class Song {
 
     /**
      * Instantiates a new Song.
-     */
-    public Song() {
-
-    }
-
-    /**
-     * Instantiates a new Song.
      *
      * @param name           the name
      * @param album          the album
@@ -153,7 +151,7 @@ public class Song {
      * @param addedBy        the added by
      * @param publishedState the published state
      */
-    public Song(@NotBlank String name, Album album, @Size(max = 5) String guitarKey, @Size(max = 5) String beat, Language language, String keywords, @NotBlank String lyrics, String youTubeLink, String spotifyLink, String deezerLink, String imgUrl, boolean isExplicit, Contributor addedBy, boolean publishedState) {
+    public Song(@NotBlank String name, Album album, @Size(max = 5) String guitarKey, @Size(max = 5) String beat, @NotBlank Language language, String keywords, @NotBlank String lyrics, String youTubeLink, String spotifyLink, String deezerLink, String imgUrl, Boolean isExplicit, Contributor addedBy, Boolean publishedState) {
 
         this.name = name;
         this.album = album;
@@ -172,93 +170,13 @@ public class Song {
     }
 
     /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    public Long getId() {
-
-        return id;
-    }
-
-    /**
-     * Sets id.
-     *
-     * @param id the id
-     */
-    public void setId(Long id) {
-
-        this.id = id;
-    }
-
-    /**
-     * Gets surrogate key.
-     *
-     * @return the surrogate key
-     */
-    public String getSurrogateKey() {
-
-        return surrogateKey;
-    }
-
-    /**
-     * Sets surrogate key.
-     *
-     * @param surrogateKey the surrogate key
-     */
-    public void setSurrogateKey(String surrogateKey) {
-
-        this.surrogateKey = surrogateKey;
-    }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-
-        return name;
-    }
-
-    /**
      * Sets name.
      *
      * @param name the name
      */
-    public void setName(String name) {
+    public void setName(@NotBlank String name) {
 
         this.name = name;
-    }
-
-    /**
-     * Gets album.
-     *
-     * @return the album
-     */
-    public Album getAlbum() {
-
-        return album;
-    }
-
-    /**
-     * Sets album.
-     *
-     * @param album the album
-     */
-    public void setAlbum(Album album) {
-
-        this.album = album;
-    }
-
-    /**
-     * Gets guitar key.
-     *
-     * @return the guitar key
-     */
-    public String getGuitarKey() {
-
-        return guitarKey;
     }
 
     /**
@@ -266,19 +184,9 @@ public class Song {
      *
      * @param guitarKey the guitar key
      */
-    public void setGuitarKey(String guitarKey) {
+    public void setGuitarKey(@Size(max = 5) String guitarKey) {
 
         this.guitarKey = guitarKey;
-    }
-
-    /**
-     * Gets beat.
-     *
-     * @return the beat
-     */
-    public String getBeat() {
-
-        return beat;
     }
 
     /**
@@ -286,19 +194,9 @@ public class Song {
      *
      * @param beat the beat
      */
-    public void setBeat(String beat) {
+    public void setBeat(@Size(max = 5) String beat) {
 
         this.beat = beat;
-    }
-
-    /**
-     * Gets language.
-     *
-     * @return the language
-     */
-    public Language getLanguage() {
-
-        return language;
     }
 
     /**
@@ -306,39 +204,9 @@ public class Song {
      *
      * @param language the language
      */
-    public void setLanguage(Language language) {
+    public void setLanguage(@NotBlank Language language) {
 
         this.language = language;
-    }
-
-    /**
-     * Gets keywords.
-     *
-     * @return the keywords
-     */
-    public String getKeywords() {
-
-        return keywords;
-    }
-
-    /**
-     * Sets keywords.
-     *
-     * @param keywords the keywords
-     */
-    public void setKeywords(String keywords) {
-
-        this.keywords = keywords;
-    }
-
-    /**
-     * Gets lyrics.
-     *
-     * @return the lyrics
-     */
-    public String getLyrics() {
-
-        return new String(lyrics, StandardCharsets.UTF_8);
     }
 
     /**
@@ -346,291 +214,9 @@ public class Song {
      *
      * @param lyrics the lyrics
      */
-    public void setLyrics(String lyrics) {
+    public void setLyrics(@NotBlank byte[] lyrics) {
 
-        this.lyrics = lyrics.getBytes();
-    }
-
-    /**
-     * Gets you tube link.
-     *
-     * @return the you tube link
-     */
-    public String getYouTubeLink() {
-
-        return youTubeLink;
-    }
-
-    /**
-     * Sets you tube link.
-     *
-     * @param youTubeLink the you tube link
-     */
-    public void setYouTubeLink(String youTubeLink) {
-
-        this.youTubeLink = youTubeLink;
-    }
-
-    /**
-     * Gets spotify link.
-     *
-     * @return the spotify link
-     */
-    public String getSpotifyLink() {
-
-        return spotifyLink;
-    }
-
-    /**
-     * Sets spotify link.
-     *
-     * @param spotifyLink the spotify link
-     */
-    public void setSpotifyLink(String spotifyLink) {
-
-        this.spotifyLink = spotifyLink;
-    }
-
-    /**
-     * Gets deezer link.
-     *
-     * @return the deezer link
-     */
-    public String getDeezerLink() {
-
-        return deezerLink;
-    }
-
-    /**
-     * Sets deezer link.
-     *
-     * @param deezerLink the deezer link
-     */
-    public void setDeezerLink(String deezerLink) {
-
-        this.deezerLink = deezerLink;
-    }
-
-    /**
-     * Gets img url.
-     *
-     * @return the img url
-     */
-    public String getImgUrl() {
-
-        return imgUrl;
-    }
-
-    /**
-     * Sets img url.
-     *
-     * @param imgUrl the img url
-     */
-    public void setImgUrl(String imgUrl) {
-
-        this.imgUrl = imgUrl;
-    }
-
-    /**
-     * Is explicit boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isExplicit() {
-
-        return isExplicit;
-    }
-
-    /**
-     * Sets explicit.
-     *
-     * @param explicit the explicit
-     */
-    public void setExplicit(boolean explicit) {
-
-        isExplicit = explicit;
-    }
-
-    /**
-     * Gets added by.
-     *
-     * @return the added by
-     */
-    public Contributor getAddedBy() {
-
-        return addedBy;
-    }
-
-    /**
-     * Sets added by.
-     *
-     * @param addedBy the added by
-     */
-    public void setAddedBy(Contributor addedBy) {
-
-        this.addedBy = addedBy;
-    }
-
-    /**
-     * Gets added date.
-     *
-     * @return the added date
-     */
-    public LocalDateTime getAddedDate() {
-
-        return addedDate;
-    }
-
-    /**
-     * Gets last modified date.
-     *
-     * @return the last modified date
-     */
-    public LocalDateTime getLastModifiedDate() {
-
-        return lastModifiedDate;
-    }
-
-    /**
-     * Gets last modified by.
-     *
-     * @return the last modified by
-     */
-    public Contributor getLastModifiedBy() {
-
-        return lastModifiedBy;
-    }
-
-    /**
-     * Sets last modified by.
-     *
-     * @param lastModifiedBy the last modified by
-     */
-    public void setLastModifiedBy(Contributor lastModifiedBy) {
-
-        this.lastModifiedBy = lastModifiedBy;
-    }
-
-    /**
-     * Gets published by.
-     *
-     * @return the published by
-     */
-    public Contributor getPublishedBy() {
-
-        return publishedBy;
-    }
-
-    /**
-     * Sets published by.
-     *
-     * @param publishedBy the published by
-     */
-    public void setPublishedBy(Contributor publishedBy) {
-
-        this.publishedBy = publishedBy;
-    }
-
-    /**
-     * Gets published date.
-     *
-     * @return the published date
-     */
-    public LocalDateTime getPublishedDate() {
-
-        return publishedDate;
-    }
-
-    /**
-     * Sets published date.
-     *
-     * @param publishedDate the published date
-     */
-    public void setPublishedDate(LocalDateTime publishedDate) {
-
-        this.publishedDate = publishedDate;
-    }
-
-    /**
-     * Is published state boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isPublishedState() {
-
-        return publishedState;
-    }
-
-    /**
-     * Sets published state.
-     *
-     * @param publishedState the published state
-     */
-    public void setPublishedState(boolean publishedState) {
-
-        this.publishedState = publishedState;
-    }
-
-    /**
-     * Gets song genres.
-     *
-     * @return the song genres
-     */
-    public Set<SongGenre> getSongGenres() {
-
-        return songGenres;
-    }
-
-    /**
-     * Sets song genres.
-     *
-     * @param songGenres the song genres
-     */
-    public void setSongGenres(Set<SongGenre> songGenres) {
-
-        this.songGenres = songGenres;
-    }
-
-    /**
-     * Gets artist songs.
-     *
-     * @return the artist songs
-     */
-    public Set<ArtistSong> getArtistSongs() {
-
-        System.out.println("getter song");
-        return artistSongs;
-    }
-
-    /**
-     * Sets artist songs.
-     *
-     * @param artistSongs the artist songs
-     */
-    public void setArtistSongs(Set<ArtistSong> artistSongs) {
-        System.out.println("getter song");
-
-        this.artistSongs = artistSongs;
-    }
-
-    /**
-     * Gets song modifies.
-     *
-     * @return the song modifies
-     */
-    public Set<SongModify> getSongModifies() {
-
-        return songModifies;
-    }
-
-    /**
-     * Sets song modifies.
-     *
-     * @param songModifies the song modifies
-     */
-    public void setSongModifies(Set<SongModify> songModifies) {
-
-        this.songModifies = songModifies;
+        this.lyrics = lyrics;
     }
 
 }

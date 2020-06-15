@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("album")
 public interface AlbumController {
 
-    @PutMapping("add")
-    ResponseEntity<HttpResponseData> addAlbum(HttpServletRequest request, @RequestPart("payload") Album payload, @RequestPart("image") MultipartFile image);
+    @PutMapping("create")
+    ResponseEntity<HttpResponseData> createAlbum(HttpServletRequest request, @RequestPart("payload") Album payload, @RequestPart("image") MultipartFile image);
 
     @GetMapping("search")
     ResponseEntity<HttpResponseData> searchAlbums(String keyword);

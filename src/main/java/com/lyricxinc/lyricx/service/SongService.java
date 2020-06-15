@@ -10,10 +10,13 @@ import com.lyricxinc.lyricx.model.validator.group.OnSongCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnSongUpdate;
 import com.lyricxinc.lyricx.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.function.Consumer;
@@ -35,6 +38,12 @@ public class SongService {
     private final AmazonClientService amazonClientService;
 
     /**
+     * The Song image url.
+     */
+    @Value("${com.lyricxinc.lyricx.songImageUrl}")
+    String songImageUrl;
+
+    /**
      * Instantiates a new Song service.
      *
      * @param songRepository      the song repository
@@ -42,9 +51,10 @@ public class SongService {
      * @param languageService     the language service
      * @param contributorService  the contributor service
      * @param amazonClientService the amazon client service
+     * @param conversionService   the conversion service
      */
     @Autowired
-    public SongService(SongRepository songRepository, AlbumService albumService, LanguageService languageService, ContributorService contributorService, AmazonClientService amazonClientService) {
+    public SongService(SongRepository songRepository, AlbumService albumService, LanguageService languageService, ContributorService contributorService, AmazonClientService amazonClientService, ConversionService conversionService) {
 
         this.songRepository = songRepository;
         this.albumService = albumService;
@@ -76,31 +86,32 @@ public class SongService {
     }
 
     /**
-     * Add song.
+     * Create song.
      *
      * @param request the request
      * @param payload the payload
      */
     @Validated(OnSongCreate.class)
-    public void addSong(final HttpServletRequest request, final @Valid Song payload) {
+    public void createSong(HttpServletRequest request, final  @Valid Song payload) {
 
-        convertPayloadToSong(payload, request);
-        songRepository.save(payload);
-    }
+//        if(payload == null){
+//            throw new IllegalObjectException(ErrorMessage.LYRICX_ERR_28, ErrorMessage.LYRICX_ERR_28);
+//        }
 
-    /**
-     * Add song.
-     *
-     * @param request the request
-     * @param payload the payload
-     * @param image   the image
-     */
-    @Validated(OnSongCreate.class)
-    public void addSong(HttpServletRequest request, final @Valid Song payload, MultipartFile image) {
+        payload.setAddedBy(contributorService.getContributorByHttpServletRequest(request));
+        payload.setLastModifiedBy(contributorService.getContributorByHttpServletRequest(request));
+        payload.setPublishedState(false);
+        payload.setPublishedBy(null);
+        payload.setPublishedDate(null);
 
-        convertPayloadToSong(payload, request);
-        String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.SONG_FOLDER);
-        payload.setImgUrl(imgUrl);
+        Album album = albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey());
+        payload.setAlbum(album);
+
+        Language language = languageService.getLanguageByLanguageCode(payload.getLanguage().getLanguageCode());
+        payload.setLanguage(language);
+
+        payload.setImgUrl(album.getImgUrl());
+
         songRepository.save(payload);
     }
 
@@ -113,7 +124,7 @@ public class SongService {
     @Validated(OnSongUpdate.class)
     public void updateSong(final HttpServletRequest request, final @Valid Song payload) {
 
-        updateSongDetails(request, payload, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
+        updateSongDetails(request, payload, null, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
 
         songRepository.save(payload);
     }
@@ -128,25 +139,7 @@ public class SongService {
     @Validated(OnSongUpdate.class)
     public void updateSong(final HttpServletRequest request, final @Valid Song payload, MultipartFile image) {
 
-        updateSongDetails(request, payload, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
-
-        String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.SONG_FOLDER);
-
-        String oldImgUrl = null;
-
-        try
-        {
-            oldImgUrl = getSongImgUrl(payload.getSurrogateKey());
-        } finally
-        {
-            //delete old song image from S3 bucket
-            if (oldImgUrl != null)
-            {
-                this.amazonClientService.deleteFileFromS3Bucket(oldImgUrl, AmazonClientService.S3BucketFolders.SONG_FOLDER);
-            }
-        }
-
-        payload.setImgUrl(imgUrl);
+        updateSongDetails(request, payload, image, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
 
         songRepository.save(payload);
     }
@@ -195,30 +188,36 @@ public class SongService {
         return songRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(ErrorMessage.LYRICX_ERR_24, ErrorCode.LYRICX_ERR_24));
     }
 
-    private void convertPayloadToSong(Song payload, HttpServletRequest request) {
+    private String getSongImgUrl(Long id) {
 
-        payload.setAddedBy(contributorService.getContributorByHttpServletRequest(request));
-        payload.setLastModifiedBy(contributorService.getContributorByHttpServletRequest(request));
-
-        payload.setLanguage(languageService.getLanguageById(payload.getLanguage().getId()));
-
-        payload.setAlbum(albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey()));
-
-        payload.setPublishedState(false);
-        payload.setPublishedBy(null);
-        payload.setPublishedDate(null);
-
-        payload.setAlbum(albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey()));
-
-        payload.setLanguage(languageService.getLanguageByLanguageCode(payload.getLanguage().getLanguageCode()));
-
-        payload.setPublishedState(false);
+        return songRepository.findImgUrlUsingId(id).orElseThrow(() -> new NotFoundException(ErrorMessage.LYRICX_ERR_24, ErrorCode.LYRICX_ERR_24));
     }
 
-    private void updateSongDetails(final HttpServletRequest request, final Song payload, Consumer<Contributor> contributorStatus) {
+//    private void convertPayloadToSong(Song payload, HttpServletRequest request) {
+//
+//
+//
+//    }
+
+    private void updateSongDetails(final HttpServletRequest request, final Song payload, @Nullable final MultipartFile image, Consumer<Contributor> contributorStatus) {
 
         Song oldSong = getSongBySurrogateKey(payload.getSurrogateKey());
         payload.setId(oldSong.getId());
+
+        if (image != null)
+        {
+            String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.SONG_FOLDER);
+
+            String oldImgUrl = oldSong.getImgUrl();
+
+            //delete old song image from S3 bucket
+            if (oldImgUrl != null && !oldImgUrl.equals(songImageUrl) && !oldImgUrl.equals(oldSong.getAlbum().getImgUrl()))
+            {
+                this.amazonClientService.deleteFileFromS3Bucket(oldImgUrl, AmazonClientService.S3BucketFolders.SONG_FOLDER);
+            }
+
+            payload.setImgUrl(imgUrl);
+        }
 
         if (payload.getAlbum() == null || payload.getAlbum().getSurrogateKey() == null)
         {
@@ -227,6 +226,12 @@ public class SongService {
         else
         {
             Album newAlbum = albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey());
+
+            //if old album album art is same as song's current album art then set new album art from album when album is set
+            if (image == null && oldSong.getAlbum().getImgUrl().equals(oldSong.getImgUrl()))
+            {
+                payload.setImgUrl(newAlbum.getImgUrl());
+            }
             payload.setAlbum(newAlbum);
         }
 

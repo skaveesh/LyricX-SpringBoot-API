@@ -32,7 +32,7 @@ public class ArtistControllerImpl implements ArtistController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> addArtist(final HttpServletRequest request, @Valid @RequestBody Artist payload, MultipartFile image) {
+    public ResponseEntity<HttpResponseData> createArtist(final HttpServletRequest request, @Valid @RequestBody Artist payload, MultipartFile image) {
 
         artistService.addArtist(request, payload, image);
 

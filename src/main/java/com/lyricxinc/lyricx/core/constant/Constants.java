@@ -172,6 +172,11 @@ public final class Constants {
          */
         public static final String LYRICX_ERR_27 = "Type of suggestion could not be found.";
 
+        /**
+         * The constant LYRICX_ERR_28.
+         */
+        public static final String LYRICX_ERR_28 = "Invalid song payload conversion";
+
     }
 
 
@@ -296,6 +301,11 @@ public final class Constants {
          * The constant LYRICX_ERR_26.
          */
         public static final String LYRICX_ERR_27 = "LYRICX_ERR_27";
+
+        /**
+         * The constant LYRICX_ERR_28.
+         */
+        public static final String LYRICX_ERR_28 = "LYRICX_ERR_28";
 
     }
 

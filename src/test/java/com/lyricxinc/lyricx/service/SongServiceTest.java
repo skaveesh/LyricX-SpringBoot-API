@@ -9,8 +9,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.servlet.http.HttpSession;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -58,7 +56,7 @@ public class SongServiceTest {
         HttpSession session = mock.getSession();
         session.setAttribute("userId", "gjzXThtgTsUBcZMw0eSADOI3Fs73");
 
-        songService.addSong(mock, new Song("Counting Stars",album,"G","6x4", language, "Native\n Counting stars", lyrics, "https://www.youtube.com/watch?v=hT_nvWreIhg", "https://open.spotify.com/track/6sy3LkhNFjJWlaeSMNwQ62", "https://www.deezer.com/us/track/65759979", "img url", true, contributor, false));
+//        songService.createSong(mock, new Song("Counting Stars",album,"G","6x4", language, "Native\n Counting stars", lyrics, "https://www.youtube.com/watch?v=hT_nvWreIhg", "https://open.spotify.com/track/6sy3LkhNFjJWlaeSMNwQ62", "https://www.deezer.com/us/track/65759979", "img url", true, contributor, false));
 
     }
 

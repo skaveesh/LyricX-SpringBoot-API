@@ -23,6 +23,15 @@ public interface SongRepository extends JpaRepository<Song, Long> {
     Optional<Song> findBySurrogateKey(String surrogateKey);
 
     /**
+     * Find img url using id optional.
+     *
+     * @param id the id
+     * @return the optional
+     */
+    @Query(value = "SELECT img_url FROM song WHERE id=:id LIMIT 1", nativeQuery = true)
+    Optional<String> findImgUrlUsingId(@Param("id") Long id);
+
+    /**
      * Find img url using surrogate key optional.
      *
      * @param surrogateKey the surrogate key
@@ -30,5 +39,4 @@ public interface SongRepository extends JpaRepository<Song, Long> {
      */
     @Query(value = "SELECT img_url FROM song WHERE surrogate_key=:surrogateKey LIMIT 1", nativeQuery = true)
     Optional<String> findImgUrlUsingSurrogateKey(@Param("surrogateKey") String surrogateKey);
-
 }

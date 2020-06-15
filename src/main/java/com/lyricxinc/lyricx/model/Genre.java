@@ -16,7 +16,6 @@ public class Genre {
     @Id
     @SequenceGenerator(name = "genre_id_seq", sequenceName = "genre_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "genre_id_seq")
-    @JsonIgnore
     private Short id;
 
     @NotBlank

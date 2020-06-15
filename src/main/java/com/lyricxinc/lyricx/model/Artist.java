@@ -33,6 +33,10 @@ public class Artist {
     @JsonIgnore
     private Long id;
 
+    @Column(unique = true, updatable = false, nullable = false)
+    @NotBlank(groups = {OnAlbumCreate.class, OnArtistUpdate.class})
+    private String surrogateKey;
+
     @Size(max = 50)
     @NotBlank(groups = OnArtistCreate.class)
     private String name;
@@ -53,10 +57,6 @@ public class Artist {
     private Contributor lastModifiedBy;
 
     private boolean approvedStatus;
-
-    @Column(unique = true, updatable = false, nullable = false)
-    @NotBlank(groups = {OnAlbumCreate.class, OnArtistUpdate.class})
-    private String surrogateKey;
 
     @CreationTimestamp
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)

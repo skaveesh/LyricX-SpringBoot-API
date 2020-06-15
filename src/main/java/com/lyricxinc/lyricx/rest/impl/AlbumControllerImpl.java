@@ -32,7 +32,7 @@ public class AlbumControllerImpl implements AlbumController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> addAlbum(final HttpServletRequest request, @RequestPart("payload") Album payload, @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<HttpResponseData> createAlbum(final HttpServletRequest request, @RequestPart("payload") Album payload, @RequestPart("image") MultipartFile image) {
 
         albumService.addAlbum(request, payload, image);
 
