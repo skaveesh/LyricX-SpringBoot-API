@@ -6,8 +6,7 @@ import com.lyricxinc.lyricx.repository.LanguageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 
 /**
  * The type Language service.
@@ -36,7 +35,7 @@ public class LanguageService {
      */
     public Language getLanguageById(final Short id) {
 
-        return languageRepository.findById(id).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_14, ErrorCode.LYRICX_ERR_14));
+        return languageRepository.findById(id).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_14.getErrorMessage(), LYRICX_ERR_14.name()));
     }
 
     /**
@@ -47,7 +46,7 @@ public class LanguageService {
      */
     public Language getLanguageByLanguageCode(String languageCode) {
 
-        return languageRepository.findByLanguageCode(languageCode.toLowerCase()).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_14, ErrorCode.LYRICX_ERR_14));
+        return languageRepository.findByLanguageCode(languageCode.toLowerCase()).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_14.getErrorMessage(), LYRICX_ERR_14.name()));
     }
 
     /**

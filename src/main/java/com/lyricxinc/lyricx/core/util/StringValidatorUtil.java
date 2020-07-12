@@ -4,15 +4,14 @@ import com.lyricxinc.lyricx.core.exception.ForbiddenException;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.commons.validator.routines.UrlValidator;
 
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 
 public class StringValidatorUtil {
 
     private static void nullCheck(String string) {
 
         if (string == null)
-            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_20, ErrorCode.LYRICX_ERR_20);
+            throw new ForbiddenException(LYRICX_ERR_20.getErrorMessage(), LYRICX_ERR_20.name());
     }
 
     public static String validateEmailAddress(String email) {
@@ -22,7 +21,7 @@ public class StringValidatorUtil {
         email = email.trim();
 
         if (!EmailValidator.getInstance().isValid(email))
-            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_21, ErrorCode.LYRICX_ERR_21);
+            throw new ForbiddenException(LYRICX_ERR_21.getErrorMessage(), LYRICX_ERR_21.name());
 
         return email;
     }
@@ -34,7 +33,7 @@ public class StringValidatorUtil {
         name = name.trim();
 
         if (name.matches(".*\\d+.*"))
-            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_22, ErrorCode.LYRICX_ERR_22);
+            throw new ForbiddenException(LYRICX_ERR_22.getErrorMessage(), LYRICX_ERR_22.name());
 
         return name;
     }
@@ -46,7 +45,7 @@ public class StringValidatorUtil {
         url = url.trim();
 
         if (!UrlValidator.getInstance().isValid(url))
-            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_23, ErrorCode.LYRICX_ERR_23);
+            throw new ForbiddenException(LYRICX_ERR_23.getErrorMessage(), LYRICX_ERR_23.name());
 
         return url;
     }

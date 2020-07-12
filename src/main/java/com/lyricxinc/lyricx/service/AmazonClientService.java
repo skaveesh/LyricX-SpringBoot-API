@@ -20,9 +20,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
-
 @Service
 public class AmazonClientService {
 

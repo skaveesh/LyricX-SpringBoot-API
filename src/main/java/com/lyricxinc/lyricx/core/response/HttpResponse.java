@@ -19,11 +19,11 @@ public class HttpResponse {
     }
 
     //    public Resource<ResponseEntity<HttpResponseData>> returnResponse(HttpStatus httpStatus, String message, Object data, Link link) {
-    public ResponseEntity<HttpResponseData> returnResponse(HttpStatus httpStatus, String message, String code, Object data) {
+    public ResponseEntity<HttpResponseData> returnResponse(HttpStatus httpStatus, String message, String errorCode, Object data) {
 
         httpResponseData.setTimestamp(LocalDateTime.now());
         httpResponseData.setMessage(message);
-        httpResponseData.setCode(code);
+        httpResponseData.setErrorCode(errorCode);
         httpResponseData.setData(data);
         return new ResponseEntity<>(httpResponseData, httpStatus);
         //        return new Resource<>(new ResponseEntity<>(httpResponseData, httpStatus), link);

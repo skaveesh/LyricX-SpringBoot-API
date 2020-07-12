@@ -1,17 +1,15 @@
 package com.lyricxinc.lyricx.service;
 
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 import com.lyricxinc.lyricx.core.exception.ForbiddenException;
+import com.lyricxinc.lyricx.core.exception.LyricxBaseException;
 import com.lyricxinc.lyricx.core.exception.NotFoundException;
-import com.lyricxinc.lyricx.model.Album;
-import com.lyricxinc.lyricx.model.Contributor;
-import com.lyricxinc.lyricx.model.Language;
-import com.lyricxinc.lyricx.model.Song;
+import com.lyricxinc.lyricx.model.*;
 import com.lyricxinc.lyricx.model.validator.group.OnSongCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnSongUpdate;
 import com.lyricxinc.lyricx.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,10 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.function.Consumer;
-
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.BiConsumer;
 
 /**
  * The type Song service.
@@ -35,6 +33,10 @@ public class SongService {
     private final AlbumService albumService;
     private final LanguageService languageService;
     private final ContributorService contributorService;
+    private final ArtistService artistService;
+    private final ArtistSongService artistSongService;
+    private final GenreService genreService;
+    private final SongGenreService songGenreService;
     private final AmazonClientService amazonClientService;
 
     /**
@@ -50,16 +52,23 @@ public class SongService {
      * @param albumService        the album service
      * @param languageService     the language service
      * @param contributorService  the contributor service
+     * @param artistService       the artist service
+     * @param artistSongService   the artist song service
+     * @param genreService        the genre service
+     * @param songGenreService    the song genre service
      * @param amazonClientService the amazon client service
-     * @param conversionService   the conversion service
      */
     @Autowired
-    public SongService(SongRepository songRepository, AlbumService albumService, LanguageService languageService, ContributorService contributorService, AmazonClientService amazonClientService, ConversionService conversionService) {
+    public SongService(SongRepository songRepository, AlbumService albumService, LanguageService languageService, ContributorService contributorService, ArtistService artistService, ArtistSongService artistSongService, GenreService genreService, SongGenreService songGenreService, AmazonClientService amazonClientService) {
 
         this.songRepository = songRepository;
         this.albumService = albumService;
         this.languageService = languageService;
         this.contributorService = contributorService;
+        this.artistService = artistService;
+        this.artistSongService = artistSongService;
+        this.genreService = genreService;
+        this.songGenreService = songGenreService;
         this.amazonClientService = amazonClientService;
     }
 
@@ -71,7 +80,7 @@ public class SongService {
      */
     public Song getSongById(long id) {
 
-        return songRepository.findById(id).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_10, ErrorCode.LYRICX_ERR_10));
+        return songRepository.findById(id).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_10.getErrorMessage(), LYRICX_ERR_10.name()));
     }
 
     /**
@@ -82,21 +91,19 @@ public class SongService {
      */
     public Song getSongBySurrogateKey(String surrogateKey) {
 
-        return songRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_10, ErrorCode.LYRICX_ERR_10));
+        return songRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_10.getErrorMessage(), LYRICX_ERR_10.name()));
     }
 
     /**
      * Create song.
      *
-     * @param request the request
-     * @param payload the payload
+     * @param request                the request
+     * @param payload                the payload
+     * @param artistSurrogateKeyList the artist surrogate key list
+     * @param genreIdList            the genre id list
      */
     @Validated(OnSongCreate.class)
-    public void createSong(HttpServletRequest request, final  @Valid Song payload) {
-
-//        if(payload == null){
-//            throw new IllegalObjectException(ErrorMessage.LYRICX_ERR_28, ErrorMessage.LYRICX_ERR_28);
-//        }
+    public void createSong(HttpServletRequest request, final @Valid Song payload, List<String> artistSurrogateKeyList, List<Short> genreIdList) {
 
         payload.setAddedBy(contributorService.getContributorByHttpServletRequest(request));
         payload.setLastModifiedBy(contributorService.getContributorByHttpServletRequest(request));
@@ -110,38 +117,36 @@ public class SongService {
         Language language = languageService.getLanguageByLanguageCode(payload.getLanguage().getLanguageCode());
         payload.setLanguage(language);
 
-        payload.setImgUrl(album.getImgUrl());
+        Song song = songRepository.save(payload);
 
-        songRepository.save(payload);
+        updateSongArtistList(song, artistSurrogateKeyList);
+        updateSongGenreList(song, genreIdList);
     }
 
     /**
      * Update song.
      *
-     * @param request the request
-     * @param payload the payload
+     * @param request                the request
+     * @param payload                the payload
+     * @param artistSurrogateKeyList the artist surrogate key list
+     * @param genreIdList            the genre id list
+     * @param image                  the image
      */
     @Validated(OnSongUpdate.class)
-    public void updateSong(final HttpServletRequest request, final @Valid Song payload) {
+    public void updateSong(final HttpServletRequest request, final @Valid Song payload, List<String> artistSurrogateKeyList, List<Short> genreIdList, MultipartFile image) {
 
-        updateSongDetails(request, payload, null, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
+        updateSongDetails(request, payload, image, contributorService::checkNonSeniorContributorEditsVerifiedContent);
 
-        songRepository.save(payload);
-    }
+        Song song = songRepository.save(payload);
 
-    /**
-     * Update song.
-     *
-     * @param request the request
-     * @param payload the payload
-     * @param image   the image
-     */
-    @Validated(OnSongUpdate.class)
-    public void updateSong(final HttpServletRequest request, final @Valid Song payload, MultipartFile image) {
+        try
+        {
+            updateSongArtistList(song, artistSurrogateKeyList);
 
-        updateSongDetails(request, payload, image, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
-
-        songRepository.save(payload);
+            updateSongGenreList(song, genreIdList);
+        }catch (LyricxBaseException ex){
+            //todo log here - didn't update these list - can found which threw error based on error id
+        }
     }
 
     /**
@@ -161,7 +166,7 @@ public class SongService {
         //delete old song image from S3 bucket
         this.amazonClientService.deleteFileFromS3Bucket(song.getImgUrl(), AmazonClientService.S3BucketFolders.SONG_FOLDER);
 
-        song.setImgUrl(song.getAlbum().getImgUrl());
+        song.setImgUrl(null);
 
         songRepository.save(song);
     }
@@ -185,21 +190,15 @@ public class SongService {
 
     private String getSongImgUrl(String surrogateKey) {
 
-        return songRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(ErrorMessage.LYRICX_ERR_24, ErrorCode.LYRICX_ERR_24));
+        return songRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(LYRICX_ERR_24.getErrorMessage(), LYRICX_ERR_24.name()));
     }
 
     private String getSongImgUrl(Long id) {
 
-        return songRepository.findImgUrlUsingId(id).orElseThrow(() -> new NotFoundException(ErrorMessage.LYRICX_ERR_24, ErrorCode.LYRICX_ERR_24));
+        return songRepository.findImgUrlUsingId(id).orElseThrow(() -> new NotFoundException(LYRICX_ERR_24.getErrorMessage(), LYRICX_ERR_24.name()));
     }
 
-//    private void convertPayloadToSong(Song payload, HttpServletRequest request) {
-//
-//
-//
-//    }
-
-    private void updateSongDetails(final HttpServletRequest request, final Song payload, @Nullable final MultipartFile image, Consumer<Contributor> contributorStatus) {
+    private void updateSongDetails(final HttpServletRequest request, final Song payload, @Nullable final MultipartFile image, BiConsumer<Contributor, Song> contributorSongBiConsumer) {
 
         Song oldSong = getSongBySurrogateKey(payload.getSurrogateKey());
         payload.setId(oldSong.getId());
@@ -211,7 +210,7 @@ public class SongService {
             String oldImgUrl = oldSong.getImgUrl();
 
             //delete old song image from S3 bucket
-            if (oldImgUrl != null && !oldImgUrl.equals(songImageUrl) && !oldImgUrl.equals(oldSong.getAlbum().getImgUrl()))
+            if (oldImgUrl != null)
             {
                 this.amazonClientService.deleteFileFromS3Bucket(oldImgUrl, AmazonClientService.S3BucketFolders.SONG_FOLDER);
             }
@@ -227,8 +226,7 @@ public class SongService {
         {
             Album newAlbum = albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey());
 
-            //if old album album art is same as song's current album art then set new album art from album when album is set
-            if (image == null && oldSong.getAlbum().getImgUrl().equals(oldSong.getImgUrl()))
+            if (image == null && oldSong.getImgUrl() != null)
             {
                 payload.setImgUrl(newAlbum.getImgUrl());
             }
@@ -246,8 +244,61 @@ public class SongService {
         }
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
-        contributorStatus.accept(contributor);
+        contributorSongBiConsumer.accept(contributor, payload);
         payload.setLastModifiedBy(contributor);
+    }
+
+    /**
+     * Update song artist list.
+     *
+     * @param song                   the song
+     * @param artistSurrogateKeyList the artist surrogate key list
+     */
+    public void updateSongArtistList(Song song, List<String> artistSurrogateKeyList) {
+
+        if(song == null || artistSurrogateKeyList == null){
+            throw new ForbiddenException(LYRICX_ERR_29.getErrorMessage(), LYRICX_ERR_29.name());
+        }
+
+        Set<String> artistSurrogateKeySet = new HashSet<>(artistSurrogateKeyList);
+
+        List<Artist> artistList = artistService.findArtistsBySurrogateKeys(artistSurrogateKeySet);
+
+        if(artistList.isEmpty()){
+            throw new ForbiddenException(LYRICX_ERR_29.getErrorMessage(), LYRICX_ERR_29.name());
+        }
+
+        artistSongService.createArtistSong(song, artistList);
+    }
+
+    /**
+     * Update song genre list.
+     *
+     * @param song        the song
+     * @param genreIdList the genre id list
+     */
+    public void updateSongGenreList(Song song, List<Short> genreIdList){
+
+        if(song == null || genreIdList == null){
+            throw new ForbiddenException(LYRICX_ERR_30.getErrorMessage(), LYRICX_ERR_30.name());
+        }
+
+        Set<Short> genreIdSet = new HashSet<>(genreIdList);
+
+        List<Genre> genreList = genreService.findGenreByIds(genreIdSet);
+
+        if(genreList.isEmpty()){
+            throw new ForbiddenException(LYRICX_ERR_30.getErrorMessage(), LYRICX_ERR_30.name());
+        }
+
+        songGenreService.createSongGenre(song, genreList);
+    }
+
+    /**
+     * Remove artist list.
+     */
+    public void removeArtistList(){
+
     }
 
 }

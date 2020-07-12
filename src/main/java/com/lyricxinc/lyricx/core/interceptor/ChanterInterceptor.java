@@ -9,8 +9,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 
 public class ChanterInterceptor implements HandlerInterceptor {
 
@@ -30,7 +29,7 @@ public class ChanterInterceptor implements HandlerInterceptor {
                 decodeToken = FirebaseAuth.getInstance(FirebaseConfig.getChanterFirebaseApp()).verifyIdToken(authToken);
             } catch (Exception e)
             {
-                throw new ForbiddenException(ErrorMessage.LYRICX_ERR_18, ErrorCode.LYRICX_ERR_18);
+                throw new ForbiddenException(LYRICX_ERR_18.getErrorMessage(), LYRICX_ERR_18.name());
             }
 
             String uid = decodeToken.getUid();
@@ -42,7 +41,7 @@ public class ChanterInterceptor implements HandlerInterceptor {
         }
         else
         {
-            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_18, ErrorCode.LYRICX_ERR_18);
+            throw new ForbiddenException(LYRICX_ERR_18.getErrorMessage(), LYRICX_ERR_18.name());
         }
     }
 

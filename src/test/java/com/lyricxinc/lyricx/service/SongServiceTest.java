@@ -9,6 +9,8 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -145,8 +147,12 @@ public class SongServiceTest {
     //    }
 
     @Test
-    public void removeSong() {
+    public void getArtistList() {
+        Song son = songService.getSongById(1);
 
+        List<String> arti = Arrays.asList("b801f90f01474b7d9abaa9ed9e690ed3","b801f90f01474b7d9abaa9ed9e690ed3","6752223b05654b50ba6e468e3d89d028", "964eaf04f9cf4e60800092762e7a4dd2", "6a7a6061bb2a410fb480c2913b111dd7", "ac99ffd6b18f44fb88996ef1825c83cb", "97833ad7516e46838da8f88bee23d6fb");
+
+        songService.updateSongArtistList(son, arti);
     }
 
 }

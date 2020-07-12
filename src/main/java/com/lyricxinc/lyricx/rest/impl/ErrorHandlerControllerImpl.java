@@ -4,8 +4,7 @@ import com.lyricxinc.lyricx.core.exception.NotFoundException;
 import com.lyricxinc.lyricx.rest.controller.ErrorHandlerController;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 
 /**
  * Project lyricx
@@ -18,7 +17,7 @@ public class ErrorHandlerControllerImpl implements org.springframework.boot.web.
     @Override
     public String handleError() {
 
-        throw new NotFoundException(ErrorMessage.LYRICX_ERR_15, ErrorCode.LYRICX_ERR_15);
+        throw new NotFoundException(LYRICX_ERR_15.getErrorMessage(), LYRICX_ERR_15.name());
     }
 
     @Override

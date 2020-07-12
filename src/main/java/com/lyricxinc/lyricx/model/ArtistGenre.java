@@ -35,10 +35,10 @@ public class ArtistGenre {
 
     }
 
-    public ArtistGenre(Artist artist, Genre genre) {
+    public ArtistGenre(Genre genre, Artist artist) {
 
-        this.artist = artist;
         this.genre = genre;
+        this.artist = artist;
     }
 
     public Long getId() {

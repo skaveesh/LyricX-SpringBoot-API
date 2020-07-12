@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -25,7 +25,7 @@ public class ContributorServiceTest {
             contributorService.getContributorById("notavailablecontributor");
         } catch (ForbiddenException ex)
         {
-            Assert.assertEquals(ErrorCode.LYRICX_ERR_05, ex.getCode());
+            Assert.assertEquals(LYRICX_ERR_05.getErrorMessage(), ex.getCode());
         }
     }
 
@@ -37,7 +37,7 @@ public class ContributorServiceTest {
             contributorService.getContributorById(null);
         } catch (ForbiddenException ex)
         {
-            Assert.assertEquals(ErrorCode.LYRICX_ERR_04, ex.getCode());
+            Assert.assertEquals(LYRICX_ERR_04.getErrorMessage(), ex.getCode());
         }
     }
 

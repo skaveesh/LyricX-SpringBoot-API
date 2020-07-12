@@ -16,10 +16,10 @@ public interface SongController {
     ResponseEntity<HttpResponseData> createSong(HttpServletRequest request, @RequestBody SongCreateUpdateRequest payload);
 
     @PostMapping("update/details")
-    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, @RequestBody Song payload);
+    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, @RequestBody SongCreateUpdateRequest payload);
 
     @PostMapping("update/albumart")
-    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, @RequestPart Song payload, MultipartFile image);
+    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, @RequestBody SongCreateUpdateRequest payload, MultipartFile image);
 
     @DeleteMapping("remove/albumart")
     ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, @RequestBody Song payload);

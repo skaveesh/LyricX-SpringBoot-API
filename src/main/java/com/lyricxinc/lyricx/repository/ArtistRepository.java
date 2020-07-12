@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * The interface Artist repository.
@@ -39,5 +40,13 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
      */
     @Query(value = "SELECT img_url FROM artist WHERE surrogate_key=:surrogateKey LIMIT 1", nativeQuery = true)
     Optional<String> findImgUrlUsingSurrogateKey(@Param("surrogateKey") String surrogateKey);
+
+    /**
+     * Find by surrogate key in list.
+     *
+     * @param surrogateKeySet the surrogate key set
+     * @return the list
+     */
+    List<Artist> findBySurrogateKeyIn(Set<String> surrogateKeySet);
 
 }

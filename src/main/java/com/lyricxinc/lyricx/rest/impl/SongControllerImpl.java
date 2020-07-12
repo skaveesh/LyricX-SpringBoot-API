@@ -16,8 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.lyricxinc.lyricx.core.constant.Constants.SuccessCode;
-import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage;
+import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage.*;
 
 /**
  * The type Song controller.
@@ -46,47 +45,50 @@ public class SongControllerImpl implements SongController {
 
 
     @Override
-    public ResponseEntity<HttpResponseData> createSong(HttpServletRequest request, final @RequestBody SongCreateUpdateRequest payload) {
+    public ResponseEntity<HttpResponseData> createSong(final HttpServletRequest request, final @RequestBody SongCreateUpdateRequest requestPayload) {
 /* TODO: 12/30/2019  when adding a song, set imgurl to null. when ui displaying song image, display album's one. when user uploading a custom album art of the song
                      then remove the null of imgurl of the song and add the user uploaded one */
 
-        songService.createSong(request, conversionService.convert(payload, Song.class));
+        Song songPayload = conversionService.convert(requestPayload, Song.class);
+        songService.createSong(request, songPayload, requestPayload.getArtistSurrogateKeyList(), requestPayload.getGenreIdList());
 
-        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SONG_CREATE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
+        return httpResponse.returnResponse(HttpStatus.OK, SONG_CREATE_SUCCESS.getSuccessMessage(), null, null);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @RequestBody Song payload) {
+    public ResponseEntity<HttpResponseData> updateSong(final HttpServletRequest request, final @RequestBody SongCreateUpdateRequest requestPayload) {
 
-        //        songService.updateSong(request, songId, name, albumId, guitarKey, beat, languageId, keywords, lyrics, youTubeLink, spotifyLink, deezerLink);
+        Song songPayload = conversionService.convert(requestPayload, Song.class);
+        songService.updateSong(request, songPayload, requestPayload.getArtistSurrogateKeyList(), requestPayload.getGenreIdList(), null);
 
-        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SONG_UPDATE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
+        return httpResponse.returnResponse(HttpStatus.OK, SONG_UPDATE_SUCCESS.getSuccessMessage(), null, null);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, final @RequestBody Song payload, MultipartFile image) {
+    public ResponseEntity<HttpResponseData> updateSong(final HttpServletRequest request, final @RequestBody SongCreateUpdateRequest requestPayload, MultipartFile image) {
 
-        //        songService.updateSong(request, songId, image);
+        Song songPayload = conversionService.convert(requestPayload, Song.class);
+        songService.updateSong(request, songPayload, requestPayload.getArtistSurrogateKeyList(), requestPayload.getGenreIdList(), image);
 
-        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SONG_ALBUM_ART_UPDATE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
+        return httpResponse.returnResponse(HttpStatus.OK, SONG_ALBUM_ART_UPDATE_SUCCESS.getSuccessMessage(), null, null);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, final @RequestBody Song payload) {
+    public ResponseEntity<HttpResponseData> removeAlbumArt(final HttpServletRequest request, final @RequestBody Song payload) {
 
         //        todo
         //         songService.removeAlbumArt(request, songId);
 
-        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SONG_ALBUM_ART_REMOVE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
+        return httpResponse.returnResponse(HttpStatus.OK, SONG_ALBUM_ART_REMOVE_SUCCESS.getSuccessMessage(), null, null);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> removeSong(HttpServletRequest request, final @RequestBody Song payload) {
+    public ResponseEntity<HttpResponseData> removeSong(final HttpServletRequest request, final @RequestBody Song payload) {
 
         //        todo
         //        songService.removeSong(request, songId);
 
-        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SONG_REMOVE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
+        return httpResponse.returnResponse(HttpStatus.OK, SONG_REMOVE_SUCCESS.getSuccessMessage(), null, null);
     }
 
 }

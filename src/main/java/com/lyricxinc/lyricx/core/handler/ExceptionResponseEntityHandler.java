@@ -22,8 +22,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.validation.ConstraintViolationException;
 
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 
 @ControllerAdvice
 public class ExceptionResponseEntityHandler {
@@ -42,14 +41,14 @@ public class ExceptionResponseEntityHandler {
     @ResponseBody
     public ResponseEntity<HttpResponseData> handleNotFoundException() {
 
-        return httpResponse.returnResponse(HttpStatus.NOT_FOUND, ErrorMessage.LYRICX_ERR_01, ErrorCode.LYRICX_ERR_01, null);
+        return httpResponse.returnResponse(HttpStatus.NOT_FOUND, LYRICX_ERR_01.getErrorMessage(), LYRICX_ERR_01.name(), null);
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseEntity<HttpResponseData> handleException() {
 
-        return httpResponse.returnResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessage.LYRICX_ERR_00, ErrorCode.LYRICX_ERR_00, null);
+        return httpResponse.returnResponse(HttpStatus.INTERNAL_SERVER_ERROR, LYRICX_ERR_00.getErrorMessage(),  LYRICX_ERR_00.name(), null);
     }
 
     @ExceptionHandler(NotFoundException.class)
@@ -63,7 +62,7 @@ public class ExceptionResponseEntityHandler {
     @ResponseBody
     public ResponseEntity<HttpResponseData> handleFileUploadErrorException(WebRequest request) {
 
-        return httpResponse.returnResponse(HttpStatus.FORBIDDEN, ErrorMessage.LYRICX_ERR_03, ErrorCode.LYRICX_ERR_03, null);
+        return httpResponse.returnResponse(HttpStatus.FORBIDDEN, LYRICX_ERR_03.getErrorMessage(), LYRICX_ERR_03.name(), null);
     }
 
     @ExceptionHandler(FileUploadException.class)
@@ -95,7 +94,7 @@ public class ExceptionResponseEntityHandler {
     public ResponseEntity<HttpResponseData> handleMySQLIntegrityConstraintViolationException(RuntimeException ex) {
 
         logError(ex);
-        return httpResponse.returnResponse(HttpStatus.FORBIDDEN, ErrorMessage.LYRICX_ERR_02, ErrorCode.LYRICX_ERR_02, null);
+        return httpResponse.returnResponse(HttpStatus.FORBIDDEN, LYRICX_ERR_02.getErrorMessage(), LYRICX_ERR_02.name(), null);
     }
 
     private void logError(Exception ex) {

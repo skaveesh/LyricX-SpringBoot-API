@@ -12,7 +12,7 @@ public class HttpResponseData {
 
     private LocalDateTime timestamp;
     private String message;
-    private String code;
+    private String errorCode;
     private Object data;
 
 
@@ -30,9 +30,9 @@ public class HttpResponseData {
         this.message = message;
     }
 
-    public void setCode(String code) {
+    public void setErrorCode(String errorCode) {
 
-        this.code = code;
+        this.errorCode = errorCode;
     }
 
     public void setData(Object data) {
@@ -50,9 +50,9 @@ public class HttpResponseData {
         return message;
     }
 
-    public String getCode() {
+    public String getErrorCode() {
 
-        return code;
+        return errorCode;
     }
 
     public Object getData() {

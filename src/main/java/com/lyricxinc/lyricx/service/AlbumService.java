@@ -26,8 +26,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Consumer;
 
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 import static com.lyricxinc.lyricx.service.suggest.MediaSuggestFactory.MediaType.ALBUM;
 
 /**
@@ -77,7 +76,7 @@ public class AlbumService {
      */
     public Album getAlbumById(final Long id) {
 
-        return albumRepository.findById(id).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_11, ErrorCode.LYRICX_ERR_11));
+        return albumRepository.findById(id).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_11.getErrorMessage(), LYRICX_ERR_11.name()));
     }
 
     /**
@@ -88,7 +87,7 @@ public class AlbumService {
      */
     public Album getAlbumBySurrogateKey(final String surrogateKey) {
 
-        return albumRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_11, ErrorCode.LYRICX_ERR_11));
+        return albumRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_11.getErrorMessage(), LYRICX_ERR_11.name()));
     }
 
     /**
@@ -253,7 +252,7 @@ public class AlbumService {
 
     private String getAlbumImgUrl(String surrogateKey) {
 
-        return albumRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(ErrorMessage.LYRICX_ERR_25, ErrorCode.LYRICX_ERR_25));
+        return albumRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(LYRICX_ERR_25.getErrorMessage(), LYRICX_ERR_25.name()));
     }
 
     private void updateAlbumDetails(final HttpServletRequest request, final Album payload, Consumer<Contributor> contributorStatus) {

@@ -9,8 +9,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 
 public class AdminInterceptor implements HandlerInterceptor {
 
@@ -32,7 +31,7 @@ public class AdminInterceptor implements HandlerInterceptor {
                 decodeToken = FirebaseAuth.getInstance(FirebaseConfig.getAdminFirebaseApp()).verifyIdToken(authToken);
             } catch (Exception e)
             {
-                throw new ForbiddenException(ErrorMessage.LYRICX_ERR_16, ErrorCode.LYRICX_ERR_16);
+                throw new ForbiddenException(LYRICX_ERR_16.getErrorMessage(), LYRICX_ERR_16.name());
             }
 
             String uid = decodeToken.getUid();
@@ -41,7 +40,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 
             if (!isEmailVerified)
             {
-                throw new ForbiddenException(ErrorMessage.LYRICX_ERR_19, ErrorCode.LYRICX_ERR_19);
+                throw new ForbiddenException(LYRICX_ERR_19.getErrorMessage(), LYRICX_ERR_19.name());
             }
 
             System.out.println("email: " + email + " uid: " + uid + " issuer: " + decodeToken.getIssuer());
@@ -50,7 +49,7 @@ public class AdminInterceptor implements HandlerInterceptor {
         }
         else
         {
-            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_16, ErrorCode.LYRICX_ERR_16);
+            throw new ForbiddenException(LYRICX_ERR_16.getErrorMessage(), LYRICX_ERR_16.name());
         }
     }
 

@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.lyricxinc.lyricx.core.constant.Constants.SuccessCode;
 import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage;
 
 @RestController
@@ -36,13 +35,13 @@ public class AlbumControllerImpl implements AlbumController {
 
         albumService.addAlbum(request, payload, image);
 
-        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.ALBUM_CREATE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
+        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.ALBUM_CREATE_SUCCESS.getSuccessMessage(), null, null);
     }
 
     @Override
     public ResponseEntity<HttpResponseData> searchAlbums(final String keyword) {
 
-        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SUCCESS, SuccessCode.LYRICX_SUC_00, albumService.searchAlbums(keyword));
+        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SUCCESS.getSuccessMessage(), null, albumService.searchAlbums(keyword));
     }
 
     @Override
@@ -50,7 +49,7 @@ public class AlbumControllerImpl implements AlbumController {
 
         albumService.updateAlbum(request, payload);
 
-        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.ALBUM_UPDATE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
+        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.ALBUM_UPDATE_SUCCESS.getSuccessMessage(), null, null);
     }
 
     @Override
@@ -58,7 +57,7 @@ public class AlbumControllerImpl implements AlbumController {
 
         albumService.updateAlbum(request, payload, image);
 
-        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.ALBUM_ARTWORK_UPDATE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
+        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.ALBUM_ARTWORK_UPDATE_SUCCESS.getSuccessMessage(), null, null);
     }
 
     @Override
@@ -66,7 +65,7 @@ public class AlbumControllerImpl implements AlbumController {
 
         albumService.resetAlbumArt(request, payload);
 
-        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.ALBUM_ARTWORK_REMOVE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
+        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.ALBUM_ARTWORK_REMOVE_SUCCESS.getSuccessMessage(), null, null);
     }
 
     @Override

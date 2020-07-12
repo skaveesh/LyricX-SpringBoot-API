@@ -15,8 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.lyricxinc.lyricx.core.constant.Constants.SuccessCode;
-import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage;
+import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage.*;
 
 @RestController
 public class ContributorControllerImpl implements ContributorController {
@@ -36,14 +35,14 @@ public class ContributorControllerImpl implements ContributorController {
     public ResponseEntity<HttpResponseData> createAccount(String email, char[] password, String firstName, String lastName, String contactLink) {
 
         contributorService.addContributor(email, password, firstName, lastName, contactLink);
-        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.ACCOUNT_CREATE_SUCCESS, SuccessCode.LYRICX_SUC_00, null);
+        return httpResponse.returnResponse(HttpStatus.OK, ACCOUNT_CREATE_SUCCESS.getSuccessMessage(), null, null);
     }
 
     @Override
     public ResponseEntity<HttpResponseData> getContTest(HttpServletRequest request, @RequestBody ConTestRequest payload) {
 
         LOGGER.log(Level.WARNING, payload.getName());
-        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SUCCESS, SuccessCode.LYRICX_SUC_00, payload.getName());
+        return httpResponse.returnResponse(HttpStatus.OK, SUCCESS.getSuccessMessage(), null, payload.getName());
     }
 
     //TODO: remove this method after testing

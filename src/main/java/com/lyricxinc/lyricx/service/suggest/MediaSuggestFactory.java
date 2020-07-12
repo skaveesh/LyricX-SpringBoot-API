@@ -1,6 +1,6 @@
 package com.lyricxinc.lyricx.service.suggest;
 
-import com.lyricxinc.lyricx.core.constant.Constants;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 import com.lyricxinc.lyricx.core.exception.LyricxBaseException;
 
 /**
@@ -21,7 +21,7 @@ public class MediaSuggestFactory {
             return new AlbumSuggestOperation();
         }
 
-        throw new LyricxBaseException(Constants.ErrorMessage.LYRICX_ERR_27, Constants.ErrorCode.LYRICX_ERR_27);
+        throw new LyricxBaseException(LYRICX_ERR_27.getErrorMessage(), LYRICX_ERR_27.name());
     }
 
     /**

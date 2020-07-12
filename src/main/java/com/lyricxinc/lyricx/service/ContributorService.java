@@ -17,8 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorCode;
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessage;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 
 @Service
 public class ContributorService {
@@ -37,7 +36,7 @@ public class ContributorService {
     public Contributor getContributorById(String id) {
 
         //todo validate id in similar scenarios
-        return contributorRepository.findById(Optional.ofNullable(id).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_04, ErrorCode.LYRICX_ERR_04))).orElseThrow(() -> new ForbiddenException(ErrorMessage.LYRICX_ERR_05, ErrorCode.LYRICX_ERR_05));
+        return contributorRepository.findById(Optional.ofNullable(id).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_04.getErrorMessage(), LYRICX_ERR_04.name()))).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_05.getErrorMessage(), LYRICX_ERR_05.name()));
     }
 
     public void addContributor(String email, char[] password, String firstName, String lastName, String contactLink) {
@@ -64,7 +63,7 @@ public class ContributorService {
 
         } catch (Exception e)
         {
-            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_06 + e.getMessage(), ErrorCode.LYRICX_ERR_06);
+            throw new ForbiddenException(LYRICX_ERR_06.getErrorMessage() + e.getMessage(), LYRICX_ERR_06.name());
         }
     }
 
@@ -93,7 +92,7 @@ public class ContributorService {
     public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Song song) {
 
         if (!contributor.isSeniorContributor() && song.isPublishedState())
-            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_07, ErrorCode.LYRICX_ERR_07);
+            throw new ForbiddenException(LYRICX_ERR_07.getErrorMessage(), LYRICX_ERR_07.name());
     }
 
     /**
@@ -106,7 +105,7 @@ public class ContributorService {
     public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Artist artist) {
 
         if (!contributor.isSeniorContributor() && artist.isApprovedStatus())
-            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_08, ErrorCode.LYRICX_ERR_08);
+            throw new ForbiddenException(LYRICX_ERR_08.getErrorMessage(), LYRICX_ERR_08.name());
     }
 
     /**
@@ -119,7 +118,7 @@ public class ContributorService {
     public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Album album) {
 
         if (!contributor.isSeniorContributor() && album.isApprovedStatus())
-            throw new ForbiddenException(ErrorMessage.LYRICX_ERR_09, ErrorCode.LYRICX_ERR_09);
+            throw new ForbiddenException(LYRICX_ERR_09.getErrorMessage(), LYRICX_ERR_09.name());
     }
 
 }

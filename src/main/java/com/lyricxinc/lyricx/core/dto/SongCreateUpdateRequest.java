@@ -37,7 +37,7 @@ public class SongCreateUpdateRequest {
 
     private Boolean isExplicit;
 
-    private List<Short> genreIdList;
-
     private List<String> artistSurrogateKeyList;
+
+    private List<Short> genreIdList;
 }
