@@ -18,6 +18,13 @@ public class AllMediaSuggest {
     }
 
     /**
+     * Instantiates a new All media suggest.
+     */
+    public AllMediaSuggest() {
+
+    }
+
+    /**
      * Gets media name.
      *
      * @return the media name

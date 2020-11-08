@@ -20,8 +20,8 @@ import java.util.List;
 public class ArtistGenreService {
 
     private final ArtistGenreRepository artistGenreRepository;
-    private final ArtistService artistService;
     private final GenreService genreService;
+    private ArtistService artistService;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -30,15 +30,24 @@ public class ArtistGenreService {
      * Instantiates a new Artist genre service.
      *
      * @param artistGenreRepository the artist genre repository
-     * @param artistService         the artist service
      * @param genreService          the genre service
      */
     @Autowired
-    public ArtistGenreService(ArtistGenreRepository artistGenreRepository, ArtistService artistService, GenreService genreService) {
+    public ArtistGenreService(ArtistGenreRepository artistGenreRepository, GenreService genreService) {
 
         this.artistGenreRepository = artistGenreRepository;
-        this.artistService = artistService;
         this.genreService = genreService;
+    }
+
+    @Autowired
+    public void setArtistService(ArtistService artistService) {
+
+        this.artistService = artistService;
+    }
+
+    public ArtistService getArtistService() {
+
+        return artistService;
     }
 
     /**

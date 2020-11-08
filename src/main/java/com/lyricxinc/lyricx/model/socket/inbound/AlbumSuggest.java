@@ -17,6 +17,9 @@ public class AlbumSuggest {
         this.albumName = albumName;
     }
 
+    /**
+     * Instantiates a new Album suggest.
+     */
     public AlbumSuggest() {
 
     }

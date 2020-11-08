@@ -6,23 +6,27 @@ import com.lyricxinc.lyricx.core.exception.NotFoundException;
 import com.lyricxinc.lyricx.model.Artist;
 import com.lyricxinc.lyricx.model.Contributor;
 import com.lyricxinc.lyricx.model.Genre;
+import com.lyricxinc.lyricx.model.socket.inbound.ArtistSuggest;
+import com.lyricxinc.lyricx.model.socket.outbound.ArtistSuggestedItem;
 import com.lyricxinc.lyricx.model.validator.group.OnArtistCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnArtistUpdate;
 import com.lyricxinc.lyricx.repository.ArtistRepository;
+import com.lyricxinc.lyricx.service.suggest.MediaSuggestFactory;
+import com.lyricxinc.lyricx.service.suggest.MediaSuggestOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
+import static com.lyricxinc.lyricx.service.suggest.MediaSuggestFactory.MediaType.ARTIST;
 
 /**
  * The type Artist service.
@@ -33,8 +37,11 @@ public class ArtistService {
     private final ArtistRepository artistRepository;
     private final ContributorService contributorService;
     private final GenreService genreService;
-    private final ArtistGenreService artistGenreService;
     private final AmazonClientService amazonClientService;
+    private ArtistGenreService artistGenreService;
+
+    private final MediaSuggestFactory mediaSuggestFactory;
+
 
     /**
      * The Artist default image url.
@@ -48,17 +55,28 @@ public class ArtistService {
      * @param artistRepository    the artist repository
      * @param contributorService  the contributor service
      * @param genreService        the genre service
-     * @param artistGenreService  the artist genre service
      * @param amazonClientService the amazon client service
+     * @param mediaSuggestFactory the media suggest factory
      */
     @Autowired
-    public ArtistService(ArtistRepository artistRepository, ContributorService contributorService, GenreService genreService, ArtistGenreService artistGenreService, AmazonClientService amazonClientService) {
+    public ArtistService(ArtistRepository artistRepository, ContributorService contributorService, GenreService genreService, AmazonClientService amazonClientService, MediaSuggestFactory mediaSuggestFactory) {
 
         this.artistRepository = artistRepository;
         this.contributorService = contributorService;
         this.genreService = genreService;
-        this.artistGenreService = artistGenreService;
         this.amazonClientService = amazonClientService;
+        this.mediaSuggestFactory = mediaSuggestFactory;
+    }
+
+    @Autowired
+    public void setArtistGenreService(ArtistGenreService artistGenreService) {
+
+        this.artistGenreService = artistGenreService;
+    }
+
+    public ArtistGenreService getArtistGenreService() {
+
+        return artistGenreService;
     }
 
     /**
@@ -227,6 +245,36 @@ public class ArtistService {
         }
 
         artistGenreService.createArtistGenre(artist, genreList);
+    }
+
+    /**
+     * Suggest artist sorted set.
+     *
+     * @param artistSuggest the artist suggest
+     * @return the sorted set
+     */
+    public SortedSet<ArtistSuggestedItem> suggestArtists(final ArtistSuggest artistSuggest) {
+
+        MediaSuggestOperation albumSuggestOperation = mediaSuggestFactory.getMediaSuggestion(ARTIST);
+
+        TreeSet<ArtistSuggestedItem> albumSuggestedItemTreeSet = new TreeSet<>(Comparator.comparing(ArtistSuggestedItem::getArtistName));
+        albumSuggestedItemTreeSet.addAll(albumSuggestOperation.readMedia(HtmlUtils.htmlEscape(artistSuggest.getArtistName())));
+
+        System.out.println(HtmlUtils.htmlEscape(artistSuggest.getArtistName()));
+
+        if (albumSuggestedItemTreeSet.size() < 6)
+        {
+            albumSuggestedItemTreeSet.clear();
+            albumSuggestedItemTreeSet.addAll(artistRepository.findArtistSuggestionUsingArtistName(artistSuggest.getArtistName()));
+            albumSuggestOperation.createMedia(albumSuggestedItemTreeSet);
+
+            while (albumSuggestedItemTreeSet.size() > 6)
+            {
+                albumSuggestedItemTreeSet.pollLast();
+            }
+        }
+
+        return albumSuggestedItemTreeSet;
     }
 
 }

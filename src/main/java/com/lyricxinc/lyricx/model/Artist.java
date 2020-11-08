@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lyricxinc.lyricx.model.socket.outbound.ArtistSuggestedItem;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnArtistCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnArtistUpdate;
@@ -25,6 +26,8 @@ import java.util.UUID;
 @Entity
 @DynamicUpdate
 @DynamicInsert
+@SqlResultSetMapping(name = "artistSuggestionUsingArtistNameMapping", classes = {@ConstructorResult(targetClass = ArtistSuggestedItem.class, columns = {@ColumnResult(name = "surrogate_key"), @ColumnResult(name = "name")})})
+@NamedNativeQuery(name = "Artist.findArtistSuggestionUsingArtistName", query = "SELECT a.surrogate_key, a.name FROM artist a WHERE a.name ILIKE CONCAT('%', :name, '%') ORDER BY a.name LIMIT 50", resultSetMapping = "artistSuggestionUsingArtistNameMapping")
 public class Artist {
 
     @Id

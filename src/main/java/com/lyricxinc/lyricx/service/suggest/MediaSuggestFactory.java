@@ -19,6 +19,8 @@ public class MediaSuggestFactory {
         if (mediaType == MediaType.ALBUM)
         {
             return new AlbumSuggestOperation();
+        } else if (mediaType == MediaType.ARTIST){
+            return new ArtistSuggestOperation();
         }
 
         throw new LyricxBaseException(LYRICX_ERR_27.getErrorMessage(), LYRICX_ERR_27.name());

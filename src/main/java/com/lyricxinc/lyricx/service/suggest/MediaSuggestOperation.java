@@ -1,6 +1,5 @@
 package com.lyricxinc.lyricx.service.suggest;
 
-import com.lyricxinc.lyricx.model.socket.outbound.AlbumSuggestedItem;
 import com.lyricxinc.lyricx.model.socket.outbound.SuggestedItem;
 
 import java.util.Set;
@@ -13,9 +12,9 @@ public interface MediaSuggestOperation {
     /**
      * Create media.
      *
-     * @param albumSuggestedItemTreeSet the album suggested item tree set
+     * @param mediaSuggestedItemTreeSet the media suggested item tree set
      */
-    void createMedia(final Set<AlbumSuggestedItem> albumSuggestedItemTreeSet);
+    <T extends SuggestedItem> void createMedia(final Set<T> mediaSuggestedItemTreeSet);
 
     /**
      * Read media set.

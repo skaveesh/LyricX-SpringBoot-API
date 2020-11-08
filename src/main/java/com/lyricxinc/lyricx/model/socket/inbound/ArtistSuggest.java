@@ -18,6 +18,13 @@ public class ArtistSuggest {
     }
 
     /**
+     * Instantiates a new Artist suggest.
+     */
+    public ArtistSuggest() {
+
+    }
+
+    /**
      * Gets artist name.
      *
      * @return the artist name

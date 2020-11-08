@@ -1,6 +1,7 @@
 package com.lyricxinc.lyricx.repository;
 
 import com.lyricxinc.lyricx.model.Artist;
+import com.lyricxinc.lyricx.model.socket.outbound.ArtistSuggestedItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -49,4 +50,12 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
      */
     List<Artist> findBySurrogateKeyIn(Set<String> surrogateKeySet);
 
+    /**
+     * Find artist suggestion using artist name list.
+     *
+     * @param name the name
+     * @return the list
+     */
+    @Query(nativeQuery = true)
+    List<ArtistSuggestedItem> findArtistSuggestionUsingArtistName(@Param("name") String name);
 }

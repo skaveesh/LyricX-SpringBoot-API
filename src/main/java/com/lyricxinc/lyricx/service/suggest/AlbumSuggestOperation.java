@@ -15,8 +15,8 @@ public class AlbumSuggestOperation implements MediaSuggestOperation {
     //TODO implement Lucene like search engine here
 
     @Override
-    public void createMedia(Set<AlbumSuggestedItem> albumSuggestedItemTreeSet) {
-        albumSuggestedItemTreeSet.forEach((x)-> System.out.println("in create " + x.getAlbumName() + " " + x.getSurrogateKey()));
+    public <T extends SuggestedItem> void createMedia(Set<T> albumSuggestedItemTreeSet) {
+        albumSuggestedItemTreeSet.forEach((T x)-> System.out.println("in create " + ((AlbumSuggestedItem)x).getAlbumName() + " " + ((AlbumSuggestedItem)x).getSurrogateKey()));
     }
 
     @Override
@@ -28,7 +28,6 @@ public class AlbumSuggestOperation implements MediaSuggestOperation {
         x.add(new AlbumSuggestedItem("a3", "samagw"));
         x.add(new AlbumSuggestedItem("a0", "sam0"));
         x.add(new AlbumSuggestedItem("a4", "sambsv"));
-        x.add(new AlbumSuggestedItem("a1", "sam1"));
 
        return (TreeSet<T>) x;
     }
