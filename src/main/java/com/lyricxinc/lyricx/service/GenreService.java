@@ -60,6 +60,15 @@ public class GenreService {
     }
 
     /**
+     * Gets all genres.
+     *
+     * @return the all genres
+     */
+    public List<Genre> getAllGenres() {
+        return genreRepository.findAll();
+    }
+
+    /**
      * Find genre by ids list.
      *
      * @param genreIdSet the genre id set
