@@ -35,13 +35,13 @@ public class SongModify {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime lastModifiedDate;
 
-    private boolean hiddenStatus;
+    private Boolean hiddenStatus;
 
     public SongModify() {
 
     }
 
-    public SongModify(Song song, @NotBlank String lyrics, Contributor contributor, boolean hiddenStatus) {
+    public SongModify(Song song, @NotBlank String lyrics, Contributor contributor, Boolean hiddenStatus) {
 
         this.song = song;
         this.lyrics = lyrics;
@@ -94,12 +94,12 @@ public class SongModify {
         return lastModifiedDate;
     }
 
-    public boolean isHiddenStatus() {
+    public Boolean isHiddenStatus() {
 
         return hiddenStatus;
     }
 
-    public void setHiddenStatus(boolean hiddenStatus) {
+    public void setHiddenStatus(Boolean hiddenStatus) {
 
         this.hiddenStatus = hiddenStatus;
     }

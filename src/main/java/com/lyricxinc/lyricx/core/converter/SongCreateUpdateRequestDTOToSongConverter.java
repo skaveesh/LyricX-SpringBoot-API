@@ -1,15 +1,15 @@
 package com.lyricxinc.lyricx.core.converter;
 
-import com.lyricxinc.lyricx.core.dto.SongCreateUpdateRequest;
+import com.lyricxinc.lyricx.core.dto.SongCreateUpdateRequestDTO;
 import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.model.Language;
 import com.lyricxinc.lyricx.model.Song;
 import org.springframework.core.convert.converter.Converter;
 
-public class SongCreateUpdateRequestToSongConverter implements Converter<SongCreateUpdateRequest, Song> {
+public class SongCreateUpdateRequestDTOToSongConverter implements Converter<SongCreateUpdateRequestDTO, Song> {
 
     @Override
-    public Song convert(SongCreateUpdateRequest source) {
+    public Song convert(SongCreateUpdateRequestDTO source) {
 
         Album album = new Album();
         album.setSurrogateKey(source.getAlbumSurrogateKey());

@@ -5,21 +5,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Year;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlbumCreateUpdateRequest {
+public class ArtistCreateUpdateRequestDTO {
 
     private String surrogateKey;
 
     private String name;
 
-    private String artistSurrogateKey;
-
-    private Year year;
-
     private Boolean approvedStatus;
+
+    private List<Short> genreIdList;
+
 }

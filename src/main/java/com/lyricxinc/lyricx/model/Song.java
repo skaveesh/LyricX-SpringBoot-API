@@ -113,7 +113,7 @@ public class Song {
     private LocalDateTime publishedDate;
 
     //todo @JsonProperty(access = JsonProperty.Access.READ_ONLY) this is commented because contributor can make this true. but check before update if the contributor is senior
-    private boolean publishedState;
+    private Boolean publishedState;
 
     @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonManagedReference(value = "songGenresReferenceSong")

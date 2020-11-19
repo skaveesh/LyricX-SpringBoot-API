@@ -1,7 +1,7 @@
 package com.lyricxinc.lyricx.rest.impl;
 
 import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage.*;
-import com.lyricxinc.lyricx.core.dto.ArtistCreateUpdateRequest;
+import com.lyricxinc.lyricx.core.dto.ArtistCreateUpdateRequestDTO;
 import com.lyricxinc.lyricx.core.response.HttpResponse;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
 import com.lyricxinc.lyricx.model.Artist;
@@ -12,6 +12,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,25 +34,25 @@ public class ArtistControllerImpl implements ArtistController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> createArtist(final HttpServletRequest request, @RequestBody ArtistCreateUpdateRequest requestPayload, MultipartFile image) {
+    public ResponseEntity<HttpResponseData> createArtist(final HttpServletRequest request, @RequestPart("payload") ArtistCreateUpdateRequestDTO payload, @RequestPart("image") MultipartFile image) {
 
-        artistService.addArtist(request, conversionService.convert(requestPayload, Artist.class), image, requestPayload.getGenreIdList());
+        artistService.addArtist(request, conversionService.convert(payload, Artist.class), image, payload.getGenreIdList());
 
         return httpResponse.returnResponse(HttpStatus.OK, ARTIST_CREATE_SUCCESS.getSuccessMessage(), null, null);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateArtist(HttpServletRequest request, @RequestBody ArtistCreateUpdateRequest requestPayload) {
+    public ResponseEntity<HttpResponseData> updateArtist(HttpServletRequest request, @RequestBody ArtistCreateUpdateRequestDTO payload) {
 
-        artistService.updateArtist(request, conversionService.convert(requestPayload, Artist.class), null, requestPayload.getGenreIdList());
+        artistService.updateArtist(request, conversionService.convert(payload, Artist.class), payload.getGenreIdList());
 
         return httpResponse.returnResponse(HttpStatus.OK, ARTIST_UPDATE_SUCCESS.getSuccessMessage(), null, null);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateArtistImage(HttpServletRequest request, @RequestBody ArtistCreateUpdateRequest requestPayload, MultipartFile image) {
+    public ResponseEntity<HttpResponseData> updateArtistImage(HttpServletRequest request, @RequestPart("payload") ArtistCreateUpdateRequestDTO payload, @RequestPart("image") MultipartFile image) {
 
-        artistService.updateArtist(request, conversionService.convert(requestPayload, Artist.class), image, requestPayload.getGenreIdList());
+        artistService.updateArtist(request, conversionService.convert(payload, Artist.class), image, payload.getGenreIdList());
 
         return httpResponse.returnResponse(HttpStatus.OK, ARTIST_IMAGE_UPDATE_SUCCESS.getSuccessMessage(), null, null);
     }

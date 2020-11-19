@@ -1,6 +1,6 @@
 package com.lyricxinc.lyricx.rest.impl;
 
-import com.lyricxinc.lyricx.core.dto.SongCreateUpdateRequest;
+import com.lyricxinc.lyricx.core.dto.SongCreateUpdateRequestDTO;
 import com.lyricxinc.lyricx.core.response.HttpResponse;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
 import com.lyricxinc.lyricx.model.Song;
@@ -45,7 +45,7 @@ public class SongControllerImpl implements SongController {
 
 
     @Override
-    public ResponseEntity<HttpResponseData> createSong(final HttpServletRequest request, final @RequestBody SongCreateUpdateRequest requestPayload) {
+    public ResponseEntity<HttpResponseData> createSong(final HttpServletRequest request, final @RequestBody SongCreateUpdateRequestDTO requestPayload) {
 /* TODO: 12/30/2019  when adding a song, set imgurl to null. when ui displaying song image, display album's one. when user uploading a custom album art of the song
                      then remove the null of imgurl of the song and add the user uploaded one */
 
@@ -56,7 +56,7 @@ public class SongControllerImpl implements SongController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateSong(final HttpServletRequest request, final @RequestBody SongCreateUpdateRequest requestPayload) {
+    public ResponseEntity<HttpResponseData> updateSong(final HttpServletRequest request, final @RequestBody SongCreateUpdateRequestDTO requestPayload) {
 
         Song songPayload = conversionService.convert(requestPayload, Song.class);
         songService.updateSong(request, songPayload, requestPayload.getArtistSurrogateKeyList(), requestPayload.getGenreIdList(), null);
@@ -65,7 +65,7 @@ public class SongControllerImpl implements SongController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateSong(final HttpServletRequest request, final @RequestBody SongCreateUpdateRequest requestPayload, MultipartFile image) {
+    public ResponseEntity<HttpResponseData> updateSong(final HttpServletRequest request, final @RequestBody SongCreateUpdateRequestDTO requestPayload, MultipartFile image) {
 
         Song songPayload = conversionService.convert(requestPayload, Song.class);
         songService.updateSong(request, songPayload, requestPayload.getArtistSurrogateKeyList(), requestPayload.getGenreIdList(), image);

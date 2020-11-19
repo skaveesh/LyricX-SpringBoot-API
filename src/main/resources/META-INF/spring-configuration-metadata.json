@@ -17,6 +17,10 @@
       "type": "java.lang.String"
     },
     {
+      "name": "com.lyricxinc.lyricx.baseImageBucketUrl",
+      "type": "java.lang.String"
+    },
+    {
       "name": "com.lyricxinc.lyricx.contributorImageUrl",
       "type": "java.lang.String"
     },

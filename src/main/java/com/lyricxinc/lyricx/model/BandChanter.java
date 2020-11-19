@@ -31,13 +31,13 @@ public class BandChanter {
     @JsonBackReference(value = "bandChantersReferenceChanter")
     private Chanter chanter;
 
-    private boolean moderatorStatus;
+    private Boolean moderatorStatus;
 
     public BandChanter() {
 
     }
 
-    public BandChanter(Band band, Chanter chanter, boolean moderatorStatus) {
+    public BandChanter(Band band, Chanter chanter, Boolean moderatorStatus) {
 
         this.band = band;
         this.chanter = chanter;
@@ -79,12 +79,12 @@ public class BandChanter {
         this.chanter = chanter;
     }
 
-    public boolean isModeratorStatus() {
+    public Boolean isModeratorStatus() {
 
         return moderatorStatus;
     }
 
-    public void setModeratorStatus(boolean moderatorStatus) {
+    public void setModeratorStatus(Boolean moderatorStatus) {
 
         this.moderatorStatus = moderatorStatus;
     }

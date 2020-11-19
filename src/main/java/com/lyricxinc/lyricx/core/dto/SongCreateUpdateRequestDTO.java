@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SongCreateUpdateRequest {
+public class SongCreateUpdateRequestDTO {
 
     private String surrogateKey;
 

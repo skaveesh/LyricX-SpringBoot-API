@@ -41,21 +41,21 @@ public class Album {
     private Long id;
 
     @Column(unique = true, updatable = false, nullable = false)
-    @NotBlank(groups = {OnAlbumUpdate.class, OnSongCreate.class})
+    @NotBlank(groups = {OnAlbumUpdate.class, OnSongCreate.class}, message = "surrogateKey should not be blank")
     private String surrogateKey;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "artistId", nullable = false)
     @Valid
     @JsonBackReference(value = "albumsReferenceArtist")
-    @NotNull(groups = {OnAlbumCreate.class})
+    @NotNull(groups = {OnAlbumCreate.class}, message = "Artist data should not be blank")
     private Artist artist;
 
     @PastOrPresent(groups = OnAlbumCreate.class)
     private Year year;
 
     @Size(max = 50)
-    @NotBlank(groups = OnAlbumCreate.class)
+    @NotBlank(groups = OnAlbumCreate.class, message = "Album name should not be blank")
     private String name;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -83,7 +83,7 @@ public class Album {
     private Contributor lastModifiedBy;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private boolean approvedStatus;
+    private Boolean approvedStatus;
 
     @OneToMany(mappedBy = "album", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JsonManagedReference(value = "songReferenceAlbum")
@@ -112,7 +112,7 @@ public class Album {
      * @param addedBy        the added by
      * @param approvedStatus the approved status
      */
-    public Album(Artist artist, Year year, @NotBlank String name, @NotBlank String imgUrl, Contributor addedBy, boolean approvedStatus) {
+    public Album(Artist artist, Year year, @NotBlank String name, @NotBlank String imgUrl, Contributor addedBy, Boolean approvedStatus) {
 
         this.artist = artist;
         this.year = year;
@@ -284,11 +284,11 @@ public class Album {
     }
 
     /**
-     * Is approved status boolean.
+     * Is approved status Boolean.
      *
-     * @return the boolean
+     * @return the Boolean
      */
-    public boolean isApprovedStatus() {
+    public Boolean isApprovedStatus() {
 
         return approvedStatus;
     }
@@ -298,7 +298,7 @@ public class Album {
      *
      * @param approvedStatus the approved status
      */
-    public void setApprovedStatus(boolean approvedStatus) {
+    public void setApprovedStatus(Boolean approvedStatus) {
 
         this.approvedStatus = approvedStatus;
     }

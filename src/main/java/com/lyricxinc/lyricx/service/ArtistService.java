@@ -27,6 +27,7 @@ import java.util.function.BiConsumer;
 
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 import static com.lyricxinc.lyricx.service.suggest.MediaSuggestFactory.MediaType.ARTIST;
+import static com.lyricxinc.lyricx.core.util.StringValidatorUtil.*;
 
 /**
  * The type Artist service.
@@ -112,21 +113,41 @@ public class ArtistService {
     @Validated(OnArtistCreate.class)
     public void addArtist(final HttpServletRequest request, final @Valid Artist payload, final MultipartFile image, final List<Short> genreIdList) {
 
+        Objects.requireNonNull(payload);
+
+        List<Genre> genreList = getGenreListFromGenreIdList(genreIdList);
+
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
         payload.setAddedBy(contributor);
         payload.setLastModifiedBy(contributor);
+        payload.setApprovedStatus(false);
 
         if (image != null)
         {
             String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ARTIST_FOLDER);
             payload.setImgUrl(imgUrl);
         }
+        else
+        {
+            payload.setImgUrl(artistDefaultImageUrl);
+        }
 
-        Artist savedArtist = this.artistRepository.save(payload);
+        Artist newArtist = this.artistRepository.save(payload);
 
-        updateArtistGenreList(savedArtist, genreIdList);
+        artistGenreService.createArtistGenre(newArtist, genreList);
+    }
 
+    @Validated(OnArtistUpdate.class)
+    public void updateArtist(final HttpServletRequest request, final @Valid Artist payload, final List<Short> genreIdList) {
+
+        Objects.requireNonNull(payload);
+
+        Artist existingArtist = updateArtistDetails(request, payload, contributorService::checkNonSeniorContributorEditsVerifiedContent);
+
+        Artist updatedArtist = artistRepository.save(existingArtist);
+
+        this.updateNewGenres(updatedArtist, genreIdList);
     }
 
     /**
@@ -140,17 +161,31 @@ public class ArtistService {
     @Validated(OnArtistUpdate.class)
     public void updateArtist(final HttpServletRequest request, final @Valid Artist payload, final MultipartFile image, final List<Short> genreIdList) {
 
-        updateAlbumDetails(request, payload, image, contributorService::checkNonSeniorContributorEditsVerifiedContent);
+        Objects.requireNonNull(payload);
+        Objects.requireNonNull(image);
 
-        Artist savedArtist = artistRepository.save(payload);
+        Artist existingArtist = updateArtistDetails(request, payload, contributorService::checkNonSeniorContributorEditsVerifiedContent);
+
+        String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ARTIST_FOLDER);
+        String oldImgUrl = null;
 
         try
         {
-            updateArtistGenreList(savedArtist, genreIdList);
-        } catch (LyricxBaseException ex)
+            oldImgUrl = getArtistImgUrl(existingArtist.getSurrogateKey());
+        } finally
         {
-            //todo - log
+            //delete old song image from S3 bucket
+            if (oldImgUrl != null)
+            {
+                this.amazonClientService.deleteFileFromS3Bucket(oldImgUrl, AmazonClientService.S3BucketFolders.ARTIST_FOLDER);
+            }
         }
+
+        existingArtist.setImgUrl(imgUrl);
+
+        Artist updatedArtist = artistRepository.save(existingArtist);
+
+        this.updateNewGenres(updatedArtist, genreIdList);
     }
 
     /**
@@ -187,52 +222,48 @@ public class ArtistService {
         return artistRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(LYRICX_ERR_26.getErrorMessage(), LYRICX_ERR_26.name()));
     }
 
-    private void updateAlbumDetails(final HttpServletRequest request, final Artist payload, MultipartFile image, BiConsumer<Contributor, Artist> contributorArtistBiConsumer) {
+    private Artist updateArtistDetails(final HttpServletRequest request, final Artist payload, BiConsumer<Contributor, Artist> contributorArtistBiConsumer) {
 
-        Artist oldArtist = this.getArtistBySurrogateKey(payload.getSurrogateKey());
-        payload.setId(oldArtist.getId());
-
-        if (payload.getAddedBy() == null || payload.getAddedBy().getId() == null)
-        {
-            payload.setAddedBy(oldArtist.getAddedBy());
-        }
+        Artist existingArtist = this.getArtistBySurrogateKey(payload.getSurrogateKey());
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
-        contributorArtistBiConsumer.accept(contributor, payload);
-        payload.setLastModifiedBy(contributor);
 
-        if(image != null)
+        contributorArtistBiConsumer.accept(contributor, existingArtist);
+
+        //check non senior contributor tries to update the verified status
+        if (!contributor.isSeniorContributor() && payload.isApprovedStatus() != null) {
+            throw new ForbiddenException("Non-Senior Contributor tries to change the approved status of a Artist", "LYRICX_ERR_33");
+        }
+
+        existingArtist.setLastModifiedBy(contributor);
+
+        if (isStringNotEmpty(payload.getName())) {
+            existingArtist.setName(payload.getName());
+        }
+
+        if (payload.isApprovedStatus() != null){
+            existingArtist.setApprovedStatus(payload.isApprovedStatus());
+        }
+
+        return existingArtist;
+    }
+
+    private void updateNewGenres(Artist updatedArtist, List<Short> genreIdList){
+        try
         {
-            String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ARTIST_FOLDER);
-
-            String oldImgUrl = null;
-
-            try
-            {
-                oldImgUrl = getArtistImgUrl(payload.getSurrogateKey());
-            } finally
-            {
-                //delete old song image from S3 bucket
-                if (oldImgUrl != null)
-                {
-                    this.amazonClientService.deleteFileFromS3Bucket(oldImgUrl, AmazonClientService.S3BucketFolders.ARTIST_FOLDER);
-                }
-            }
-
-            payload.setImgUrl(imgUrl);
+            List<Genre> genreList = getGenreListFromGenreIdList(genreIdList);
+            int removedItems = artistGenreService.removeAllArtistGenre(updatedArtist.getId());
+            // todo log removed items
+            artistGenreService.createArtistGenre(updatedArtist, genreList);
+        } catch (LyricxBaseException ex)
+        {
+            //todo - log there is no genres to update
         }
     }
 
+    private List<Genre> getGenreListFromGenreIdList(List<Short> genreIdList){
 
-    /**
-     * Update artist genre list.
-     *
-     * @param artist      the artist
-     * @param genreIdList the genre id list
-     */
-    public void updateArtistGenreList(Artist artist, List<Short> genreIdList){
-
-        if(artist == null || genreIdList == null){
+        if(genreIdList == null || genreIdList.isEmpty()){
             throw new ForbiddenException(LYRICX_ERR_31.getErrorMessage(), LYRICX_ERR_31.name());
         }
 
@@ -244,7 +275,7 @@ public class ArtistService {
             throw new ForbiddenException(LYRICX_ERR_31.getErrorMessage(), LYRICX_ERR_31.name());
         }
 
-        artistGenreService.createArtistGenre(artist, genreList);
+        return genreList;
     }
 
     /**

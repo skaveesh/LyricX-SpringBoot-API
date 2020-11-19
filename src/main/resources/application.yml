@@ -2,13 +2,16 @@ com:
   amazonaws:
     s3:
       amazonProperties:
-        endpointUrl: https://s3.us-east-2.amazonaws.com
         accessKey: AKIAVIWLUOY4IPTSFZ3H
         secretKey: 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
+        endpointUrl: https://s3.us-east-2.amazonaws.com
         bucketName: lyricx-images
   lyricxinc:
     lyricx:
+      baseImageBucketUrl: https://i.imgur.com/
       contributorImageUrl: https://www.myimage.com/contributorimage
       albumImageUrl: https://www.myimage.com/albumimage
       artistImageUrl: https://www.myimage.com/artistimage
       songImageUrl: https://www.myimage.com/songimage
+
+#baseImageBucketUrl = endpointUrl + bucketName

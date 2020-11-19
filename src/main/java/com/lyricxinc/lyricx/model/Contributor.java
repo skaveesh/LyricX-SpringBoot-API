@@ -39,7 +39,7 @@ public class Contributor {
     private String contactLink;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private boolean seniorContributor;
+    private Boolean seniorContributor;
 
     @CreationTimestamp
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -196,11 +196,11 @@ public class Contributor {
     }
 
     /**
-     * Is senior contributor boolean.
+     * Is senior contributor Boolean.
      *
-     * @return the boolean
+     * @return the Boolean
      */
-    public boolean isSeniorContributor() {
+    public Boolean isSeniorContributor() {
 
         return seniorContributor;
     }
@@ -210,7 +210,7 @@ public class Contributor {
      *
      * @param seniorContributor the senior contributor
      */
-    public void setSeniorContributor(boolean seniorContributor) {
+    public void setSeniorContributor(Boolean seniorContributor) {
 
         this.seniorContributor = seniorContributor;
     }

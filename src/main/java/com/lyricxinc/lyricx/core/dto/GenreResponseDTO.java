@@ -5,20 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArtistCreateUpdateRequest {
+public class GenreResponseDTO {
 
-    private String surrogateKey;
+    private Short id;
 
-    private String name;
-
-    private Boolean approvedStatus;
-
-    private List<Short> genreIdList;
-
+    private String genreName;
 }

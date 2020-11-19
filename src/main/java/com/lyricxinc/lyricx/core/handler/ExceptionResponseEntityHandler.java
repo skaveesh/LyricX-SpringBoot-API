@@ -86,7 +86,7 @@ public class ExceptionResponseEntityHandler {
     public ResponseEntity<HttpResponseData> handleConstraintViolationException(RuntimeException ex) {
 
         logError(ex);
-        return handleException();
+        return httpResponse.returnResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), LYRICX_ERR_02.name(), null);
     }
 
     @ExceptionHandler(MySQLIntegrityConstraintViolationException.class)

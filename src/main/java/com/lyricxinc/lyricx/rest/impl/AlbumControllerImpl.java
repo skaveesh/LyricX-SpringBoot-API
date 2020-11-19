@@ -1,11 +1,13 @@
 package com.lyricxinc.lyricx.rest.impl;
 
+import com.lyricxinc.lyricx.core.dto.AlbumCreateUpdateRequestDTO;
 import com.lyricxinc.lyricx.core.response.HttpResponse;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
 import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.rest.controller.AlbumController;
 import com.lyricxinc.lyricx.service.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,18 +24,20 @@ public class AlbumControllerImpl implements AlbumController {
 
     private final AlbumService albumService;
     private final HttpResponse httpResponse;
+    private final ConversionService conversionService;
 
     @Autowired
-    AlbumControllerImpl(AlbumService albumService, HttpResponse httpResponse) {
+    AlbumControllerImpl(AlbumService albumService, HttpResponse httpResponse, ConversionService conversionService) {
 
         this.albumService = albumService;
         this.httpResponse = httpResponse;
+        this.conversionService = conversionService;
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> createAlbum(final HttpServletRequest request, @RequestPart("payload") Album payload, @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<HttpResponseData> createAlbum(final HttpServletRequest request, @RequestPart("payload") AlbumCreateUpdateRequestDTO payload, @RequestPart("image") MultipartFile image) {
 
-        albumService.addAlbum(request, payload, image);
+        albumService.addAlbum(request, conversionService.convert(payload, Album.class), image);
 
         return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.ALBUM_CREATE_SUCCESS.getSuccessMessage(), null, null);
     }
@@ -45,25 +49,25 @@ public class AlbumControllerImpl implements AlbumController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, final @RequestBody Album payload) {
+    public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, final @RequestBody AlbumCreateUpdateRequestDTO payload) {
 
-        albumService.updateAlbum(request, payload);
+        albumService.updateAlbum(request, conversionService.convert(payload, Album.class));
 
         return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.ALBUM_UPDATE_SUCCESS.getSuccessMessage(), null, null);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, @RequestPart("payload") Album payload, @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, @RequestPart("payload") AlbumCreateUpdateRequestDTO payload, @RequestPart("image") MultipartFile image) {
 
-        albumService.updateAlbum(request, payload, image);
+        albumService.updateAlbum(request, conversionService.convert(payload, Album.class), image);
 
         return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.ALBUM_ARTWORK_UPDATE_SUCCESS.getSuccessMessage(), null, null);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, final @RequestBody Album payload) {
+    public ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, final @RequestBody AlbumCreateUpdateRequestDTO payload) {
 
-        albumService.resetAlbumArt(request, payload);
+        albumService.resetAlbumArt(request, conversionService.convert(payload, Album.class));
 
         return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.ALBUM_ARTWORK_REMOVE_SUCCESS.getSuccessMessage(), null, null);
     }

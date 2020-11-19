@@ -8,15 +8,36 @@ import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*
 
 public class StringValidatorUtil {
 
-    private static void nullCheck(String string) {
+    private StringValidatorUtil() {
+        // private constructor to forbid instantiation
+    }
+
+    private static void checkStringNullity(String string) {
 
         if (string == null)
+        {
             throw new ForbiddenException(LYRICX_ERR_20.getErrorMessage(), LYRICX_ERR_20.name());
+        }
+    }
+
+    public static boolean isStringNotEmpty(String string) {
+
+        return string != null && !string.isEmpty();
+    }
+
+    public static void checkStringEmpty(String string) {
+
+        checkStringNullity(string);
+
+        if(string.isEmpty())
+        {
+            throw new ForbiddenException(LYRICX_ERR_20.getErrorMessage(), LYRICX_ERR_20.name());
+        }
     }
 
     public static String validateEmailAddress(String email) {
 
-        nullCheck(email);
+        checkStringNullity(email);
 
         email = email.trim();
 
@@ -28,7 +49,7 @@ public class StringValidatorUtil {
 
     public static String validateName(String name) {
 
-        nullCheck(name);
+        checkStringNullity(name);
 
         name = name.trim();
 
@@ -40,7 +61,7 @@ public class StringValidatorUtil {
 
     public static String validateContactLink(String url) {
 
-        nullCheck(url);
+        checkStringNullity(url);
 
         url = url.trim();
 

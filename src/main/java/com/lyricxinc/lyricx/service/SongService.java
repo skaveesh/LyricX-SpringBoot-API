@@ -201,6 +201,12 @@ public class SongService {
     private void updateSongDetails(final HttpServletRequest request, final Song payload, @Nullable final MultipartFile image, BiConsumer<Contributor, Song> contributorSongBiConsumer) {
 
         Song oldSong = getSongBySurrogateKey(payload.getSurrogateKey());
+
+        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
+
+        contributorSongBiConsumer.accept(contributor, oldSong);
+
+        payload.setLastModifiedBy(contributor);
         payload.setId(oldSong.getId());
 
         if (image != null)
@@ -243,9 +249,6 @@ public class SongService {
             payload.setLanguage(newLanguage);
         }
 
-        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
-        contributorSongBiConsumer.accept(contributor, payload);
-        payload.setLastModifiedBy(contributor);
     }
 
     /**

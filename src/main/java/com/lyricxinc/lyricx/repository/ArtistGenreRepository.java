@@ -20,6 +20,9 @@ public interface ArtistGenreRepository extends JpaRepository<ArtistGenre, Long> 
     @Transactional
     int deleteByArtist_IdAndGenre_Id(long artistId, short genreId);
 
+    @Transactional
+    int deleteAllByArtist_Id(long artistId);
+
     ArtistGenre findByArtist_IdAndGenre_Id(long artistId, short genreId);
 
 }

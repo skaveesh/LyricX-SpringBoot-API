@@ -1,12 +1,15 @@
 package com.lyricxinc.lyricx.service;
 
+import com.lyricxinc.lyricx.core.dto.GenreResponseDTO;
 import com.lyricxinc.lyricx.model.Genre;
 import com.lyricxinc.lyricx.repository.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The type Genre service.
@@ -15,16 +18,19 @@ import java.util.Set;
 public class GenreService {
 
     private final GenreRepository genreRepository;
+    private final ConversionService conversionService;
 
     /**
      * Instantiates a new Genre service.
      *
-     * @param genreRepository the genre repository
+     * @param genreRepository   the genre repository
+     * @param conversionService the conversion service
      */
     @Autowired
-    public GenreService(GenreRepository genreRepository) {
+    public GenreService(GenreRepository genreRepository, ConversionService conversionService) {
 
         this.genreRepository = genreRepository;
+        this.conversionService = conversionService;
     }
 
     /**
@@ -59,13 +65,15 @@ public class GenreService {
         genreRepository.save(new Genre(genreName));
     }
 
+
     /**
      * Gets all genres.
      *
      * @return the all genres
      */
-    public List<Genre> getAllGenres() {
-        return genreRepository.findAll();
+    public List<GenreResponseDTO> getAllGenres() {
+        return genreRepository.findAll().stream().map(genre -> conversionService.convert(genre, GenreResponseDTO.class))
+                .collect(Collectors.toList());
     }
 
     /**

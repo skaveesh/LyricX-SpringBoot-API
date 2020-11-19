@@ -37,11 +37,11 @@ public class Artist {
     private Long id;
 
     @Column(unique = true, updatable = false, nullable = false)
-    @NotBlank(groups = {OnAlbumCreate.class, OnArtistUpdate.class})
+    @NotBlank(groups = {OnAlbumCreate.class, OnArtistUpdate.class}, message = "surrogateKey should not be blank")
     private String surrogateKey;
 
     @Size(max = 50)
-    @NotBlank(groups = OnArtistCreate.class)
+    @NotBlank(groups = OnArtistCreate.class, message = "Artist name should not be blank")
     private String name;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -59,7 +59,7 @@ public class Artist {
     @JsonBackReference(value = "referenceLastModifiedBy")
     private Contributor lastModifiedBy;
 
-    private boolean approvedStatus;
+    private Boolean approvedStatus;
 
     @CreationTimestamp
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -102,7 +102,7 @@ public class Artist {
      * @param addedBy        the added by
      * @param approvedStatus the approved status
      */
-    public Artist(@NotBlank @Size(max = 50) String name, @NotBlank String imgUrl, Contributor addedBy, boolean approvedStatus) {
+    public Artist(@NotBlank @Size(max = 50) String name, @NotBlank String imgUrl, Contributor addedBy, Boolean approvedStatus) {
 
         this.name = name;
         this.imgUrl = imgUrl;
@@ -211,11 +211,11 @@ public class Artist {
     }
 
     /**
-     * Is approved status boolean.
+     * Is approved status Boolean.
      *
-     * @return the boolean
+     * @return the Boolean
      */
-    public boolean isApprovedStatus() {
+    public Boolean isApprovedStatus() {
 
         return approvedStatus;
     }
@@ -225,7 +225,7 @@ public class Artist {
      *
      * @param approvedStatus the approved status
      */
-    public void setApprovedStatus(boolean approvedStatus) {
+    public void setApprovedStatus(Boolean approvedStatus) {
 
         this.approvedStatus = approvedStatus;
     }

@@ -1,8 +1,7 @@
 package com.lyricxinc.lyricx.rest.controller;
 
-import com.lyricxinc.lyricx.core.dto.ArtistCreateUpdateRequest;
+import com.lyricxinc.lyricx.core.dto.ArtistCreateUpdateRequestDTO;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
-import com.lyricxinc.lyricx.model.Artist;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,13 +17,13 @@ public interface ArtistController {
     /**
      * Create artist response entity.
      *
-     * @param request        the request
-     * @param requestPayload the request payload
-     * @param image          the image
+     * @param request the request
+     * @param payload the payload
+     * @param image   the image
      * @return the response entity
      */
-    @PostMapping("create")
-    ResponseEntity<HttpResponseData> createArtist(HttpServletRequest request, @RequestBody ArtistCreateUpdateRequest requestPayload, MultipartFile image);
+    @PutMapping("create")
+    ResponseEntity<HttpResponseData> createArtist(HttpServletRequest request, @RequestPart("payload") ArtistCreateUpdateRequestDTO payload, @RequestPart("image") MultipartFile image);
 
     /**
      * Update artist response entity.
@@ -33,8 +32,8 @@ public interface ArtistController {
      * @param requestPayload the request payload
      * @return the response entity
      */
-    @PutMapping("update/details")
-    ResponseEntity<HttpResponseData> updateArtist(HttpServletRequest request, @RequestBody ArtistCreateUpdateRequest requestPayload);
+    @PostMapping("update/details")
+    ResponseEntity<HttpResponseData> updateArtist(HttpServletRequest request, @RequestBody ArtistCreateUpdateRequestDTO requestPayload);
 
     /**
      * Update artist image response entity.
@@ -44,8 +43,8 @@ public interface ArtistController {
      * @param image          the image
      * @return the response entity
      */
-    @PutMapping("update/image")
-    ResponseEntity<HttpResponseData> updateArtistImage(HttpServletRequest request, @RequestBody ArtistCreateUpdateRequest requestPayload, MultipartFile image);
+    @PostMapping("update/details/image")
+    ResponseEntity<HttpResponseData> updateArtistImage(HttpServletRequest request, @RequestPart("payload") ArtistCreateUpdateRequestDTO requestPayload, @RequestPart("image") MultipartFile image);
 
     /**
      * Remove artist image response entity.

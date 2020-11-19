@@ -20,7 +20,7 @@ public class Admin {
     @NotBlank
     private String name;
 
-    private boolean fullControl;
+    private Boolean fullControl;
 
     @CreationTimestamp
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -34,7 +34,7 @@ public class Admin {
 
     }
 
-    public Admin(@NotBlank String id, @NotBlank String name, boolean fullControl) {
+    public Admin(@NotBlank String id, @NotBlank String name, Boolean fullControl) {
 
         this.id = id;
         this.name = name;
@@ -61,12 +61,12 @@ public class Admin {
         this.name = name;
     }
 
-    public boolean isFullControl() {
+    public Boolean isFullControl() {
 
         return fullControl;
     }
 
-    public void setFullControl(boolean fullControl) {
+    public void setFullControl(Boolean fullControl) {
 
         this.fullControl = fullControl;
     }

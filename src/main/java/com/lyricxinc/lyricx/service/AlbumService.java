@@ -20,14 +20,12 @@ import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Comparator;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.function.Consumer;
+import java.util.*;
+import java.util.function.BiConsumer;
 
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 import static com.lyricxinc.lyricx.service.suggest.MediaSuggestFactory.MediaType.ALBUM;
+import static com.lyricxinc.lyricx.core.util.StringValidatorUtil.*;
 
 /**
  * The type Album service.
@@ -111,11 +109,13 @@ public class AlbumService {
     @Validated(OnAlbumCreate.class)
     public void addAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile image) {
 
+        Objects.requireNonNull(payload);
+
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
         payload.setAddedBy(contributor);
         payload.setLastModifiedBy(contributor);
-
+        payload.setApprovedStatus(false);
         payload.setArtist(artistService.getArtistBySurrogateKey(payload.getArtist().getSurrogateKey()));
 
         if (image != null)
@@ -140,9 +140,11 @@ public class AlbumService {
     @Validated(OnAlbumUpdate.class)
     public void updateAlbum(final HttpServletRequest request, final @Valid Album payload) {
 
-        updateAlbumDetails(request, payload, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
+        Objects.requireNonNull(payload);
 
-        albumRepository.save(payload);
+        Album existingAlbum = updateAlbumDetails(request, payload, contributorService::checkNonSeniorContributorEditsVerifiedContent);
+
+        albumRepository.save(existingAlbum);
     }
 
     /**
@@ -150,20 +152,22 @@ public class AlbumService {
      *
      * @param request      the request
      * @param payload      the payload
-     * @param payloadImage the payload image
+     * @param image the image
      */
     @Validated(OnAlbumUpdate.class)
-    public void updateAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile payloadImage) {
+    public void updateAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile image) {
 
-        updateAlbumDetails(request, payload, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
+        Objects.requireNonNull(payload);
+        Objects.requireNonNull(image);
 
-        String imgUrl = this.amazonClientService.uploadFile(payloadImage, AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
+        Album existingAlbum = updateAlbumDetails(request, payload, contributorService::checkNonSeniorContributorEditsVerifiedContent);
 
+        String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
         String oldImgUrl = null;
 
         try
         {
-            oldImgUrl = getAlbumImgUrl(payload.getSurrogateKey());
+            oldImgUrl = getAlbumImgUrl(existingAlbum.getSurrogateKey());
         } finally
         {
             //delete old song image from S3 bucket
@@ -172,9 +176,9 @@ public class AlbumService {
                 this.amazonClientService.deleteFileFromS3Bucket(oldImgUrl, AmazonClientService.S3BucketFolders.SONG_FOLDER);
             }
         }
-        payload.setImgUrl(imgUrl);
+        existingAlbum.setImgUrl(imgUrl);
 
-        albumRepository.save(payload);
+        albumRepository.save(existingAlbum);
     }
 
     /**
@@ -205,7 +209,10 @@ public class AlbumService {
     @Validated(OnAlbumUpdate.class)
     public void resetAlbumArt(final HttpServletRequest request, final @Valid Album payload) {
 
-        updateAlbumDetails(request, payload, cont -> contributorService.checkNonSeniorContributorEditsVerifiedContent(cont, payload));
+        Objects.requireNonNull(payload);
+
+        // todo have to re-check
+        //updateAlbumDetails(request, payload, contributorService::checkNonSeniorContributorEditsVerifiedContent);
 
         payload.setImgUrl(albumDefaultImageUrl);
 
@@ -240,43 +247,43 @@ public class AlbumService {
         return albumSuggestedItemTreeSet;
     }
 
-    private void setArtistThroughSurrogateKey(final Album payload) {
-
-        String artistSurrogateKey = payload.getArtist().getSurrogateKey();
-
-        if (artistSurrogateKey != null)
-        {
-            payload.setArtist(artistService.getArtistBySurrogateKey(artistSurrogateKey));
-        }
-    }
-
     private String getAlbumImgUrl(String surrogateKey) {
 
         return albumRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(LYRICX_ERR_25.getErrorMessage(), LYRICX_ERR_25.name()));
     }
 
-    private void updateAlbumDetails(final HttpServletRequest request, final Album payload, Consumer<Contributor> contributorStatus) {
+    private Album updateAlbumDetails(final HttpServletRequest request, final Album payload, BiConsumer<Contributor, Album> contributorAlbumBiConsumer) {
 
-        Album oldAlbum = getAlbumBySurrogateKey(payload.getSurrogateKey());
-        payload.setId(oldAlbum.getId());
-
-        if (payload.getArtist() == null || payload.getArtist().getId() == null)
-        {
-            payload.setArtist(oldAlbum.getArtist());
-        }
-        else
-        {
-            this.setArtistThroughSurrogateKey(payload);
-        }
-
-        if (payload.getAddedBy() == null || payload.getAddedBy().getId() == null)
-        {
-            payload.setAddedBy(oldAlbum.getAddedBy());
-        }
+        Album existingAlbum = getAlbumBySurrogateKey(payload.getSurrogateKey());
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
-        contributorStatus.accept(contributor);
-        payload.setLastModifiedBy(contributor);
+
+        contributorAlbumBiConsumer.accept(contributor, existingAlbum);
+
+        //check non senior contributor tries to update the verified status
+        if (!contributor.isSeniorContributor() && payload.isApprovedStatus() != null) {
+            throw new ForbiddenException("Non-Senior Contributor tries to change the approved status of a Album", "LYRICX_ERR_32");
+        }
+
+        existingAlbum.setLastModifiedBy(contributor);
+
+        if(payload.getArtist() != null && isStringNotEmpty(payload.getArtist().getSurrogateKey())){
+            existingAlbum.setArtist(artistService.getArtistBySurrogateKey(payload.getArtist().getSurrogateKey()));
+        }
+
+        if(isStringNotEmpty(payload.getName())){
+            existingAlbum.setName(payload.getName());
+        }
+
+        if(payload.getYear() != null){
+            existingAlbum.setYear(payload.getYear());
+        }
+
+        if (payload.isApprovedStatus() != null){
+            existingAlbum.setApprovedStatus(payload.isApprovedStatus());
+        }
+
+        return existingAlbum;
     }
 
 }

@@ -74,6 +74,17 @@ public class ArtistGenreService {
     }
 
     /**
+     * Remove all artist genre int.
+     *
+     * @param artistId the artist id
+     * @return the int
+     */
+    public int removeAllArtistGenre(Long artistId) {
+
+        return artistGenreRepository.deleteAllByArtist_Id(artistId);
+    }
+
+    /**
      * Create artist genre.
      *
      * @param artist    the artist

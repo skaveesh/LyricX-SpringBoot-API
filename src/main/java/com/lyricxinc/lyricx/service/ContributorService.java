@@ -24,21 +24,44 @@ public class ContributorService {
 
     private final ContributorRepository contributorRepository;
 
+    /**
+     * The Contributor default image url.
+     */
     @Value("${com.lyricxinc.lyricx.contributorImageUrl}")
     String contributorDefaultImageUrl;
 
+    /**
+     * Instantiates a new Contributor service.
+     *
+     * @param contributorRepository the contributor repository
+     */
     @Autowired
     public ContributorService(ContributorRepository contributorRepository) {
 
         this.contributorRepository = contributorRepository;
     }
 
+    /**
+     * Gets contributor by id.
+     *
+     * @param id the id
+     * @return the contributor by id
+     */
     public Contributor getContributorById(String id) {
 
         //todo validate id in similar scenarios
         return contributorRepository.findById(Optional.ofNullable(id).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_04.getErrorMessage(), LYRICX_ERR_04.name()))).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_05.getErrorMessage(), LYRICX_ERR_05.name()));
     }
 
+    /**
+     * Add contributor.
+     *
+     * @param email       the email
+     * @param password    the password
+     * @param firstName   the first name
+     * @param lastName    the last name
+     * @param contactLink the contact link
+     */
     public void addContributor(String email, char[] password, String firstName, String lastName, String contactLink) {
 
         email = StringValidatorUtil.validateEmailAddress(email);
@@ -67,16 +90,32 @@ public class ContributorService {
         }
     }
 
+    /**
+     * Update contributor.
+     *
+     * @param contributor the contributor
+     */
     public void updateContributor(Contributor contributor) {
 
         contributorRepository.save(contributor);
     }
 
+    /**
+     * Remove contributor.
+     *
+     * @param id the id
+     */
     public void removeContributor(String id) {
 
         contributorRepository.deleteById(id);
     }
 
+    /**
+     * Gets contributor by http servlet request.
+     *
+     * @param request the request
+     * @return the contributor by http servlet request
+     */
     public Contributor getContributorByHttpServletRequest(HttpServletRequest request) {
 
         return getContributorById((String) request.getSession().getAttribute("userId"));
@@ -86,12 +125,12 @@ public class ContributorService {
      * verified contributor can update verified/non-verified artist
      * non-verified contributor only can update non-verified artist
      *
-     * @param contributor
-     * @param song
+     * @param contributor the contributor
+     * @param song the song
      */
     public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Song song) {
 
-        if (!contributor.isSeniorContributor() && song.isPublishedState())
+        if (!contributor.isSeniorContributor() && song.getPublishedState())
             throw new ForbiddenException(LYRICX_ERR_07.getErrorMessage(), LYRICX_ERR_07.name());
     }
 
@@ -99,8 +138,8 @@ public class ContributorService {
      * verified contributor can update verified/non-verified artist
      * non-verified contributor only can update non-verified artist
      *
-     * @param contributor
-     * @param artist
+     * @param contributor the contributor
+     * @param artist the song
      */
     public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Artist artist) {
 
@@ -112,8 +151,8 @@ public class ContributorService {
      * verified contributor can update verified/non-verified artist
      * non-verified contributor only can update non-verified artist
      *
-     * @param contributor
-     * @param album
+     * @param contributor the contributor
+     * @param album the album
      */
     public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Album album) {
 
