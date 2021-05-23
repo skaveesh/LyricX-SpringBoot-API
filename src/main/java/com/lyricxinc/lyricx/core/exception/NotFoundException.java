@@ -1,10 +1,12 @@
 package com.lyricxinc.lyricx.core.exception;
 
+import com.lyricxinc.lyricx.core.constant.Constants;
+
 public class NotFoundException extends LyricxBaseException {
 
-    public NotFoundException(String message, String code) {
+    public NotFoundException(Constants.ErrorMessageAndCode err) {
 
-        super(message, code);
+        super(err.getErrorMessage(), err.name());
     }
 
 }

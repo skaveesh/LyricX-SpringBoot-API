@@ -31,7 +31,7 @@ public class AdminInterceptor implements HandlerInterceptor {
                 decodeToken = FirebaseAuth.getInstance(FirebaseConfig.getAdminFirebaseApp()).verifyIdToken(authToken);
             } catch (Exception e)
             {
-                throw new ForbiddenException(LYRICX_ERR_16.getErrorMessage(), LYRICX_ERR_16.name());
+                throw new ForbiddenException(LYRICX_ERR_16);
             }
 
             String uid = decodeToken.getUid();
@@ -40,7 +40,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 
             if (!isEmailVerified)
             {
-                throw new ForbiddenException(LYRICX_ERR_19.getErrorMessage(), LYRICX_ERR_19.name());
+                throw new ForbiddenException(LYRICX_ERR_19);
             }
 
             System.out.println("email: " + email + " uid: " + uid + " issuer: " + decodeToken.getIssuer());
@@ -49,7 +49,7 @@ public class AdminInterceptor implements HandlerInterceptor {
         }
         else
         {
-            throw new ForbiddenException(LYRICX_ERR_16.getErrorMessage(), LYRICX_ERR_16.name());
+            throw new ForbiddenException(LYRICX_ERR_16);
         }
     }
 

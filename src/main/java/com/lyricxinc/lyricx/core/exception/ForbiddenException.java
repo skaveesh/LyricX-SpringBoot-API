@@ -1,10 +1,12 @@
 package com.lyricxinc.lyricx.core.exception;
 
+import com.lyricxinc.lyricx.core.constant.Constants;
+
 public class ForbiddenException extends LyricxBaseException {
 
-    public ForbiddenException(String message, String code) {
+    public ForbiddenException(Constants.ErrorMessageAndCode err) {
 
-        super(message, code);
+        super(err.getErrorMessage(), err.name());
     }
 
 }

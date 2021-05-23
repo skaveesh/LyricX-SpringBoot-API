@@ -85,7 +85,7 @@ public class Album {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Boolean approvedStatus;
 
-    @OneToMany(mappedBy = "album", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "album", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JsonManagedReference(value = "songReferenceAlbum")
     private Set<Song> songs;
 

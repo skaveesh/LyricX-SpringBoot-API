@@ -1,14 +1,12 @@
 package com.lyricxinc.lyricx.core.config;
 
-import com.lyricxinc.lyricx.core.converter.AlbumCreateUpdateRequestDTOToAlbumConverter;
-import com.lyricxinc.lyricx.core.converter.ArtistCreateUpdateRequestDTOToArtistConverter;
-import com.lyricxinc.lyricx.core.converter.GenreToGenreResponseDTOConverter;
-import com.lyricxinc.lyricx.core.converter.SongCreateUpdateRequestDTOToSongConverter;
+import com.lyricxinc.lyricx.core.converter.*;
 import com.lyricxinc.lyricx.core.interceptor.AdminInterceptor;
 import com.lyricxinc.lyricx.core.interceptor.ChanterInterceptor;
 import com.lyricxinc.lyricx.core.interceptor.ContributorInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -40,11 +38,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addConverter(new AlbumCreateUpdateRequestDTOToAlbumConverter());
         registry.addConverter(new ArtistCreateUpdateRequestDTOToArtistConverter());
         registry.addConverter(new GenreToGenreResponseDTOConverter());
+        registry.addConverter(new LanguageToLanguageResponseDTOConverter());
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("http://localhost:4200");
+        registry.addMapping("/**")
+                .allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name(), HttpMethod.DELETE.name())
+                .allowedOrigins("http://localhost:4200");
     }
 
 }

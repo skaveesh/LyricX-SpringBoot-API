@@ -1,10 +1,12 @@
 package com.lyricxinc.lyricx.core.exception;
 
+import com.lyricxinc.lyricx.core.constant.Constants;
+
 public class FileUploadException extends LyricxBaseException {
 
-    public FileUploadException(String message, String code) {
+    public FileUploadException(Constants.ErrorMessageAndCode err) {
 
-        super(message, code);
+        super(err.getErrorMessage(), err.name());
     }
 
 }

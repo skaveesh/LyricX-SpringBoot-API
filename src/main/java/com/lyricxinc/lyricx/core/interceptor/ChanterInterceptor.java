@@ -29,7 +29,7 @@ public class ChanterInterceptor implements HandlerInterceptor {
                 decodeToken = FirebaseAuth.getInstance(FirebaseConfig.getChanterFirebaseApp()).verifyIdToken(authToken);
             } catch (Exception e)
             {
-                throw new ForbiddenException(LYRICX_ERR_18.getErrorMessage(), LYRICX_ERR_18.name());
+                throw new ForbiddenException(LYRICX_ERR_18);
             }
 
             String uid = decodeToken.getUid();
@@ -41,7 +41,7 @@ public class ChanterInterceptor implements HandlerInterceptor {
         }
         else
         {
-            throw new ForbiddenException(LYRICX_ERR_18.getErrorMessage(), LYRICX_ERR_18.name());
+            throw new ForbiddenException(LYRICX_ERR_18);
         }
     }
 

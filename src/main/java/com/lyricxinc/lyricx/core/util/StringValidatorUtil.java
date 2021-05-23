@@ -16,7 +16,7 @@ public class StringValidatorUtil {
 
         if (string == null)
         {
-            throw new ForbiddenException(LYRICX_ERR_20.getErrorMessage(), LYRICX_ERR_20.name());
+            throw new ForbiddenException(LYRICX_ERR_20);
         }
     }
 
@@ -31,7 +31,7 @@ public class StringValidatorUtil {
 
         if(string.isEmpty())
         {
-            throw new ForbiddenException(LYRICX_ERR_20.getErrorMessage(), LYRICX_ERR_20.name());
+            throw new ForbiddenException(LYRICX_ERR_20);
         }
     }
 
@@ -42,7 +42,7 @@ public class StringValidatorUtil {
         email = email.trim();
 
         if (!EmailValidator.getInstance().isValid(email))
-            throw new ForbiddenException(LYRICX_ERR_21.getErrorMessage(), LYRICX_ERR_21.name());
+            throw new ForbiddenException(LYRICX_ERR_21);
 
         return email;
     }
@@ -54,7 +54,7 @@ public class StringValidatorUtil {
         name = name.trim();
 
         if (name.matches(".*\\d+.*"))
-            throw new ForbiddenException(LYRICX_ERR_22.getErrorMessage(), LYRICX_ERR_22.name());
+            throw new ForbiddenException(LYRICX_ERR_22);
 
         return name;
     }
@@ -66,7 +66,7 @@ public class StringValidatorUtil {
         url = url.trim();
 
         if (!UrlValidator.getInstance().isValid(url))
-            throw new ForbiddenException(LYRICX_ERR_23.getErrorMessage(), LYRICX_ERR_23.name());
+            throw new ForbiddenException(LYRICX_ERR_23);
 
         return url;
     }

@@ -1,11 +1,13 @@
 package com.lyricxinc.lyricx.repository;
 
+import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.model.Song;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,6 +23,14 @@ public interface SongRepository extends JpaRepository<Song, Long> {
      * @return the optional
      */
     Optional<Song> findBySurrogateKey(String surrogateKey);
+
+    /**
+     * Find by album optional.
+     *
+     * @param album the album
+     * @return the optional
+     */
+    Optional<List<Song>> findByAlbum(Album album);
 
     /**
      * Find img url using id optional.

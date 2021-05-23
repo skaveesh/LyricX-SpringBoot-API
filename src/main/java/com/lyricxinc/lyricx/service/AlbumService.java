@@ -74,7 +74,7 @@ public class AlbumService {
      */
     public Album getAlbumById(final Long id) {
 
-        return albumRepository.findById(id).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_11.getErrorMessage(), LYRICX_ERR_11.name()));
+        return albumRepository.findById(id).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_11));
     }
 
     /**
@@ -85,7 +85,7 @@ public class AlbumService {
      */
     public Album getAlbumBySurrogateKey(final String surrogateKey) {
 
-        return albumRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_11.getErrorMessage(), LYRICX_ERR_11.name()));
+        return albumRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_11));
     }
 
     /**
@@ -249,7 +249,7 @@ public class AlbumService {
 
     private String getAlbumImgUrl(String surrogateKey) {
 
-        return albumRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(LYRICX_ERR_25.getErrorMessage(), LYRICX_ERR_25.name()));
+        return albumRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(LYRICX_ERR_25));
     }
 
     private Album updateAlbumDetails(final HttpServletRequest request, final Album payload, BiConsumer<Contributor, Album> contributorAlbumBiConsumer) {
@@ -262,7 +262,7 @@ public class AlbumService {
 
         //check non senior contributor tries to update the verified status
         if (!contributor.isSeniorContributor() && payload.isApprovedStatus() != null) {
-            throw new ForbiddenException("Non-Senior Contributor tries to change the approved status of a Album", "LYRICX_ERR_32");
+            throw new ForbiddenException(LYRICX_ERR_32);
         }
 
         existingAlbum.setLastModifiedBy(contributor);

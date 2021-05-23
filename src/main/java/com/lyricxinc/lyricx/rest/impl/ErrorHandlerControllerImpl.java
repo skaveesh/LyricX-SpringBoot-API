@@ -17,7 +17,7 @@ public class ErrorHandlerControllerImpl implements org.springframework.boot.web.
     @Override
     public String handleError() {
 
-        throw new NotFoundException(LYRICX_ERR_15.getErrorMessage(), LYRICX_ERR_15.name());
+        throw new NotFoundException(LYRICX_ERR_15);
     }
 
     @Override

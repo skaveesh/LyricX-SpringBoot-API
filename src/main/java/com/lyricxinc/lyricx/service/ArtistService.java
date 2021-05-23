@@ -88,7 +88,7 @@ public class ArtistService {
      */
     public Artist getArtistById(long id) {
 
-        return artistRepository.findById(id).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_12.getErrorMessage(), LYRICX_ERR_12.name()));
+        return artistRepository.findById(id).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_12));
     }
 
     /**
@@ -99,7 +99,7 @@ public class ArtistService {
      */
     public Artist getArtistBySurrogateKey(String surrogateKey) {
 
-        return artistRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_12.getErrorMessage(), LYRICX_ERR_12.name()));
+        return artistRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_12));
     }
 
     /**
@@ -219,7 +219,7 @@ public class ArtistService {
 
     private String getArtistImgUrl(String surrogateKey) {
 
-        return artistRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(LYRICX_ERR_26.getErrorMessage(), LYRICX_ERR_26.name()));
+        return artistRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(LYRICX_ERR_26));
     }
 
     private Artist updateArtistDetails(final HttpServletRequest request, final Artist payload, BiConsumer<Contributor, Artist> contributorArtistBiConsumer) {
@@ -232,7 +232,7 @@ public class ArtistService {
 
         //check non senior contributor tries to update the verified status
         if (!contributor.isSeniorContributor() && payload.isApprovedStatus() != null) {
-            throw new ForbiddenException("Non-Senior Contributor tries to change the approved status of a Artist", "LYRICX_ERR_33");
+            throw new ForbiddenException(LYRICX_ERR_33);
         }
 
         existingArtist.setLastModifiedBy(contributor);
@@ -264,7 +264,7 @@ public class ArtistService {
     private List<Genre> getGenreListFromGenreIdList(List<Short> genreIdList){
 
         if(genreIdList == null || genreIdList.isEmpty()){
-            throw new ForbiddenException(LYRICX_ERR_31.getErrorMessage(), LYRICX_ERR_31.name());
+            throw new ForbiddenException(LYRICX_ERR_31);
         }
 
         Set<Short> genreIdSet = new HashSet<>(genreIdList);
@@ -272,7 +272,7 @@ public class ArtistService {
         List<Genre> genreList = genreService.findGenreByIds(genreIdSet);
 
         if(genreList.isEmpty()){
-            throw new ForbiddenException(LYRICX_ERR_31.getErrorMessage(), LYRICX_ERR_31.name());
+            throw new ForbiddenException(LYRICX_ERR_31);
         }
 
         return genreList;

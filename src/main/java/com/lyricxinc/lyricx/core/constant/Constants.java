@@ -59,42 +59,189 @@ public final class Constants {
 
 
     /**
-     * The type Error message and code.
+     * The enum Error message and code.
      */
     public enum ErrorMessageAndCode {
 
+        /**
+         * "Internal Server Error.
+         */
         LYRICX_ERR_00( "Internal Server Error."),
+
+        /**
+         * Requested API Method Doesn't Exists.
+         */
         LYRICX_ERR_01("Requested API Method Doesn't Exists."),
+
+        /**
+         * Server Database Error Occurred.
+         */
         LYRICX_ERR_02("Server Database Error Occurred."),
+
+        /**
+         * Error while uploading the image. Image should not exceed the size of 3Mb.
+         */
         LYRICX_ERR_03("Error while uploading the image. Image should not exceed the size of 3Mb."),
+
+        /**
+         * Unauthorized user
+         */
         LYRICX_ERR_04("Unauthorized user"),
+
+        /**
+         * Contributor cannot be found.
+         */
         LYRICX_ERR_05("Contributor cannot be found."),
+
+        /**
+         * Something went wrong while creating user account.
+         */
         LYRICX_ERR_06("Something went wrong while creating user account. "),
+
+        /**
+         * Only senior contributors can update verified song.
+         */
         LYRICX_ERR_07("Only senior contributors can update verified song."),
+
+        /**
+         * Only senior contributors can update verified artist.
+         */
         LYRICX_ERR_08("Only senior contributors can update verified artist."),
+
+        /**
+         * Only senior contributors can update verified album.
+         */
         LYRICX_ERR_09("Only senior contributors can update verified album."),
+
+        /**
+         * Requested song cannot be found.
+         */
         LYRICX_ERR_10("Requested song cannot be found."),
+
+        /**
+         * Requested album cannot be found.
+         */
         LYRICX_ERR_11("Requested album cannot be found."),
+
+        /**
+         * Requested artist cannot be found.
+         */
         LYRICX_ERR_12("Requested artist cannot be found."),
+
+        /**
+         * Error while uploading the file.
+         */
         LYRICX_ERR_13("Error while uploading the file."),
+
+        /**
+         * Requested language cannot be found.
+         */
         LYRICX_ERR_14("Requested language cannot be found."),
+
+        /**
+         * Requested resource cannot be found.
+         */
         LYRICX_ERR_15("Requested resource cannot be found."),
+
+        /**
+         * Provided admin credentials are not valid.
+         */
         LYRICX_ERR_16("Provided admin credentials are not valid."),
+
+        /**
+         * Provided contributor credentials are not valid.
+         */
         LYRICX_ERR_17("Provided contributor credentials are not valid."),
+
+        /**
+         * Provided chanter credentials are not valid.
+         */
         LYRICX_ERR_18("Provided chanter credentials are not valid."),
+
+        /**
+         * This account hasn't verified yet. Please verify.
+         */
         LYRICX_ERR_19("This account hasn't verified yet. Please verify."),
+
+        /**
+         * Required one or more property is empty.
+         */
         LYRICX_ERR_20("Required one or more property is empty."),
+
+        /**
+         * Provided E-Mail address is incorrect.
+         */
         LYRICX_ERR_21("Provided E-Mail address is incorrect."),
+
+        /**
+         * Name should not contain any numbers.
+         */
         LYRICX_ERR_22("Name should not contain any numbers."),
+
+        /**
+         * Entered contact link not valid.
+         */
         LYRICX_ERR_23("Entered contact link not valid."),
+
+        /**
+         * Could not find image url for the song.
+         */
         LYRICX_ERR_24("Could not find image url for the song."),
+
+        /**
+         * Could not find image url for the album.
+         */
         LYRICX_ERR_25("Could not find image url for the album."),
+
+        /**
+         * Could not find image url for the artist.
+         */
         LYRICX_ERR_26("Could not find image url for the artist."),
+
+        /**
+         * Type of suggestion could not be found.
+         */
         LYRICX_ERR_27("Type of suggestion could not be found."),
+
+        /**
+         * No song genres present.
+         */
         LYRICX_ERR_28("No song genres present."),
+
+        /**
+         * Artists not found while updating the song
+         */
         LYRICX_ERR_29("Artists not found while updating the song"),
+
+        /**
+         * Genres not found while updating the song
+         */
         LYRICX_ERR_30("Genres not found while updating the song"),
-        LYRICX_ERR_31("Genres not found while updating the artist");
+
+        /**
+         * Genres not found while updating the artist
+         */
+        LYRICX_ERR_31("Genres not found while updating the artist"),
+
+        /**
+         * Non-Senior Contributor tries to change the approved status of a Album
+         */
+        LYRICX_ERR_32("Non-Senior Contributor tries to change the approved status of a Album"),
+
+        /**
+         * Non-Senior Contributor tries to change the approved status of a Artist
+         */
+        LYRICX_ERR_33("Non-Senior Contributor tries to change the approved status of a Artist"),
+
+        /**
+         * Song already exists
+         */
+        LYRICX_ERR_34("Song already exists"),
+
+        /**
+         * Exception occurred while parsing the payload
+         */
+        LYRICX_ERR_35("Exception occurred while parsing the payload");
 
         private String errorMessage;
 
@@ -116,19 +263,74 @@ public final class Constants {
      */
     public enum SuccessMessage {
 
+        /**
+         * Success
+         */
         SUCCESS("Success"),
+
+        /**
+         * Album created successfully.
+         */
         ALBUM_CREATE_SUCCESS("Album created successfully."),
+
+        /**
+         * Album updated successfully.
+         */
         ALBUM_UPDATE_SUCCESS("Album updated successfully."),
+
+        /**
+         * Album artwork and details updated successfully.
+         */
         ALBUM_ARTWORK_UPDATE_SUCCESS("Album artwork and details updated successfully."),
+
+        /**
+         * Album artwork removed successfully.
+         */
         ALBUM_ARTWORK_REMOVE_SUCCESS("Album artwork removed successfully."),
+
+        /**
+         * Artist created successfully.
+         */
         ARTIST_CREATE_SUCCESS("Artist created successfully."),
+
+        /**
+         * Artist updated successfully.
+         */
         ARTIST_UPDATE_SUCCESS("Artist updated successfully."),
+
+        /**
+         * Artist image and details updated successfully.
+         */
         ARTIST_IMAGE_UPDATE_SUCCESS("Artist image and details updated successfully."),
+
+        /**
+         * Song added successfully.
+         */
         SONG_CREATE_SUCCESS("Song added successfully."),
+
+        /**
+         * Song updated successfully.
+         */
         SONG_UPDATE_SUCCESS("Song updated successfully."),
+
+        /**
+         * Song removed successfully.
+         */
         SONG_REMOVE_SUCCESS("Song removed successfully."),
+
+        /**
+         * Song album art updated successfully.
+         */
         SONG_ALBUM_ART_UPDATE_SUCCESS("Song album art updated successfully."),
+
+        /**
+         * Song album art removed successfully.
+         */
         SONG_ALBUM_ART_REMOVE_SUCCESS("Song album art removed successfully."),
+
+        /**
+         * Account created successfully.
+         */
         ACCOUNT_CREATE_SUCCESS("Account created successfully.");
 
         private String successMessage;

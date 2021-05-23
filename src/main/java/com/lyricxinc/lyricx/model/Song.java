@@ -9,12 +9,11 @@ import com.lyricxinc.lyricx.model.validator.group.OnSongUpdate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -68,6 +67,7 @@ public class Song {
     private String keywords;
 
     @Lob
+    @Type(type = "org.hibernate.type.BinaryType")
     @NotNull(groups = {OnSongCreate.class})
     @Column(length = 100000)
     private byte[] lyrics;

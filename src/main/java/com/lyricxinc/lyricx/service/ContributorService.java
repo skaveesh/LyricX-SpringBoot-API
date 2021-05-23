@@ -50,7 +50,7 @@ public class ContributorService {
     public Contributor getContributorById(String id) {
 
         //todo validate id in similar scenarios
-        return contributorRepository.findById(Optional.ofNullable(id).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_04.getErrorMessage(), LYRICX_ERR_04.name()))).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_05.getErrorMessage(), LYRICX_ERR_05.name()));
+        return contributorRepository.findById(Optional.ofNullable(id).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_04))).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_05));
     }
 
     /**
@@ -86,7 +86,7 @@ public class ContributorService {
 
         } catch (Exception e)
         {
-            throw new ForbiddenException(LYRICX_ERR_06.getErrorMessage() + e.getMessage(), LYRICX_ERR_06.name());
+            throw new ForbiddenException(LYRICX_ERR_06);
         }
     }
 
@@ -131,7 +131,7 @@ public class ContributorService {
     public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Song song) {
 
         if (!contributor.isSeniorContributor() && song.getPublishedState())
-            throw new ForbiddenException(LYRICX_ERR_07.getErrorMessage(), LYRICX_ERR_07.name());
+            throw new ForbiddenException(LYRICX_ERR_07);
     }
 
     /**
@@ -144,7 +144,7 @@ public class ContributorService {
     public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Artist artist) {
 
         if (!contributor.isSeniorContributor() && artist.isApprovedStatus())
-            throw new ForbiddenException(LYRICX_ERR_08.getErrorMessage(), LYRICX_ERR_08.name());
+            throw new ForbiddenException(LYRICX_ERR_08);
     }
 
     /**
@@ -157,7 +157,7 @@ public class ContributorService {
     public void checkNonSeniorContributorEditsVerifiedContent(Contributor contributor, Album album) {
 
         if (!contributor.isSeniorContributor() && album.isApprovedStatus())
-            throw new ForbiddenException(LYRICX_ERR_09.getErrorMessage(), LYRICX_ERR_09.name());
+            throw new ForbiddenException(LYRICX_ERR_09);
     }
 
 }
