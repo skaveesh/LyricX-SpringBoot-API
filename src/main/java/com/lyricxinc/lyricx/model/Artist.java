@@ -287,7 +287,12 @@ public class Artist {
      */
     public void setArtistGenres(Set<ArtistGenre> artistGenres) {
 
-        this.artistGenres = artistGenres;
+        if (this.artistGenres == null) {
+            this.artistGenres = artistGenres;
+        } else {
+            this.artistGenres.clear();
+            this.artistGenres.addAll(artistGenres);
+        }
     }
 
     /**
@@ -307,7 +312,12 @@ public class Artist {
      */
     public void setAlbums(Set<Album> albums) {
 
-        this.albums = albums;
+        if (this.albums == null) {
+            this.albums = albums;
+        } else {
+            this.albums.clear();
+            this.albums.addAll(albums);
+        }
     }
 
     /**
@@ -327,7 +337,12 @@ public class Artist {
      */
     public void setArtistSongs(Set<ArtistSong> artistSongs) {
 
-        this.artistSongs = artistSongs;
+        if (this.artistSongs == null) {
+            this.artistSongs = artistSongs;
+        } else {
+            this.artistSongs.clear();
+            this.artistSongs.addAll(artistSongs);
+        }
     }
 
 }

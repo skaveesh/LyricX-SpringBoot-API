@@ -322,7 +322,12 @@ public class Album {
      */
     public void setSongs(Set<Song> songs) {
 
-        this.songs = songs;
+        if (this.songs == null) {
+            this.songs = songs;
+        } else {
+            this.songs.clear();
+            this.songs.addAll(songs);
+        }
     }
 
     /**

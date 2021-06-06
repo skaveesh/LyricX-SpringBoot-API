@@ -25,7 +25,7 @@ public class LanguageControllerImpl implements LanguageController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> getAllGenres(HttpServletRequest request) {
+    public ResponseEntity<HttpResponseData> getAllLanguages(HttpServletRequest request) {
 
         return httpResponse.returnResponse(HttpStatus.OK, null, null, languageService.getAllLanguages());
     }

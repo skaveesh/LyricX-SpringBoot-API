@@ -81,7 +81,12 @@ public class Band {
 
     public void setBandChanters(Set<BandChanter> bandChanters) {
 
-        this.bandChanters = bandChanters;
+        if (this.bandChanters == null) {
+            this.bandChanters = bandChanters;
+        } else {
+            this.bandChanters.clear();
+            this.bandChanters.addAll(bandChanters);
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-package com.lyricxinc.lyricx.core.converter;
+package com.lyricxinc.lyricx.core.converter.tomodel;
 
 import com.lyricxinc.lyricx.core.dto.SongCreateUpdateRequestDTO;
 import com.lyricxinc.lyricx.model.Album;
@@ -18,6 +18,7 @@ public class SongCreateUpdateRequestDTOToSongConverter implements Converter<Song
         language.setLanguageCode(source.getLanguageCode());
 
         Song song = new Song();
+        song.setSurrogateKey(source.getSurrogateKey());
         song.setName(source.getName());
         song.setAlbum(album);
         song.setGuitarKey(source.getGuitarKey());

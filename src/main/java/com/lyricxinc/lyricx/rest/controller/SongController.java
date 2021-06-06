@@ -1,8 +1,8 @@
 package com.lyricxinc.lyricx.rest.controller;
 
+import com.lyricxinc.lyricx.core.dto.SongCreateUpdateRequestDTO;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
 import com.lyricxinc.lyricx.model.Song;
-import com.lyricxinc.lyricx.core.dto.SongCreateUpdateRequestDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +23,7 @@ public interface SongController {
      * @return the response entity
      */
     @PutMapping("save/details")
-    ResponseEntity<HttpResponseData> saveSong(HttpServletRequest request, @RequestBody SongCreateUpdateRequestDTO payload);
+    ResponseEntity<HttpResponseData> saveSong(HttpServletRequest request, @RequestPart("payload") SongCreateUpdateRequestDTO payload);
 
     /**
      * Save song response entity.
@@ -34,7 +34,7 @@ public interface SongController {
      * @return the response entity
      */
     @PutMapping("save/albumart")
-    ResponseEntity<HttpResponseData> saveSong(HttpServletRequest request, @RequestBody SongCreateUpdateRequestDTO payload, MultipartFile image);
+    ResponseEntity<HttpResponseData> saveSong(HttpServletRequest request, @RequestPart("payload") SongCreateUpdateRequestDTO payload, @RequestPart("image") MultipartFile image);
 
     /**
      * Create song response entity.
@@ -44,7 +44,7 @@ public interface SongController {
      * @return the response entity
      */
     @PutMapping("create/details")
-    ResponseEntity<HttpResponseData> createSong(HttpServletRequest request, @RequestBody SongCreateUpdateRequestDTO payload);
+    ResponseEntity<HttpResponseData> createSong(HttpServletRequest request, @RequestPart("payload") SongCreateUpdateRequestDTO payload);
 
     /**
      * Create song response entity.
@@ -55,7 +55,7 @@ public interface SongController {
      * @return the response entity
      */
     @PutMapping("create/albumart")
-    ResponseEntity<HttpResponseData> createSong(HttpServletRequest request, @RequestBody SongCreateUpdateRequestDTO payload, MultipartFile image);
+    ResponseEntity<HttpResponseData> createSong(HttpServletRequest request, @RequestPart("payload") SongCreateUpdateRequestDTO payload, @RequestPart("image") MultipartFile image);
 
     /**
      * Update song response entity.
@@ -65,7 +65,7 @@ public interface SongController {
      * @return the response entity
      */
     @PostMapping("update/details")
-    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, @RequestBody SongCreateUpdateRequestDTO payload);
+    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, @RequestPart("payload") SongCreateUpdateRequestDTO payload);
 
     /**
      * Update song response entity.
@@ -76,7 +76,7 @@ public interface SongController {
      * @return the response entity
      */
     @PostMapping("update/albumart")
-    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, @RequestBody SongCreateUpdateRequestDTO payload, MultipartFile image);
+    ResponseEntity<HttpResponseData> updateSong(HttpServletRequest request, @RequestPart("payload") SongCreateUpdateRequestDTO payload, @RequestPart("image") MultipartFile image);
 
     /**
      * Remove album art response entity.

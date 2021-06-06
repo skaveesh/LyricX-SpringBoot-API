@@ -13,6 +13,7 @@ import com.lyricxinc.lyricx.repository.ContributorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -20,6 +21,7 @@ import java.util.Optional;
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 
 @Service
+@Transactional
 public class ContributorService {
 
     private final ContributorRepository contributorRepository;

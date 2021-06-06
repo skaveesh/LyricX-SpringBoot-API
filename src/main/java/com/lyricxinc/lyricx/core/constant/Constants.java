@@ -241,7 +241,22 @@ public final class Constants {
         /**
          * Exception occurred while parsing the payload
          */
-        LYRICX_ERR_35("Exception occurred while parsing the payload");
+        LYRICX_ERR_35("Exception occurred while parsing the payload"),
+
+        /**
+         * Exception occurred while parsing the resource
+         */
+        LYRICX_ERR_36("Exception occurred while parsing the resource"),
+
+        /**
+         * Exception occurred while saving the song
+         */
+        LYRICX_ERR_37("Exception occurred while saving the song"),
+
+        /**
+         * Invalid ID found while updating the song
+         */
+        LYRICX_ERR_38("Invalid ID found while updating the song");
 
         private String errorMessage;
 
@@ -302,6 +317,11 @@ public final class Constants {
          * Artist image and details updated successfully.
          */
         ARTIST_IMAGE_UPDATE_SUCCESS("Artist image and details updated successfully."),
+
+        /**
+         * Song saved successfully.
+         */
+        SONG_SAVE_SUCCESS("Song saved successfully."),
 
         /**
          * Song added successfully.

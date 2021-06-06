@@ -17,6 +17,7 @@ import java.util.List;
  * The type Artist genre service.
  */
 @Service
+@Transactional
 public class ArtistGenreService {
 
     private final ArtistGenreRepository artistGenreRepository;

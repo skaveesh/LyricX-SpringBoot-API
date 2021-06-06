@@ -22,7 +22,7 @@ public class AlbumSuggestOperation implements MediaSuggestOperation {
     @Override
     public <T extends SuggestedItem> Set<T> readMedia(String name) {
 
-        TreeSet<AlbumSuggestedItem> x = new TreeSet<>(Comparator.comparing(AlbumSuggestedItem::getAlbumName));
+        TreeSet<AlbumSuggestedItem> x = new TreeSet<>(Comparator.comparing((album)-> album.getAlbumName() + '$' + album.getSurrogateKey()));
         x.add(new AlbumSuggestedItem("a5", "sam5"));
         x.add(new AlbumSuggestedItem("a2", "sam2"));
         x.add(new AlbumSuggestedItem("a3", "samagw"));

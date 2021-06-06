@@ -72,7 +72,12 @@ public class Chanter {
 
     public void setBandChanters(Set<BandChanter> bandChanters) {
 
-        this.bandChanters = bandChanters;
+        if (this.bandChanters == null) {
+            this.bandChanters = bandChanters;
+        } else {
+            this.bandChanters.clear();
+            this.bandChanters.addAll(bandChanters);
+        }
     }
 
     public Set<Favourite> getFavourites() {
@@ -82,7 +87,12 @@ public class Chanter {
 
     public void setFavourites(Set<Favourite> favourites) {
 
-        this.favourites = favourites;
+        if (this.favourites == null) {
+            this.favourites = favourites;
+        } else {
+            this.favourites.clear();
+            this.favourites.addAll(favourites);
+        }
     }
 
     public Set<Playlist> getPlaylists() {
@@ -92,7 +102,12 @@ public class Chanter {
 
     public void setPlaylists(Set<Playlist> playlists) {
 
-        this.playlists = playlists;
+        if (this.playlists == null) {
+            this.playlists = playlists;
+        } else {
+            this.playlists.clear();
+            this.playlists.addAll(playlists);
+        }
     }
 
     public Set<ChanterFriend> getChanters() {
@@ -102,7 +117,12 @@ public class Chanter {
 
     public void setChanters(Set<ChanterFriend> chanters) {
 
-        this.chanters = chanters;
+        if (this.chanters == null) {
+            this.chanters = chanters;
+        } else {
+            this.chanters.clear();
+            this.chanters.addAll(chanters);
+        }
     }
 
     public Set<ChanterFriend> getFriends() {
@@ -112,7 +132,12 @@ public class Chanter {
 
     public void setFriends(Set<ChanterFriend> friends) {
 
-        this.friends = friends;
+        if (this.friends == null) {
+            this.friends = friends;
+        } else {
+            this.friends.clear();
+            this.friends.addAll(friends);
+        }
     }
 
 }

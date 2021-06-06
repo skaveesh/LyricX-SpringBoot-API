@@ -11,5 +11,5 @@ import javax.servlet.http.HttpServletRequest;
 public interface LanguageController {
 
     @GetMapping("all")
-    ResponseEntity<HttpResponseData> getAllGenres(HttpServletRequest request);
+    ResponseEntity<HttpResponseData> getAllLanguages(HttpServletRequest request);
 }

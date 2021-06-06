@@ -1,6 +1,7 @@
 package com.lyricxinc.lyricx.core.config;
 
-import com.lyricxinc.lyricx.core.converter.*;
+import com.lyricxinc.lyricx.core.converter.todto.SongToSongCreateUpdateRequestDTOConverter;
+import com.lyricxinc.lyricx.core.converter.tomodel.*;
 import com.lyricxinc.lyricx.core.interceptor.AdminInterceptor;
 import com.lyricxinc.lyricx.core.interceptor.ChanterInterceptor;
 import com.lyricxinc.lyricx.core.interceptor.ContributorInterceptor;
@@ -34,11 +35,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
 
+        // to model
         registry.addConverter(new SongCreateUpdateRequestDTOToSongConverter());
         registry.addConverter(new AlbumCreateUpdateRequestDTOToAlbumConverter());
         registry.addConverter(new ArtistCreateUpdateRequestDTOToArtistConverter());
         registry.addConverter(new GenreToGenreResponseDTOConverter());
         registry.addConverter(new LanguageToLanguageResponseDTOConverter());
+
+        // to dto
+        registry.addConverter(new SongToSongCreateUpdateRequestDTOConverter());
     }
 
     @Override

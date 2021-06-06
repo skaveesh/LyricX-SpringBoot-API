@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.*;
 
-import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -217,6 +217,51 @@ public class Song {
     public void setLyrics(@NotBlank byte[] lyrics) {
 
         this.lyrics = lyrics;
+    }
+
+    /**
+     * Sets song genres.
+     *
+     * @param songGenres the song genres
+     */
+    public void setSongGenres(Set<SongGenre> songGenres) {
+
+        if (this.songGenres == null) {
+            this.songGenres = songGenres;
+        } else {
+            this.songGenres.clear();
+            this.songGenres.addAll(songGenres);
+        }
+    }
+
+    /**
+     * Sets artist songs.
+     *
+     * @param artistSongs the artist songs
+     */
+    public void setArtistSongs(Set<ArtistSong> artistSongs) {
+
+        if (this.artistSongs == null) {
+            this.artistSongs = artistSongs;
+        } else {
+            this.artistSongs.clear();
+            this.artistSongs.addAll(artistSongs);
+        }
+    }
+
+    /**
+     * Sets song modifies.
+     *
+     * @param songModifies the song modifies
+     */
+    public void setSongModifies(Set<SongModify> songModifies) {
+
+        if (this.songModifies == null) {
+            this.songModifies = songModifies;
+        } else {
+            this.songModifies.clear();
+            this.songModifies.addAll(songModifies);
+        }
     }
 
 }

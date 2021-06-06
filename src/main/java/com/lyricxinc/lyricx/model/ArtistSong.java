@@ -3,12 +3,22 @@ package com.lyricxinc.lyricx.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
+@Getter
+@Setter
+@NoArgsConstructor
 public class ArtistSong {
 
     @Id
@@ -31,49 +41,9 @@ public class ArtistSong {
     @JsonBackReference(value = "artistSongsReferenceSong")
     private Song song;
 
-    public ArtistSong() {
-
-    }
-
     public ArtistSong(Artist artist, Song song) {
 
         this.artist = artist;
         this.song = song;
     }
-
-    public Long getId() {
-
-        return id;
-    }
-
-    public void setId(Long id) {
-
-        this.id = id;
-    }
-
-    public LocalDateTime getAddedDate() {
-
-        return addedDate;
-    }
-
-    public Artist getArtist() {
-
-        return artist;
-    }
-
-    public void setArtist(Artist artist) {
-
-        this.artist = artist;
-    }
-
-    public Song getSong() {
-
-        return song;
-    }
-
-    public void setSong(Song song) {
-
-        this.song = song;
-    }
-
 }

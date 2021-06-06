@@ -14,6 +14,7 @@ import com.lyricxinc.lyricx.service.suggest.MediaSuggestOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.HtmlUtils;
@@ -24,14 +25,15 @@ import java.util.*;
 import java.util.function.BiConsumer;
 
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
+import static com.lyricxinc.lyricx.core.util.StringValidatorUtil.isStringNotEmpty;
 import static com.lyricxinc.lyricx.service.suggest.MediaSuggestFactory.MediaType.ALBUM;
-import static com.lyricxinc.lyricx.core.util.StringValidatorUtil.*;
 
 /**
  * The type Album service.
  */
 @Validated
 @Service
+@Transactional
 public class AlbumService {
 
     private final AlbumRepository albumRepository;
@@ -229,7 +231,7 @@ public class AlbumService {
 
         MediaSuggestOperation albumSuggestOperation = mediaSuggestFactory.getMediaSuggestion(ALBUM);
 
-        TreeSet<AlbumSuggestedItem> albumSuggestedItemTreeSet = new TreeSet<>(Comparator.comparing(AlbumSuggestedItem::getAlbumName));
+        TreeSet<AlbumSuggestedItem> albumSuggestedItemTreeSet = new TreeSet<>(Comparator.comparing((album)-> album.getAlbumName() + '$' + album.getSurrogateKey()));
         albumSuggestedItemTreeSet.addAll(albumSuggestOperation.readMedia(HtmlUtils.htmlEscape(albumSuggest.getAlbumName())));
 
         if (albumSuggestedItemTreeSet.size() < 6)

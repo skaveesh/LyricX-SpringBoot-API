@@ -7,16 +7,18 @@ import com.lyricxinc.lyricx.repository.LanguageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.LYRICX_ERR_14;
 
 /**
  * The type Language service.
  */
 @Service
+@Transactional
 public class LanguageService {
 
     private final LanguageRepository languageRepository;

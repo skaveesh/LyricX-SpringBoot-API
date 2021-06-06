@@ -105,7 +105,12 @@ public class Playlist {
 
     public void setPlaylistSongs(Set<PlaylistSong> playlistSongs) {
 
-        this.playlistSongs = playlistSongs;
+        if (this.playlistSongs == null) {
+            this.playlistSongs = playlistSongs;
+        } else {
+            this.playlistSongs.clear();
+            this.playlistSongs.addAll(playlistSongs);
+        }
     }
 
 }

@@ -25,22 +25,22 @@ public class BatchInsert<T, S, R> {
      */
     public void process(S s, List<T> tList, EntityManager entityManager, BiFunction<T, S, R> strBiFunction) {
 
-        if (s == null || tList == null)
-        {
+        if (s == null || tList == null) {
             return;
         }
 
-        for (int i = 0; i < tList.size(); i++)
-        {
-            if (i > 0 && i % Constants.AppConstants.BATCH_SIZE == 0)
-            {
+        for (int i = 0; i < tList.size(); i++) {
+            if (i > 0 && i % Constants.AppConstants.BATCH_SIZE == 0) {
                 entityManager.flush();
                 entityManager.clear();
             }
-            if (tList.get(i) != null)
-            {
+            if (tList.get(i) != null) {
                 R r = strBiFunction.apply(tList.get(i), s);
                 entityManager.persist(r);
+            }
+            if (tList.size() - 1 == i) {
+                entityManager.flush();
+                entityManager.clear();
             }
         }
     }

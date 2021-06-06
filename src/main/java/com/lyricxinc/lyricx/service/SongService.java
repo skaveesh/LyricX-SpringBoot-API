@@ -11,6 +11,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,10 +21,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
+import static com.lyricxinc.lyricx.core.util.StringValidatorUtil.getUuidOrNull;
+import static com.lyricxinc.lyricx.core.util.StringValidatorUtil.isStringNotEmpty;
 
 /**
  * The type Song service.
@@ -30,6 +35,7 @@ import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*
 @Log4j2
 @Validated
 @Service
+@Transactional
 public class SongService {
 
     private final SongRepository songRepository;
@@ -98,39 +104,50 @@ public class SongService {
     }
 
     /**
-     * Save song.
+     * Save song song.
      *
      * @param request                the request
      * @param payload                the payload
      * @param artistSurrogateKeyList the artist surrogate key list
      * @param genreIdList            the genre id list
      * @param image                  the image
+     * @return the song
      */
-    public void saveSong(HttpServletRequest request, final @Valid Song payload, List<String> artistSurrogateKeyList, List<Short> genreIdList, MultipartFile image) {
+    public Song saveSong(HttpServletRequest request, final @Valid Song payload, List<String> artistSurrogateKeyList, List<Short> genreIdList, MultipartFile image) {
+
+        Song song;
 
         try {
-            createSong(request, payload, artistSurrogateKeyList, genreIdList, image);
+            if(payload.getSurrogateKey() == null || payload.getSurrogateKey().isEmpty()){
+                song = createSong(request, payload, artistSurrogateKeyList, genreIdList, image);
+            }else {
+                log.warn("Song already exists. Discarding creating a new one");
+                throw new ForbiddenException(LYRICX_ERR_34);
+            }
         } catch (ForbiddenException ex) {
-            if (LYRICX_ERR_34.name().equals(ex.getCode())) {
+             if (LYRICX_ERR_34.name().equals(ex.getCode()) && payload.getSurrogateKey() != null && !payload.getSurrogateKey().isEmpty()) {
                 log.warn("Song already exists. Proceeding with updating", ex);
-                updateSong(request, payload, artistSurrogateKeyList, genreIdList, image);
+                song = updateSong(request, payload, artistSurrogateKeyList, genreIdList, image);
             } else {
                 throw ex;
             }
         }
+
+        return songRepository.findById(song.getId()).orElse(null);
     }
 
     /**
-     * Create song.
+     * Create song song.
      *
      * @param request                the request
      * @param payload                the payload
      * @param artistSurrogateKeyList the artist surrogate key list
      * @param genreIdList            the genre id list
      * @param image                  the image
+     * @return the song
      */
     @Validated(OnSongCreate.class)
-    public void createSong(HttpServletRequest request, final @Valid Song payload, List<String> artistSurrogateKeyList, List<Short> genreIdList, MultipartFile image) {
+    public Song createSong(HttpServletRequest request, final @Valid Song payload, List<String> artistSurrogateKeyList, List<Short> genreIdList, MultipartFile image) {
 
         Album album = albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey());
 
@@ -154,30 +171,51 @@ public class SongService {
 
         Song song = songRepository.save(payload);
 
-        updateSongArtistList(song, artistSurrogateKeyList);
-        updateSongGenreList(song, genreIdList);
+        try{
+            updateSongArtistList(song, artistSurrogateKeyList, false);
+        } catch (Exception ex) {
+            if (ex instanceof LyricxBaseException && ((LyricxBaseException)ex).getCode().equals(LYRICX_ERR_29.name())) {
+                // not a issue when song doesn't have any artists other than main artist
+                log.warn("Didn't update song artist list", ex);
+            } else {
+                log.error("Error while saving the song. Rolling back changes", ex);
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                throw new ForbiddenException(LYRICX_ERR_37);
+            }
+        }
+
+        try{
+            updateSongGenreList(song, genreIdList, false);
+        } catch (Exception ex) {
+            log.error("Didn't update song genre list. Error while saving the song. Rolling back changes", ex);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            throw ex;
+        }
+
+        return songRepository.findById(song.getId()).orElse(null);
     }
 
     /**
-     * Update song.
+     * Update song song.
      *
      * @param request                the request
      * @param payload                the payload
      * @param artistSurrogateKeyList the artist surrogate key list
      * @param genreIdList            the genre id list
      * @param image                  the image
+     * @return the song
      */
     @Validated(OnSongUpdate.class)
-    public void updateSong(final HttpServletRequest request, final @Valid Song payload, List<String> artistSurrogateKeyList, List<Short> genreIdList, MultipartFile image) {
+    public Song updateSong(final HttpServletRequest request, final @Valid Song payload, List<String> artistSurrogateKeyList, List<Short> genreIdList, MultipartFile image) {
 
-        updateSongDetails(request, payload, image, contributorService::checkNonSeniorContributorEditsVerifiedContent);
+        Song modifiedSong = updateSongDetails(request, payload, image, contributorService::checkNonSeniorContributorEditsVerifiedContent);
 
-        Song song = songRepository.save(payload);
+        Song song = songRepository.save(modifiedSong);
 
         try {
-            updateSongArtistList(song, artistSurrogateKeyList);
+            updateSongArtistList(song, artistSurrogateKeyList, true);
 
-            updateSongGenreList(song, genreIdList);
+            updateSongGenreList(song, genreIdList, true);
         } catch (LyricxBaseException ex) {
             if (ex.getCode().equals(LYRICX_ERR_29.name())) {
                 log.warn("Didn't update song artist list", ex);
@@ -186,6 +224,8 @@ public class SongService {
                 log.warn("Didn't update song generic list", ex);
             }
         }
+
+        return songRepository.findById(song.getId()).orElse(null);
     }
 
     /**
@@ -227,6 +267,10 @@ public class SongService {
         songRepository.deleteById(id);
     }
 
+    private void removeSong(Song song) {
+        songRepository.delete(song);
+    }
+
     private String getSongImgUrl(String surrogateKey) {
 
         return songRepository.findImgUrlUsingSurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(LYRICX_ERR_24));
@@ -237,48 +281,74 @@ public class SongService {
         return songRepository.findImgUrlUsingId(id).orElseThrow(() -> new NotFoundException(LYRICX_ERR_24));
     }
 
-    private void updateSongDetails(final HttpServletRequest request, final Song payload, @Nullable final MultipartFile image, BiConsumer<Contributor, Song> contributorSongBiConsumer) {
+    private Song updateSongDetails(final HttpServletRequest request, final Song payload, @Nullable final MultipartFile image, BiConsumer<Contributor, Song> contributorSongBiConsumer) {
 
-        Song oldSong = getSongBySurrogateKey(payload.getSurrogateKey());
+        Optional.ofNullable(getUuidOrNull(payload.getSurrogateKey())).orElseThrow(
+                () -> new ForbiddenException(LYRICX_ERR_38));
+
+        Song existingSong = getSongBySurrogateKey(payload.getSurrogateKey());
 
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
 
-        contributorSongBiConsumer.accept(contributor, oldSong);
+        contributorSongBiConsumer.accept(contributor, existingSong);
 
-        payload.setLastModifiedBy(contributor);
-        payload.setId(oldSong.getId());
+        if (isStringNotEmpty(payload.getName())) {
+            existingSong.setName(payload.getName());
+        }
+
+        if (payload.getAlbum() != null && getUuidOrNull(payload.getAlbum().getSurrogateKey()) != null
+                && !payload.getAlbum().getSurrogateKey().equals(existingSong.getAlbum().getSurrogateKey())) {
+            Album newAlbum = albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey());
+            existingSong.setAlbum(newAlbum);
+        }
+
+        existingSong.setGuitarKey(payload.getGuitarKey());
+
+        existingSong.setBeat(payload.getBeat());
+
+        if (payload.getLanguage() != null && payload.getLanguage().getLanguageCode() != null && !payload.getLanguage().getLanguageCode().equals(
+                existingSong.getLanguage().getLanguageCode())) {
+            Language newLanguage = languageService.getLanguageByLanguageCode(payload.getLanguage().getLanguageCode());
+            existingSong.setLanguage(newLanguage);
+        }
+
+        if (isStringNotEmpty(payload.getKeywords())) {
+            existingSong.setKeywords(payload.getKeywords());
+        }
+
+        if (payload.getLyrics().length > 0) {
+            existingSong.setLyrics(payload.getLyrics());
+        }
+
+        if (isStringNotEmpty(payload.getYouTubeLink())) {
+            existingSong.setYouTubeLink(payload.getYouTubeLink());
+        }
+
+        existingSong.setSpotifyLink(payload.getSpotifyLink());
+
+        existingSong.setDeezerLink(payload.getDeezerLink());
+
+        if (Boolean.TRUE.equals(payload.getIsExplicit()) || Boolean.FALSE.equals(payload.getIsExplicit())) {
+            existingSong.setIsExplicit(payload.getIsExplicit());
+        }
 
         if (image != null) {
             String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.SONG_FOLDER);
 
-            String oldImgUrl = oldSong.getImgUrl();
+            String oldImgUrl = existingSong.getImgUrl();
 
             //delete old song image from S3 bucket
             if (oldImgUrl != null) {
-                this.amazonClientService.deleteFileFromS3Bucket(oldImgUrl, AmazonClientService.S3BucketFolders.SONG_FOLDER);
+                this.amazonClientService.deleteFileFromS3Bucket(oldImgUrl,
+                                                                AmazonClientService.S3BucketFolders.SONG_FOLDER);
             }
 
-            payload.setImgUrl(imgUrl);
+            existingSong.setImgUrl(imgUrl);
         }
 
-        if (payload.getAlbum() == null || payload.getAlbum().getSurrogateKey() == null) {
-            payload.setAlbum(oldSong.getAlbum());
-        } else {
-            Album newAlbum = albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey());
+        existingSong.setLastModifiedBy(contributor);
 
-            if (image == null && oldSong.getImgUrl() != null) {
-                payload.setImgUrl(newAlbum.getImgUrl());
-            }
-            payload.setAlbum(newAlbum);
-        }
-
-        if (payload.getLanguage() == null || payload.getLanguage().getLanguageCode() == null) {
-            payload.setLanguage(oldSong.getLanguage());
-        } else {
-            Language newLanguage = languageService.getLanguageByLanguageCode(payload.getLanguage().getLanguageCode());
-            payload.setLanguage(newLanguage);
-        }
-
+        return existingSong;
     }
 
     /**
@@ -287,21 +357,31 @@ public class SongService {
      * @param song                   the song
      * @param artistSurrogateKeyList the artist surrogate key list
      */
-    public void updateSongArtistList(Song song, List<String> artistSurrogateKeyList) {
+    public void updateSongArtistList(final Song song, final List<String> artistSurrogateKeyList, final boolean deleteExisting) {
 
-        if(song == null || artistSurrogateKeyList == null) {
+        if (song == null || artistSurrogateKeyList == null) {
             throw new ForbiddenException(LYRICX_ERR_29);
         }
 
         Set<String> artistSurrogateKeySet = new HashSet<>(artistSurrogateKeyList);
 
-        List<Artist> artistList = artistService.findArtistsBySurrogateKeys(artistSurrogateKeySet);
-
-        if(artistList.isEmpty()){
+        if (artistSurrogateKeySet.isEmpty()) {
             throw new ForbiddenException(LYRICX_ERR_29);
         }
 
-        artistSongService.createArtistSong(song, artistList);
+        List<Artist> artistList = artistService.findArtistsBySurrogateKeys(artistSurrogateKeySet);
+
+        if (artistList.isEmpty()) {
+            throw new ForbiddenException(LYRICX_ERR_29);
+        }
+
+        Set<ArtistSong> existingArtistSongSet = song.getArtistSongs();
+
+        if (deleteExisting && existingArtistSongSet != null && !existingArtistSongSet.isEmpty()) {
+            artistSongService.deleteArtistSongInBatch(existingArtistSongSet);
+        }
+
+        artistSongService.createArtistSongInBatch(song, artistList);
     }
 
     /**
@@ -310,18 +390,28 @@ public class SongService {
      * @param song        the song
      * @param genreIdList the genre id list
      */
-    public void updateSongGenreList(Song song, List<Short> genreIdList){
+    public void updateSongGenreList(final Song song, final List<Short> genreIdList, final boolean deleteExisting) {
 
-        if(song == null || genreIdList == null){
+        if (song == null || genreIdList == null) {
             throw new ForbiddenException(LYRICX_ERR_30);
         }
 
         Set<Short> genreIdSet = new HashSet<>(genreIdList);
 
+        if (genreIdSet.isEmpty()) {
+            throw new ForbiddenException(LYRICX_ERR_30);
+        }
+
         List<Genre> genreList = genreService.findGenreByIds(genreIdSet);
 
-        if(genreList.isEmpty()){
+        if (genreList.isEmpty()) {
             throw new ForbiddenException(LYRICX_ERR_30);
+        }
+
+        Set<SongGenre> existingSongGenreSet = song.getSongGenres();
+
+        if (deleteExisting && existingSongGenreSet != null && !existingSongGenreSet.isEmpty()) {
+            songGenreService.deleteSongGenreInBatch(existingSongGenreSet);
         }
 
         songGenreService.createSongGenre(song, genreList);

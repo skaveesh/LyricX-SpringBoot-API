@@ -4,6 +4,8 @@ import com.lyricxinc.lyricx.core.exception.ForbiddenException;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.commons.validator.routines.UrlValidator;
 
+import java.util.UUID;
+
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 
 public class StringValidatorUtil {
@@ -18,6 +20,11 @@ public class StringValidatorUtil {
         {
             throw new ForbiddenException(LYRICX_ERR_20);
         }
+    }
+
+    public static <T> String toStringOrNull(T t) {
+
+        return t != null ? t.toString() : null;
     }
 
     public static boolean isStringNotEmpty(String string) {
@@ -69,6 +76,14 @@ public class StringValidatorUtil {
             throw new ForbiddenException(LYRICX_ERR_23);
 
         return url;
+    }
+
+    public static String getUuidOrNull(String uuid) {
+
+        if (UUID.fromString(uuid).toString().equals(uuid)) {
+            return uuid;
+        }
+        return null;
     }
 
 }

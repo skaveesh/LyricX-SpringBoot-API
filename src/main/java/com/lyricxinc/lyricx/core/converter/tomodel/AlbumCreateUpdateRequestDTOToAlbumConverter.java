@@ -1,4 +1,4 @@
-package com.lyricxinc.lyricx.core.converter;
+package com.lyricxinc.lyricx.core.converter.tomodel;
 
 import com.lyricxinc.lyricx.core.dto.AlbumCreateUpdateRequestDTO;
 import com.lyricxinc.lyricx.model.Album;

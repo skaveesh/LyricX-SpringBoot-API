@@ -19,7 +19,7 @@ public class ArtistSuggestOperation implements MediaSuggestOperation {
     @Override
     public <T extends SuggestedItem> Set<T> readMedia(String name) {
 
-        TreeSet<ArtistSuggestedItem> x = new TreeSet<>(Comparator.comparing(ArtistSuggestedItem::getArtistName));
+        TreeSet<ArtistSuggestedItem> x = new TreeSet<>(Comparator.comparing((artist)-> artist.getArtistName() + '$' + artist.getSurrogateKey()));
         x.add(new ArtistSuggestedItem("artist5", "ASam5"));
         x.add(new ArtistSuggestedItem("artist2", "ASam2"));
         x.add(new ArtistSuggestedItem("artist3", "ASamagw"));
