@@ -1,6 +1,6 @@
 package com.lyricxinc.lyricx.service;
 
-import com.lyricxinc.lyricx.core.dto.GenreResponseDTO;
+import com.lyricxinc.lyricx.core.dto.GenreDTO;
 import com.lyricxinc.lyricx.model.Genre;
 import com.lyricxinc.lyricx.repository.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,8 +73,8 @@ public class GenreService {
      *
      * @return the all genres
      */
-    public List<GenreResponseDTO> getAllGenres() {
-        return genreRepository.findAll().stream().map(genre -> conversionService.convert(genre, GenreResponseDTO.class))
+    public List<GenreDTO> getAllGenres() {
+        return genreRepository.findAll().stream().map(genre -> conversionService.convert(genre, GenreDTO.class))
                 .collect(Collectors.toList());
     }
 

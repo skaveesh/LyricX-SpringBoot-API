@@ -1,15 +1,15 @@
 package com.lyricxinc.lyricx.core.converter.tomodel;
 
-import com.lyricxinc.lyricx.core.dto.SongCreateUpdateRequestDTO;
+import com.lyricxinc.lyricx.core.dto.SongDTO;
 import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.model.Language;
 import com.lyricxinc.lyricx.model.Song;
 import org.springframework.core.convert.converter.Converter;
 
-public class SongCreateUpdateRequestDTOToSongConverter implements Converter<SongCreateUpdateRequestDTO, Song> {
+public class SongDTOToSongConverter implements Converter<SongDTO, Song> {
 
     @Override
-    public Song convert(SongCreateUpdateRequestDTO source) {
+    public Song convert(SongDTO source) {
 
         Album album = new Album();
         album.setSurrogateKey(source.getAlbumSurrogateKey());
@@ -29,6 +29,7 @@ public class SongCreateUpdateRequestDTOToSongConverter implements Converter<Song
         song.setYouTubeLink(source.getYouTubeLink());
         song.setSpotifyLink(source.getSpotifyLink());
         song.setDeezerLink(source.getDeezerLink());
+        song.setAppleMusicLink(source.getAppleMusicLink());
         song.setIsExplicit(source.getIsExplicit());
 
         return song;

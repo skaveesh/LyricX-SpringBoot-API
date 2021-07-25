@@ -1,6 +1,9 @@
 package com.lyricxinc.lyricx.core.config;
 
-import com.lyricxinc.lyricx.core.converter.todto.SongToSongCreateUpdateRequestDTOConverter;
+import com.lyricxinc.lyricx.core.converter.todto.AlbumToAlbumDTOConverter;
+import com.lyricxinc.lyricx.core.converter.todto.ArtistToArtistDTOConverter;
+import com.lyricxinc.lyricx.core.converter.todto.ContributorToContributorDTOConverter;
+import com.lyricxinc.lyricx.core.converter.todto.SongToSongDTOConverter;
 import com.lyricxinc.lyricx.core.converter.tomodel.*;
 import com.lyricxinc.lyricx.core.interceptor.AdminInterceptor;
 import com.lyricxinc.lyricx.core.interceptor.ChanterInterceptor;
@@ -36,14 +39,17 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
 
         // to model
-        registry.addConverter(new SongCreateUpdateRequestDTOToSongConverter());
-        registry.addConverter(new AlbumCreateUpdateRequestDTOToAlbumConverter());
-        registry.addConverter(new ArtistCreateUpdateRequestDTOToArtistConverter());
-        registry.addConverter(new GenreToGenreResponseDTOConverter());
-        registry.addConverter(new LanguageToLanguageResponseDTOConverter());
+        registry.addConverter(new SongDTOToSongConverter());
+        registry.addConverter(new AlbumDTOToAlbumConverter());
+        registry.addConverter(new ArtistDTOToArtistConverter());
+        registry.addConverter(new GenreDTOToGenreConverter());
+        registry.addConverter(new LanguageDTOToLanguageConverter());
 
         // to dto
-        registry.addConverter(new SongToSongCreateUpdateRequestDTOConverter());
+        registry.addConverter(new SongToSongDTOConverter());
+        registry.addConverter(new AlbumToAlbumDTOConverter());
+        registry.addConverter(new ArtistToArtistDTOConverter());
+        registry.addConverter(new ContributorToContributorDTOConverter());
     }
 
     @Override

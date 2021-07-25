@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SongCreateUpdateRequestDTO {
+public class SongDTO {
 
     private String surrogateKey;
 
@@ -35,15 +35,17 @@ public class SongCreateUpdateRequestDTO {
 
     private String deezerLink;
 
+    private String appleMusicLink;
+
     private String imgUrl;
 
     private Boolean isExplicit;
 
-    private ContributorCreateUpdateRequestDTO addedBy;
+    private ContributorDTO addedBy;
 
-    private ContributorCreateUpdateRequestDTO lastModifiedBy;
+    private ContributorDTO lastModifiedBy;
 
-    private ContributorCreateUpdateRequestDTO publishedBy;
+    private ContributorDTO publishedBy;
 
     private String addedDate;
 

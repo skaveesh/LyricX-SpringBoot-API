@@ -1,5 +1,6 @@
 package com.lyricxinc.lyricx.rest.impl;
 
+import com.lyricxinc.lyricx.core.dto.GenreDTO;
 import com.lyricxinc.lyricx.core.response.HttpResponse;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
 import com.lyricxinc.lyricx.rest.controller.GenreController;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 @RestController
@@ -26,7 +28,12 @@ public class GenreControllerImpl implements GenreController {
     @Override
     public ResponseEntity<HttpResponseData> getAllGenres(HttpServletRequest request) {
 
-        return httpResponse.returnResponse(HttpStatus.OK, null, null, genreService.getAllGenres());
+        List<GenreDTO> x = genreService.getAllGenres();
+
+        System.out.println(x);
+        System.out.println("genre" + httpResponse.hashCode());
+
+        return httpResponse.returnResponse(HttpStatus.OK, null, null, x);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.lyricxinc.lyricx.rest.impl;
 
-import com.lyricxinc.lyricx.core.dto.AlbumCreateUpdateRequestDTO;
+import com.lyricxinc.lyricx.core.dto.AlbumDTO;
+import com.lyricxinc.lyricx.core.exception.EntityConversionException;
 import com.lyricxinc.lyricx.core.response.HttpResponse;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
 import com.lyricxinc.lyricx.model.Album;
@@ -17,6 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.Optional;
+
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.LYRICX_ERR_36;
 import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage;
 
 @RestController
@@ -35,7 +39,16 @@ public class AlbumControllerImpl implements AlbumController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> createAlbum(final HttpServletRequest request, @RequestPart("payload") AlbumCreateUpdateRequestDTO payload, @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<HttpResponseData> getAlbum(String surrogateKey) {
+
+        Album album = albumService.getAlbumBySurrogateKey(surrogateKey);
+        AlbumDTO dto = asAlbumTO(album);
+
+        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.ALBUM_CREATE_SUCCESS.getSuccessMessage(), null, dto);
+    }
+
+    @Override
+    public ResponseEntity<HttpResponseData> createAlbum(final HttpServletRequest request, @RequestPart("payload") AlbumDTO payload, @RequestPart("image") MultipartFile image) {
 
         albumService.addAlbum(request, conversionService.convert(payload, Album.class), image);
 
@@ -49,7 +62,7 @@ public class AlbumControllerImpl implements AlbumController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, final @RequestBody AlbumCreateUpdateRequestDTO payload) {
+    public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, final @RequestBody AlbumDTO payload) {
 
         albumService.updateAlbum(request, conversionService.convert(payload, Album.class));
 
@@ -57,7 +70,7 @@ public class AlbumControllerImpl implements AlbumController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, @RequestPart("payload") AlbumCreateUpdateRequestDTO payload, @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, @RequestPart("payload") AlbumDTO payload, @RequestPart("image") MultipartFile image) {
 
         albumService.updateAlbum(request, conversionService.convert(payload, Album.class), image);
 
@@ -65,7 +78,7 @@ public class AlbumControllerImpl implements AlbumController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, final @RequestBody AlbumCreateUpdateRequestDTO payload) {
+    public ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, final @RequestBody AlbumDTO payload) {
 
         albumService.resetAlbumArt(request, conversionService.convert(payload, Album.class));
 
@@ -79,4 +92,7 @@ public class AlbumControllerImpl implements AlbumController {
         return null;
     }
 
+    private AlbumDTO asAlbumTO(final Album album) {
+        return Optional.ofNullable(conversionService.convert(album, AlbumDTO.class)).orElseThrow(() -> new EntityConversionException(LYRICX_ERR_36));
+    }
 }

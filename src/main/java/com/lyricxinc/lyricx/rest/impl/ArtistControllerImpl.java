@@ -1,7 +1,11 @@
 package com.lyricxinc.lyricx.rest.impl;
 
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.LYRICX_ERR_36;
 import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage.*;
-import com.lyricxinc.lyricx.core.dto.ArtistCreateUpdateRequestDTO;
+
+import com.lyricxinc.lyricx.core.constant.Constants;
+import com.lyricxinc.lyricx.core.dto.ArtistDTO;
+import com.lyricxinc.lyricx.core.exception.EntityConversionException;
 import com.lyricxinc.lyricx.core.response.HttpResponse;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
 import com.lyricxinc.lyricx.model.Artist;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 @RestController
 public class ArtistControllerImpl implements ArtistController {
@@ -34,7 +39,16 @@ public class ArtistControllerImpl implements ArtistController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> createArtist(final HttpServletRequest request, @RequestPart("payload") ArtistCreateUpdateRequestDTO payload, @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<HttpResponseData> getArtist(String surrogateKey) {
+
+        Artist artist = artistService.getArtistBySurrogateKey(surrogateKey);
+        ArtistDTO dto = asArtistDTO(artist);
+
+        return httpResponse.returnResponse(HttpStatus.OK, Constants.SuccessMessage.ALBUM_CREATE_SUCCESS.getSuccessMessage(), null, dto);
+    }
+
+    @Override
+    public ResponseEntity<HttpResponseData> createArtist(final HttpServletRequest request, @RequestPart("payload") ArtistDTO payload, @RequestPart("image") MultipartFile image) {
 
         artistService.addArtist(request, conversionService.convert(payload, Artist.class), image, payload.getGenreIdList());
 
@@ -42,7 +56,7 @@ public class ArtistControllerImpl implements ArtistController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateArtist(HttpServletRequest request, @RequestBody ArtistCreateUpdateRequestDTO payload) {
+    public ResponseEntity<HttpResponseData> updateArtist(HttpServletRequest request, @RequestBody ArtistDTO payload) {
 
         artistService.updateArtist(request, conversionService.convert(payload, Artist.class), payload.getGenreIdList());
 
@@ -50,7 +64,7 @@ public class ArtistControllerImpl implements ArtistController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateArtistImage(HttpServletRequest request, @RequestPart("payload") ArtistCreateUpdateRequestDTO payload, @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<HttpResponseData> updateArtistImage(HttpServletRequest request, @RequestPart("payload") ArtistDTO payload, @RequestPart("image") MultipartFile image) {
 
         artistService.updateArtist(request, conversionService.convert(payload, Artist.class), image, payload.getGenreIdList());
 
@@ -70,4 +84,7 @@ public class ArtistControllerImpl implements ArtistController {
         return null;
     }
 
+    private ArtistDTO asArtistDTO(final Artist artist) {
+        return Optional.ofNullable(conversionService.convert(artist, ArtistDTO.class)).orElseThrow(() -> new EntityConversionException(LYRICX_ERR_36));
+    }
 }

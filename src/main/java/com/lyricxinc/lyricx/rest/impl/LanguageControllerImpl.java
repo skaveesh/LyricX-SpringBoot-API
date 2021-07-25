@@ -1,5 +1,7 @@
 package com.lyricxinc.lyricx.rest.impl;
 
+import com.lyricxinc.lyricx.core.dto.GenreDTO;
+import com.lyricxinc.lyricx.core.dto.LanguageDTO;
 import com.lyricxinc.lyricx.core.response.HttpResponse;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
 import com.lyricxinc.lyricx.rest.controller.LanguageController;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 @RestController
@@ -27,7 +30,12 @@ public class LanguageControllerImpl implements LanguageController {
     @Override
     public ResponseEntity<HttpResponseData> getAllLanguages(HttpServletRequest request) {
 
-        return httpResponse.returnResponse(HttpStatus.OK, null, null, languageService.getAllLanguages());
+        List<LanguageDTO> x = languageService.getAllLanguages();
+
+        System.out.println(x);
+        System.out.println("lang" + httpResponse.hashCode());
+
+        return httpResponse.returnResponse(HttpStatus.OK, null, null, x);
     }
 
 }

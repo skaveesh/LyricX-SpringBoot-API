@@ -1,6 +1,6 @@
 package com.lyricxinc.lyricx.rest.impl;
 
-import com.lyricxinc.lyricx.core.dto.SongCreateUpdateRequestDTO;
+import com.lyricxinc.lyricx.core.dto.SongDTO;
 import com.lyricxinc.lyricx.core.exception.EntityConversionException;
 import com.lyricxinc.lyricx.core.response.HttpResponse;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
@@ -49,66 +49,66 @@ public class SongControllerImpl implements SongController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> saveSong(final HttpServletRequest request, final @RequestPart("payload") SongCreateUpdateRequestDTO requestPayload) {
+    public ResponseEntity<HttpResponseData> saveSong(final HttpServletRequest request, final @RequestPart("payload") SongDTO requestPayload) {
 
         Song songPayload = asSong(requestPayload);
         Song savedSong = songService.saveSong(request, songPayload, requestPayload.getArtistSurrogateKeyList(), requestPayload.getGenreIdList(), null);
-        SongCreateUpdateRequestDTO dto = asSongCreateUpdateRequestDTO(savedSong);
+        SongDTO dto = asSongDTO(savedSong);
 
         return httpResponse.returnResponse(HttpStatus.OK, SONG_SAVE_SUCCESS.getSuccessMessage(), null, dto);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> saveSong(final HttpServletRequest request, final @RequestPart("payload") SongCreateUpdateRequestDTO requestPayload, final @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<HttpResponseData> saveSong(final HttpServletRequest request, final @RequestPart("payload") SongDTO requestPayload, final @RequestPart("image") MultipartFile image) {
 
         Song songPayload = asSong(requestPayload);
         Song savedSong = songService.saveSong(request, songPayload, requestPayload.getArtistSurrogateKeyList(), requestPayload.getGenreIdList(), image);
-        SongCreateUpdateRequestDTO dto = asSongCreateUpdateRequestDTO(savedSong);
+        SongDTO dto = asSongDTO(savedSong);
 
         return httpResponse.returnResponse(HttpStatus.OK, SONG_SAVE_SUCCESS.getSuccessMessage(), null, dto);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> createSong(final HttpServletRequest request, final @RequestPart("payload") SongCreateUpdateRequestDTO requestPayload) {
+    public ResponseEntity<HttpResponseData> createSong(final HttpServletRequest request, final @RequestPart("payload") SongDTO requestPayload) {
 /* TODO: 12/30/2019  when adding a song, set imgurl to null. when ui displaying song image, display album's one. when user uploading a custom album art of the song
                      then remove the null of imgurl of the song and add the user uploaded one */
 
         Song songPayload = asSong(requestPayload);
         Song savedSong = songService.createSong(request, songPayload, requestPayload.getArtistSurrogateKeyList(), requestPayload.getGenreIdList(), null);
-        SongCreateUpdateRequestDTO dto = asSongCreateUpdateRequestDTO(savedSong);
+        SongDTO dto = asSongDTO(savedSong);
 
         return httpResponse.returnResponse(HttpStatus.OK, SONG_CREATE_SUCCESS.getSuccessMessage(), null, dto);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> createSong(final HttpServletRequest request, final @RequestPart("payload") SongCreateUpdateRequestDTO requestPayload, final @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<HttpResponseData> createSong(final HttpServletRequest request, final @RequestPart("payload") SongDTO requestPayload, final @RequestPart("image") MultipartFile image) {
 /* TODO: 12/30/2019  when adding a song, set imgurl to null. when ui displaying song image, display album's one. when user uploading a custom album art of the song
                      then remove the null of imgurl of the song and add the user uploaded one
                       08/05/2021 I can't remember why I did the above.*/
 
         Song songPayload = asSong(requestPayload);
         Song savedSong = songService.createSong(request, songPayload, requestPayload.getArtistSurrogateKeyList(), requestPayload.getGenreIdList(), image);
-        SongCreateUpdateRequestDTO dto = asSongCreateUpdateRequestDTO(savedSong);
+        SongDTO dto = asSongDTO(savedSong);
 
         return httpResponse.returnResponse(HttpStatus.OK, SONG_CREATE_SUCCESS.getSuccessMessage(), null, dto);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateSong(final HttpServletRequest request, final @RequestPart("payload") SongCreateUpdateRequestDTO requestPayload) {
+    public ResponseEntity<HttpResponseData> updateSong(final HttpServletRequest request, final @RequestPart("payload") SongDTO requestPayload) {
 
         Song songPayload = asSong(requestPayload);
         Song savedSong = songService.updateSong(request, songPayload, requestPayload.getArtistSurrogateKeyList(), requestPayload.getGenreIdList(), null);
-        SongCreateUpdateRequestDTO dto = asSongCreateUpdateRequestDTO(savedSong);
+        SongDTO dto = asSongDTO(savedSong);
 
         return httpResponse.returnResponse(HttpStatus.OK, SONG_UPDATE_SUCCESS.getSuccessMessage(), null, dto);
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> updateSong(final HttpServletRequest request, final @RequestPart("payload") SongCreateUpdateRequestDTO requestPayload, final @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<HttpResponseData> updateSong(final HttpServletRequest request, final @RequestPart("payload") SongDTO requestPayload, final @RequestPart("image") MultipartFile image) {
 
         Song songPayload = asSong(requestPayload);
         Song savedSong = songService.updateSong(request, songPayload, requestPayload.getArtistSurrogateKeyList(), requestPayload.getGenreIdList(), image);
-        SongCreateUpdateRequestDTO dto = asSongCreateUpdateRequestDTO(savedSong);
+        SongDTO dto = asSongDTO(savedSong);
 
         return httpResponse.returnResponse(HttpStatus.OK, SONG_ALBUM_ART_UPDATE_SUCCESS.getSuccessMessage(), null, dto);
     }
@@ -131,11 +131,11 @@ public class SongControllerImpl implements SongController {
         return httpResponse.returnResponse(HttpStatus.OK, SONG_REMOVE_SUCCESS.getSuccessMessage(), null, null);
     }
 
-    private Song asSong(final SongCreateUpdateRequestDTO requestDTO) {
+    private Song asSong(final SongDTO requestDTO) {
         return Optional.ofNullable(conversionService.convert(requestDTO, Song.class)).orElseThrow(() -> new EntityConversionException(LYRICX_ERR_35));
     }
 
-    private SongCreateUpdateRequestDTO asSongCreateUpdateRequestDTO(final Song song) {
-        return Optional.ofNullable(conversionService.convert(song, SongCreateUpdateRequestDTO.class)).orElseThrow(() -> new EntityConversionException(LYRICX_ERR_36));
+    private SongDTO asSongDTO(final Song song) {
+        return Optional.ofNullable(conversionService.convert(song, SongDTO.class)).orElseThrow(() -> new EntityConversionException(LYRICX_ERR_36));
     }
 }

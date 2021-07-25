@@ -1,5 +1,6 @@
 package com.lyricxinc.lyricx.core.response;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 Do not remove the getters nor change their access modifiers from public to any other type
  */
 @Component
+@Scope("prototype")
 public class HttpResponseData {
 
     private LocalDateTime timestamp;

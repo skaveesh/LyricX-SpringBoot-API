@@ -17,6 +17,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -72,11 +73,17 @@ public class Song {
     @Column(length = 100000)
     private byte[] lyrics;
 
+    @Pattern(message="Enter valid YouTube URL" , regexp="^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]")
     private String youTubeLink;
 
+    @Pattern(message="Enter valid Spotify URL" , regexp="(^$|^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|])")
     private String spotifyLink;
 
+    @Pattern(message="Enter valid Deezer URL" , regexp="(^$|^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|])")
     private String deezerLink;
+
+    @Pattern(message="Enter valid Apple Music URL" , regexp="(^$|^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|])")
+    private String appleMusicLink;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String imgUrl;
@@ -146,12 +153,13 @@ public class Song {
      * @param youTubeLink    the you tube link
      * @param spotifyLink    the spotify link
      * @param deezerLink     the deezer link
+     * @param appleMusicLink the apple music link
      * @param imgUrl         the img url
      * @param isExplicit     the is explicit
      * @param addedBy        the added by
      * @param publishedState the published state
      */
-    public Song(@NotBlank String name, Album album, @Size(max = 5) String guitarKey, @Size(max = 5) String beat, @NotBlank Language language, String keywords, @NotBlank String lyrics, String youTubeLink, String spotifyLink, String deezerLink, String imgUrl, Boolean isExplicit, Contributor addedBy, Boolean publishedState) {
+    public Song(@NotBlank String name, Album album, @Size(max = 5) String guitarKey, @Size(max = 5) String beat, @NotBlank Language language, String keywords, @NotBlank String lyrics, String youTubeLink, String spotifyLink, String deezerLink, String appleMusicLink, String imgUrl, Boolean isExplicit, Contributor addedBy, Boolean publishedState) {
 
         this.name = name;
         this.album = album;
@@ -163,6 +171,7 @@ public class Song {
         this.youTubeLink = youTubeLink;
         this.spotifyLink = spotifyLink;
         this.deezerLink = deezerLink;
+        this.appleMusicLink = appleMusicLink;
         this.imgUrl = imgUrl;
         this.isExplicit = isExplicit;
         this.addedBy = addedBy;

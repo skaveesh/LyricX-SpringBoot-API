@@ -1,20 +1,22 @@
 package com.lyricxinc.lyricx.rest.impl;
 
-import com.lyricxinc.lyricx.core.request.contributor.ConTestRequest;
+import com.lyricxinc.lyricx.core.dto.ContributorDTO;
+import com.lyricxinc.lyricx.core.exception.EntityConversionException;
 import com.lyricxinc.lyricx.core.response.HttpResponse;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
+import com.lyricxinc.lyricx.model.Contributor;
 import com.lyricxinc.lyricx.rest.controller.ContributorController;
 import com.lyricxinc.lyricx.service.ContributorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Optional;
 
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.LYRICX_ERR_36;
 import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage.*;
 
 @RestController
@@ -22,13 +24,14 @@ public class ContributorControllerImpl implements ContributorController {
 
     private final ContributorService contributorService;
     private final HttpResponse httpResponse;
-    private static final Logger LOGGER = Logger.getLogger(ContributorControllerImpl.class.getName());
+    private final ConversionService conversionService;
 
     @Autowired
-    public ContributorControllerImpl(ContributorService contributorService, HttpResponse httpResponse) {
+    public ContributorControllerImpl(ContributorService contributorService, HttpResponse httpResponse, ConversionService conversionService) {
 
         this.contributorService = contributorService;
         this.httpResponse = httpResponse;
+        this.conversionService = conversionService;
     }
 
     @Override
@@ -39,30 +42,14 @@ public class ContributorControllerImpl implements ContributorController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> getContTest(HttpServletRequest request, @RequestBody ConTestRequest payload) {
+    public ResponseEntity<HttpResponseData> getContributor(final HttpServletRequest request) {
 
-        LOGGER.log(Level.WARNING, payload.getName());
-        return httpResponse.returnResponse(HttpStatus.OK, SUCCESS.getSuccessMessage(), null, payload.getName());
+        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
+        ContributorDTO dto = asContributorDTO(contributor);
+        return httpResponse.returnResponse(HttpStatus.OK, SUCCESS.getSuccessMessage(), null, dto);
     }
 
-    //TODO: remove this method after testing
-    //    @Override
-    //    public ResponseEntity<HttpResponseData> getContTest(HttpServletRequest request) {
-    //
-    //        LOGGER.log(Level.INFO, "Contributor test user ID is " + request.getSession().getAttribute("userId"));
-    //
-    //        List<Object> arr = new ArrayList<>();
-    //        arr.add("abc");
-    //        arr.add("def");
-    //
-    //        List<String> arr2 = new ArrayList<>();
-    //        arr2.add("pqr");
-    //        arr2.add("xyz");
-    //
-    //        arr.add(arr2);
-    //
-    //        return httpResponse.returnResponse(HttpStatus.I_AM_A_TEAPOT, "Testing successful.", arr);
-    //    }
-
-
+    private ContributorDTO asContributorDTO(final Contributor contributor) {
+        return Optional.ofNullable(conversionService.convert(contributor, ContributorDTO.class)).orElseThrow(() -> new EntityConversionException(LYRICX_ERR_36));
+    }
 }

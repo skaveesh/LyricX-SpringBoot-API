@@ -1,13 +1,13 @@
 package com.lyricxinc.lyricx.core.converter.tomodel;
 
-import com.lyricxinc.lyricx.core.dto.ArtistCreateUpdateRequestDTO;
+import com.lyricxinc.lyricx.core.dto.ArtistDTO;
 import com.lyricxinc.lyricx.model.Artist;
 import org.springframework.core.convert.converter.Converter;
 
-public class ArtistCreateUpdateRequestDTOToArtistConverter implements Converter<ArtistCreateUpdateRequestDTO, Artist> {
+public class ArtistDTOToArtistConverter implements Converter<ArtistDTO, Artist> {
 
     @Override
-    public Artist convert(ArtistCreateUpdateRequestDTO source) {
+    public Artist convert(ArtistDTO source) {
 
         Artist artist = new Artist();
         artist.setSurrogateKey(source.getSurrogateKey());

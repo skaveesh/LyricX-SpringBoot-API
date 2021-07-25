@@ -1,6 +1,6 @@
 package com.lyricxinc.lyricx.rest.controller;
 
-import com.lyricxinc.lyricx.core.dto.AlbumCreateUpdateRequestDTO;
+import com.lyricxinc.lyricx.core.dto.AlbumDTO;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +15,15 @@ import javax.servlet.http.HttpServletRequest;
 public interface AlbumController {
 
     /**
+     * Gets album.
+     *
+     * @param surrogateKey the surrogate key
+     * @return the album
+     */
+    @GetMapping("get")
+    ResponseEntity<HttpResponseData> getAlbum(@RequestParam("surrogateKey") String surrogateKey);
+
+    /**
      * Create album response entity.
      *
      * @param request the request
@@ -23,7 +32,7 @@ public interface AlbumController {
      * @return the response entity
      */
     @PutMapping("create")
-    ResponseEntity<HttpResponseData> createAlbum(HttpServletRequest request, @RequestPart("payload") AlbumCreateUpdateRequestDTO payload, @RequestPart("image") MultipartFile image);
+    ResponseEntity<HttpResponseData> createAlbum(HttpServletRequest request, @RequestPart("payload") AlbumDTO payload, @RequestPart("image") MultipartFile image);
 
     /**
      * Search albums response entity.
@@ -42,7 +51,7 @@ public interface AlbumController {
      * @return the response entity
      */
     @PostMapping("update/details")
-    ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, @RequestBody AlbumCreateUpdateRequestDTO payload);
+    ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, @RequestBody AlbumDTO payload);
 
     /**
      * Update album response entity.
@@ -53,7 +62,7 @@ public interface AlbumController {
      * @return the response entity
      */
     @PostMapping("update/details/image")
-    ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, @RequestPart("payload") AlbumCreateUpdateRequestDTO payload, @RequestPart("image") MultipartFile image);
+    ResponseEntity<HttpResponseData> updateAlbum(HttpServletRequest request, @RequestPart("payload") AlbumDTO payload, @RequestPart("image") MultipartFile image);
 
     /**
      * Remove album art response entity.
@@ -63,7 +72,7 @@ public interface AlbumController {
      * @return the response entity
      */
     @DeleteMapping("remove/albumart")
-    ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, @RequestBody AlbumCreateUpdateRequestDTO payload);
+    ResponseEntity<HttpResponseData> removeAlbumArt(HttpServletRequest request, @RequestBody AlbumDTO payload);
 
     /**
      * Remove album response entity.

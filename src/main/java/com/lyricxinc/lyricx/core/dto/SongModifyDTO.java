@@ -9,11 +9,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LanguageResponseDTO {
+public class SongModifyDTO {
 
-    private Short id;
+    private SongDTO song;
 
-    private String languageName;
+    private String lyrics;
 
-    private String languageCode;
+    private ContributorDTO contributor;
+
+    private String lastModifiedDate;
+
+    private Boolean hiddenStatus;
 }

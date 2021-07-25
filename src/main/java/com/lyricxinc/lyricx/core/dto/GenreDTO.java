@@ -9,7 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MetadataResponseDTO {
+public class GenreDTO {
 
-    private String baseImageBucketURL;
+    private Short id;
+
+    private String genreName;
 }

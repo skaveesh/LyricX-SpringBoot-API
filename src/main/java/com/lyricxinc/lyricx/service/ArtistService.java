@@ -11,6 +11,7 @@ import com.lyricxinc.lyricx.model.socket.outbound.ArtistSuggestedItem;
 import com.lyricxinc.lyricx.model.validator.group.OnArtistCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnArtistUpdate;
 import com.lyricxinc.lyricx.repository.ArtistRepository;
+import com.lyricxinc.lyricx.service.amazon.AmazonClientService;
 import com.lyricxinc.lyricx.service.suggest.MediaSuggestFactory;
 import com.lyricxinc.lyricx.service.suggest.MediaSuggestOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +91,7 @@ public class ArtistService {
      */
     public Artist getArtistById(long id) {
 
-        return artistRepository.findById(id).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_12));
+        return artistRepository.findById(id).orElseThrow(() -> new NotFoundException(LYRICX_ERR_12));
     }
 
     /**
@@ -101,7 +102,7 @@ public class ArtistService {
      */
     public Artist getArtistBySurrogateKey(String surrogateKey) {
 
-        return artistRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_12));
+        return artistRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(LYRICX_ERR_12));
     }
 
     /**
@@ -127,7 +128,7 @@ public class ArtistService {
 
         if (image != null)
         {
-            String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ARTIST_FOLDER);
+            String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFoldersType.ARTIST_FOLDER);
             payload.setImgUrl(imgUrl);
         }
         else
@@ -168,7 +169,7 @@ public class ArtistService {
 
         Artist existingArtist = updateArtistDetails(request, payload, contributorService::checkNonSeniorContributorEditsVerifiedContent);
 
-        String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ARTIST_FOLDER);
+        String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFoldersType.ARTIST_FOLDER);
         String oldImgUrl = null;
 
         try
@@ -179,7 +180,7 @@ public class ArtistService {
             //delete old song image from S3 bucket
             if (oldImgUrl != null)
             {
-                this.amazonClientService.deleteFileFromS3Bucket(oldImgUrl, AmazonClientService.S3BucketFolders.ARTIST_FOLDER);
+                this.amazonClientService.deleteFileFromS3Bucket(oldImgUrl, AmazonClientService.S3BucketFoldersType.ARTIST_FOLDER);
             }
         }
 
@@ -266,7 +267,7 @@ public class ArtistService {
     private List<Genre> getGenreListFromGenreIdList(List<Short> genreIdList){
 
         if(genreIdList == null || genreIdList.isEmpty()){
-            throw new ForbiddenException(LYRICX_ERR_31);
+            throw new NotFoundException(LYRICX_ERR_31);
         }
 
         Set<Short> genreIdSet = new HashSet<>(genreIdList);
@@ -274,7 +275,7 @@ public class ArtistService {
         List<Genre> genreList = genreService.findGenreByIds(genreIdSet);
 
         if(genreList.isEmpty()){
-            throw new ForbiddenException(LYRICX_ERR_31);
+            throw new NotFoundException(LYRICX_ERR_31);
         }
 
         return genreList;

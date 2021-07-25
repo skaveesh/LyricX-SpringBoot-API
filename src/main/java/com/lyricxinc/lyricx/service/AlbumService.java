@@ -9,6 +9,7 @@ import com.lyricxinc.lyricx.model.socket.outbound.AlbumSuggestedItem;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnAlbumUpdate;
 import com.lyricxinc.lyricx.repository.AlbumRepository;
+import com.lyricxinc.lyricx.service.amazon.AmazonClientService;
 import com.lyricxinc.lyricx.service.suggest.MediaSuggestFactory;
 import com.lyricxinc.lyricx.service.suggest.MediaSuggestOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +77,7 @@ public class AlbumService {
      */
     public Album getAlbumById(final Long id) {
 
-        return albumRepository.findById(id).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_11));
+        return albumRepository.findById(id).orElseThrow(() -> new NotFoundException(LYRICX_ERR_11));
     }
 
     /**
@@ -87,7 +88,7 @@ public class AlbumService {
      */
     public Album getAlbumBySurrogateKey(final String surrogateKey) {
 
-        return albumRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_11));
+        return albumRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(LYRICX_ERR_11));
     }
 
     /**
@@ -122,7 +123,7 @@ public class AlbumService {
 
         if (image != null)
         {
-            String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
+            String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFoldersType.ALBUM_FOLDER);
             payload.setImgUrl(imgUrl);
         }
         else
@@ -164,7 +165,7 @@ public class AlbumService {
 
         Album existingAlbum = updateAlbumDetails(request, payload, contributorService::checkNonSeniorContributorEditsVerifiedContent);
 
-        String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.ALBUM_FOLDER);
+        String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFoldersType.ALBUM_FOLDER);
         String oldImgUrl = null;
 
         try
@@ -175,7 +176,7 @@ public class AlbumService {
             //delete old song image from S3 bucket
             if (oldImgUrl != null)
             {
-                this.amazonClientService.deleteFileFromS3Bucket(oldImgUrl, AmazonClientService.S3BucketFolders.SONG_FOLDER);
+                this.amazonClientService.deleteFileFromS3Bucket(oldImgUrl, AmazonClientService.S3BucketFoldersType.SONG_FOLDER);
             }
         }
         existingAlbum.setImgUrl(imgUrl);

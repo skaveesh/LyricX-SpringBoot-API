@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 import com.lyricxinc.lyricx.core.config.FirebaseConfig;
 import com.lyricxinc.lyricx.core.exception.ForbiddenException;
+import com.lyricxinc.lyricx.core.exception.NotFoundException;
 import com.lyricxinc.lyricx.core.util.StringValidatorUtil;
 import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.model.Artist;
@@ -52,7 +53,7 @@ public class ContributorService {
     public Contributor getContributorById(String id) {
 
         //todo validate id in similar scenarios
-        return contributorRepository.findById(Optional.ofNullable(id).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_04))).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_05));
+        return contributorRepository.findById(Optional.ofNullable(id).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_04))).orElseThrow(() -> new NotFoundException(LYRICX_ERR_05));
     }
 
     /**

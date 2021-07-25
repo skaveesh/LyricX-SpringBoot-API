@@ -7,6 +7,7 @@ import com.lyricxinc.lyricx.model.*;
 import com.lyricxinc.lyricx.model.validator.group.OnSongCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnSongUpdate;
 import com.lyricxinc.lyricx.repository.SongRepository;
+import com.lyricxinc.lyricx.service.amazon.AmazonClientService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -89,7 +90,7 @@ public class SongService {
      */
     private Song getSongById(long id) {
 
-        return songRepository.findById(id).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_10));
+        return songRepository.findById(id).orElseThrow(() -> new NotFoundException(LYRICX_ERR_10));
     }
 
     /**
@@ -100,7 +101,7 @@ public class SongService {
      */
     private Song getSongBySurrogateKey(String surrogateKey) {
 
-        return songRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new ForbiddenException(LYRICX_ERR_10));
+        return songRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(LYRICX_ERR_10));
     }
 
     /**
@@ -147,7 +148,7 @@ public class SongService {
      * @return the song
      */
     @Validated(OnSongCreate.class)
-    public Song createSong(HttpServletRequest request, final @Valid Song payload, List<String> artistSurrogateKeyList, List<Short> genreIdList, MultipartFile image) {
+    public Song createSong(HttpServletRequest request, final @Valid Song payload, final List<String> artistSurrogateKeyList, final List<Short> genreIdList, final MultipartFile image) {
 
         Album album = albumService.getAlbumBySurrogateKey(payload.getAlbum().getSurrogateKey());
 
@@ -165,7 +166,7 @@ public class SongService {
         payload.setLanguage(language);
 
         if (image != null) {
-            String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.SONG_FOLDER);
+            String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFoldersType.SONG_FOLDER);
             payload.setImgUrl(imgUrl);
         }
 
@@ -206,7 +207,7 @@ public class SongService {
      * @return the song
      */
     @Validated(OnSongUpdate.class)
-    public Song updateSong(final HttpServletRequest request, final @Valid Song payload, List<String> artistSurrogateKeyList, List<Short> genreIdList, MultipartFile image) {
+    public Song updateSong(final HttpServletRequest request, final @Valid Song payload, final List<String> artistSurrogateKeyList, final List<Short> genreIdList, final MultipartFile image) {
 
         Song modifiedSong = updateSongDetails(request, payload, image, contributorService::checkNonSeniorContributorEditsVerifiedContent);
 
@@ -243,7 +244,7 @@ public class SongService {
         contributorService.checkNonSeniorContributorEditsVerifiedContent(contributor, song);
 
         //delete old song image from S3 bucket
-        this.amazonClientService.deleteFileFromS3Bucket(song.getImgUrl(), AmazonClientService.S3BucketFolders.SONG_FOLDER);
+        this.amazonClientService.deleteFileFromS3Bucket(song.getImgUrl(), AmazonClientService.S3BucketFoldersType.SONG_FOLDER);
 
         song.setImgUrl(null);
 
@@ -328,19 +329,21 @@ public class SongService {
 
         existingSong.setDeezerLink(payload.getDeezerLink());
 
+        existingSong.setAppleMusicLink(payload.getAppleMusicLink());
+
         if (Boolean.TRUE.equals(payload.getIsExplicit()) || Boolean.FALSE.equals(payload.getIsExplicit())) {
             existingSong.setIsExplicit(payload.getIsExplicit());
         }
 
         if (image != null) {
-            String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFolders.SONG_FOLDER);
+            String imgUrl = this.amazonClientService.uploadFile(image, AmazonClientService.S3BucketFoldersType.SONG_FOLDER);
 
             String oldImgUrl = existingSong.getImgUrl();
 
             //delete old song image from S3 bucket
             if (oldImgUrl != null) {
                 this.amazonClientService.deleteFileFromS3Bucket(oldImgUrl,
-                                                                AmazonClientService.S3BucketFolders.SONG_FOLDER);
+                                                                AmazonClientService.S3BucketFoldersType.SONG_FOLDER);
             }
 
             existingSong.setImgUrl(imgUrl);
@@ -360,19 +363,21 @@ public class SongService {
     public void updateSongArtistList(final Song song, final List<String> artistSurrogateKeyList, final boolean deleteExisting) {
 
         if (song == null || artistSurrogateKeyList == null) {
-            throw new ForbiddenException(LYRICX_ERR_29);
+            throw new NotFoundException(LYRICX_ERR_29);
         }
 
         Set<String> artistSurrogateKeySet = new HashSet<>(artistSurrogateKeyList);
 
+        artistSurrogateKeyList.removeIf(artistSurrogateKey -> artistSurrogateKey.equals(song.getAlbum().getArtist().getSurrogateKey()));
+
         if (artistSurrogateKeySet.isEmpty()) {
-            throw new ForbiddenException(LYRICX_ERR_29);
+            throw new NotFoundException(LYRICX_ERR_29);
         }
 
         List<Artist> artistList = artistService.findArtistsBySurrogateKeys(artistSurrogateKeySet);
 
         if (artistList.isEmpty()) {
-            throw new ForbiddenException(LYRICX_ERR_29);
+            throw new NotFoundException(LYRICX_ERR_29);
         }
 
         Set<ArtistSong> existingArtistSongSet = song.getArtistSongs();
@@ -393,19 +398,19 @@ public class SongService {
     public void updateSongGenreList(final Song song, final List<Short> genreIdList, final boolean deleteExisting) {
 
         if (song == null || genreIdList == null) {
-            throw new ForbiddenException(LYRICX_ERR_30);
+            throw new NotFoundException(LYRICX_ERR_30);
         }
 
         Set<Short> genreIdSet = new HashSet<>(genreIdList);
 
         if (genreIdSet.isEmpty()) {
-            throw new ForbiddenException(LYRICX_ERR_30);
+            throw new NotFoundException(LYRICX_ERR_30);
         }
 
         List<Genre> genreList = genreService.findGenreByIds(genreIdSet);
 
         if (genreList.isEmpty()) {
-            throw new ForbiddenException(LYRICX_ERR_30);
+            throw new NotFoundException(LYRICX_ERR_30);
         }
 
         Set<SongGenre> existingSongGenreSet = song.getSongGenres();
