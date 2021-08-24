@@ -5,6 +5,8 @@ import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.model.Artist;
 import org.springframework.core.convert.converter.Converter;
 
+import java.time.Year;
+
 public class AlbumDTOToAlbumConverter implements Converter<AlbumDTO, Album> {
 
     @Override
@@ -17,7 +19,7 @@ public class AlbumDTOToAlbumConverter implements Converter<AlbumDTO, Album> {
         album.setArtist(artist);
         album.setSurrogateKey(source.getSurrogateKey());
         album.setName(source.getName());
-        album.setYear(source.getYear());
+        album.setYear(Year.parse(source.getYear()));
         album.setApprovedStatus(source.getApprovedStatus());
 
         return album;
