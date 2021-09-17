@@ -49,6 +49,15 @@ public class SongControllerImpl implements SongController {
     }
 
     @Override
+    public ResponseEntity<HttpResponseData> getSong(String surrogateKey) {
+
+        Song song = songService.getSongBySurrogateKey(surrogateKey);
+        SongDTO dto = asSongDTO(song);
+
+        return httpResponse.returnResponse(HttpStatus.OK, SONG_CREATE_SUCCESS.getSuccessMessage(), null, dto);
+    }
+
+    @Override
     public ResponseEntity<HttpResponseData> saveSong(final HttpServletRequest request, final @RequestPart("payload") SongDTO requestPayload) {
 
         Song songPayload = asSong(requestPayload);

@@ -99,7 +99,7 @@ public class SongService {
      * @param surrogateKey the surrogate key
      * @return the song by surrogate key
      */
-    private Song getSongBySurrogateKey(String surrogateKey) {
+    public Song getSongBySurrogateKey(String surrogateKey) {
 
         return songRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(LYRICX_ERR_10));
     }

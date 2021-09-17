@@ -16,6 +16,15 @@ import javax.servlet.http.HttpServletRequest;
 public interface SongController {
 
     /**
+     * Gets song.
+     *
+     * @param surrogateKey the surrogate key
+     * @return the song
+     */
+    @GetMapping("get")
+    ResponseEntity<HttpResponseData> getSong(@RequestParam("surrogateKey") String surrogateKey);
+
+    /**
      * Save song response entity.
      *
      * @param request the request
