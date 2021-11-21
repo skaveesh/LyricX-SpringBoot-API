@@ -80,7 +80,7 @@ public class StringValidatorUtil {
 
     public static String getUuidOrNull(String uuid) {
 
-        if (UUID.fromString(uuid).toString().equals(uuid)) {
+        if (uuid != null && UUID.fromString(uuid).toString().equals(uuid)) {
             return uuid;
         }
         return null;

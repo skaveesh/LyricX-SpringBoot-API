@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage.SUCCESS;
+
 
 @RestController
 public class LanguageControllerImpl implements LanguageController {
@@ -35,7 +37,7 @@ public class LanguageControllerImpl implements LanguageController {
         System.out.println(x);
         System.out.println("lang" + httpResponse.hashCode());
 
-        return httpResponse.returnResponse(HttpStatus.OK, null, null, x);
+        return httpResponse.returnResponse(HttpStatus.OK, SUCCESS.getSuccessMessage(), null, x);
     }
 
 }

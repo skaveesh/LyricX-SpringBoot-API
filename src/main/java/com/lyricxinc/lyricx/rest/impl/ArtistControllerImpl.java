@@ -44,7 +44,7 @@ public class ArtistControllerImpl implements ArtistController {
         Artist artist = artistService.getArtistBySurrogateKey(surrogateKey);
         ArtistDTO dto = asArtistDTO(artist);
 
-        return httpResponse.returnResponse(HttpStatus.OK, Constants.SuccessMessage.ALBUM_CREATE_SUCCESS.getSuccessMessage(), null, dto);
+        return httpResponse.returnResponse(HttpStatus.OK, SUCCESS.getSuccessMessage(), null, dto);
     }
 
     @Override

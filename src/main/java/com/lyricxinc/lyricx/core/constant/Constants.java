@@ -249,14 +249,19 @@ public final class Constants {
         LYRICX_ERR_36("Exception occurred while parsing the resource"),
 
         /**
-         * Exception occurred while saving the song
+         * Exception occurred while saving the song. Rolling back changes
          */
-        LYRICX_ERR_37("Exception occurred while saving the song"),
+        LYRICX_ERR_37("Exception occurred while saving the song. Rolling back changes"),
 
         /**
          * Invalid ID found while updating the song
          */
-        LYRICX_ERR_38("Invalid ID found while updating the song");
+        LYRICX_ERR_38("Invalid ID found while updating the song"),
+
+        /**
+         * Didn't update song genre list. Error while saving the song. Rolling back changes
+         */
+        LYRICX_ERR_39("Didn't update song genre list. Error while saving the song. Rolling back changes");
 
         private String errorMessage;
 

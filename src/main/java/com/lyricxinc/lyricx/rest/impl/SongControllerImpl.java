@@ -54,7 +54,7 @@ public class SongControllerImpl implements SongController {
         Song song = songService.getSongBySurrogateKey(surrogateKey);
         SongDTO dto = asSongDTO(song);
 
-        return httpResponse.returnResponse(HttpStatus.OK, SONG_CREATE_SUCCESS.getSuccessMessage(), null, dto);
+        return httpResponse.returnResponse(HttpStatus.OK, SUCCESS.getSuccessMessage(), null, dto);
     }
 
     @Override

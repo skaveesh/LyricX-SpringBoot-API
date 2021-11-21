@@ -3,6 +3,7 @@ package com.lyricxinc.lyricx.service;
 import com.lyricxinc.lyricx.core.exception.ForbiddenException;
 import com.lyricxinc.lyricx.core.exception.LyricxBaseException;
 import com.lyricxinc.lyricx.core.exception.NotFoundException;
+import com.lyricxinc.lyricx.core.exception.RollbackException;
 import com.lyricxinc.lyricx.model.*;
 import com.lyricxinc.lyricx.model.validator.group.OnSongCreate;
 import com.lyricxinc.lyricx.model.validator.group.OnSongUpdate;
@@ -13,13 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +37,6 @@ import static com.lyricxinc.lyricx.core.util.StringValidatorUtil.isStringNotEmpt
 @Log4j2
 @Validated
 @Service
-@Transactional
 public class SongService {
 
     private final SongRepository songRepository;
@@ -147,6 +147,7 @@ public class SongService {
      * @param image                  the image
      * @return the song
      */
+    @Transactional(rollbackFor = RollbackException.class)
     @Validated(OnSongCreate.class)
     public Song createSong(HttpServletRequest request, final @Valid Song payload, final List<String> artistSurrogateKeyList, final List<Short> genreIdList, final MultipartFile image) {
 
@@ -176,12 +177,11 @@ public class SongService {
             updateSongArtistList(song, artistSurrogateKeyList, false);
         } catch (Exception ex) {
             if (ex instanceof LyricxBaseException && ((LyricxBaseException)ex).getCode().equals(LYRICX_ERR_29.name())) {
-                // not a issue when song doesn't have any artists other than main artist
+                // not an issue when song doesn't have any artists other than main artist
                 log.warn("Didn't update song artist list", ex);
             } else {
                 log.error("Error while saving the song. Rolling back changes", ex);
-                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                throw new ForbiddenException(LYRICX_ERR_37);
+                throw new RollbackException(LYRICX_ERR_37);
             }
         }
 
@@ -189,8 +189,7 @@ public class SongService {
             updateSongGenreList(song, genreIdList, false);
         } catch (Exception ex) {
             log.error("Didn't update song genre list. Error while saving the song. Rolling back changes", ex);
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            throw ex;
+            throw new RollbackException(LYRICX_ERR_39);
         }
 
         return songRepository.findById(song.getId()).orElse(null);
@@ -293,6 +292,12 @@ public class SongService {
 
         contributorSongBiConsumer.accept(contributor, existingSong);
 
+        if(payload.getPublishedState() != null) {
+            existingSong.setPublishedState(payload.getPublishedState());
+            existingSong.setPublishedBy(contributor);
+            existingSong.setPublishedDate(LocalDateTime.now());
+        }
+
         if (isStringNotEmpty(payload.getName())) {
             existingSong.setName(payload.getName());
         }
@@ -303,9 +308,13 @@ public class SongService {
             existingSong.setAlbum(newAlbum);
         }
 
-        existingSong.setGuitarKey(payload.getGuitarKey());
+        if(payload.getGuitarKey() != null) {
+            existingSong.setGuitarKey(payload.getGuitarKey().trim());
+        }
 
-        existingSong.setBeat(payload.getBeat());
+        if(payload.getBeat() != null) {
+            existingSong.setBeat(payload.getBeat().trim());
+        }
 
         if (payload.getLanguage() != null && payload.getLanguage().getLanguageCode() != null && !payload.getLanguage().getLanguageCode().equals(
                 existingSong.getLanguage().getLanguageCode())) {
@@ -317,19 +326,25 @@ public class SongService {
             existingSong.setKeywords(payload.getKeywords());
         }
 
-        if (payload.getLyrics().length > 0) {
+        if (payload.getLyrics() != null && payload.getLyrics().length > 0) {
             existingSong.setLyrics(payload.getLyrics());
         }
 
         if (isStringNotEmpty(payload.getYouTubeLink())) {
-            existingSong.setYouTubeLink(payload.getYouTubeLink());
+            existingSong.setYouTubeLink(payload.getYouTubeLink().trim());
         }
 
-        existingSong.setSpotifyLink(payload.getSpotifyLink());
+        if (payload.getSpotifyLink() != null) {
+            existingSong.setSpotifyLink(payload.getSpotifyLink().trim());
+        }
 
-        existingSong.setDeezerLink(payload.getDeezerLink());
+        if (payload.getDeezerLink() != null) {
+            existingSong.setDeezerLink(payload.getDeezerLink().trim());
+        }
 
-        existingSong.setAppleMusicLink(payload.getAppleMusicLink());
+        if (payload.getAppleMusicLink() != null) {
+            existingSong.setAppleMusicLink(payload.getAppleMusicLink().trim());
+        }
 
         if (Boolean.TRUE.equals(payload.getIsExplicit()) || Boolean.FALSE.equals(payload.getIsExplicit())) {
             existingSong.setIsExplicit(payload.getIsExplicit());
@@ -342,8 +357,7 @@ public class SongService {
 
             //delete old song image from S3 bucket
             if (oldImgUrl != null) {
-                this.amazonClientService.deleteFileFromS3Bucket(oldImgUrl,
-                                                                AmazonClientService.S3BucketFoldersType.SONG_FOLDER);
+                this.amazonClientService.deleteFileFromS3Bucket(oldImgUrl, AmazonClientService.S3BucketFoldersType.SONG_FOLDER);
             }
 
             existingSong.setImgUrl(imgUrl);

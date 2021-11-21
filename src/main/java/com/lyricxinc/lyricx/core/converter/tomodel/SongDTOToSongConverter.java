@@ -31,6 +31,7 @@ public class SongDTOToSongConverter implements Converter<SongDTO, Song> {
         song.setDeezerLink(source.getDeezerLink());
         song.setAppleMusicLink(source.getAppleMusicLink());
         song.setIsExplicit(source.getIsExplicit());
+        song.setPublishedState(source.getPublishedState());
 
         return song;
     }

@@ -17,7 +17,7 @@ public class ArtistToArtistDTOConverter implements Converter<Artist, ArtistDTO> 
         artistDTO.setName(source.getName());
         artistDTO.setImgUrl(source.getImgUrl());
         artistDTO.setAddedById(source.getAddedBy().getId());
-        artistDTO.setLastModifiedDate(source.getLastModifiedBy().getId());
+        artistDTO.setLastModifiedById(source.getLastModifiedBy().getId());
         artistDTO.setApprovedStatus(source.isApprovedStatus());
         artistDTO.setAddedDate(source.getAddedDate().toString());
         artistDTO.setLastModifiedDate(source.getLastModifiedDate().toString());

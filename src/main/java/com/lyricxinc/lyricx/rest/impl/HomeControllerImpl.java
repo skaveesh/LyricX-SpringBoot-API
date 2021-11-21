@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage.SUCCESS;
+
 /**
  * Project lyricx
  * Created by skaveesh on 2018-10-18.
@@ -42,7 +44,7 @@ public class HomeControllerImpl implements HomeController {
     @Override
     public ResponseEntity<HttpResponseData> getMetaData(HttpServletRequest request) {
 
-        return httpResponse.returnResponse(HttpStatus.OK, null, null, metadataService.getAllMetadata());
+        return httpResponse.returnResponse(HttpStatus.OK, SUCCESS.getSuccessMessage(), null, metadataService.getAllMetadata());
     }
 
 }
