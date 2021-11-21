@@ -54,9 +54,9 @@ public class ExceptionResponseEntityHandler {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseBody
-    public ResponseEntity<HttpResponseData> handleNotFoundCustomException() {
+    public ResponseEntity<HttpResponseData> handleNotFoundCustomException(LyricxBaseException ex) {
 
-        return handleNotFoundException();
+        return httpResponse.returnResponse(HttpStatus.NOT_FOUND, ex.getMessage(), ex.getCode(), null);
     }
 
     @ExceptionHandler({MultipartException.class, FileUploadBase.FileSizeLimitExceededException.class})
