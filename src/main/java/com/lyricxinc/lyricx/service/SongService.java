@@ -12,6 +12,8 @@ import com.lyricxinc.lyricx.service.amazon.AmazonClientService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -102,6 +104,19 @@ public class SongService {
     public Song getSongBySurrogateKey(String surrogateKey) {
 
         return songRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(LYRICX_ERR_10));
+    }
+
+    /**
+     * Gets songs added by contributor.
+     *
+     * @param request    the request
+     * @param pageNumber the page number
+     * @param pageSize   the page size
+     * @return the songs added by contributor
+     */
+    public Page<Song> getSongsAddedByContributor(HttpServletRequest request, int pageNumber, int pageSize) {
+        Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
+        return songRepository.findByAddedBy(contributor, PageRequest.of(pageNumber, pageSize)).orElseThrow(() -> new NotFoundException(LYRICX_ERR_10));
     }
 
     /**
@@ -373,6 +388,7 @@ public class SongService {
      *
      * @param song                   the song
      * @param artistSurrogateKeyList the artist surrogate key list
+     * @param deleteExisting         the delete existing
      */
     public void updateSongArtistList(final Song song, final List<String> artistSurrogateKeyList, final boolean deleteExisting) {
 
@@ -406,8 +422,9 @@ public class SongService {
     /**
      * Update song genre list.
      *
-     * @param song        the song
-     * @param genreIdList the genre id list
+     * @param song           the song
+     * @param genreIdList    the genre id list
+     * @param deleteExisting the delete existing
      */
     public void updateSongGenreList(final Song song, final List<Short> genreIdList, final boolean deleteExisting) {
 

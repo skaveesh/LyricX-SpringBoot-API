@@ -1,6 +1,7 @@
 package com.lyricxinc.lyricx.rest.impl;
 
 import com.lyricxinc.lyricx.core.dto.SongDTO;
+import com.lyricxinc.lyricx.core.dto.SongPageableDTO;
 import com.lyricxinc.lyricx.core.exception.EntityConversionException;
 import com.lyricxinc.lyricx.core.response.HttpResponse;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
@@ -9,15 +10,19 @@ import com.lyricxinc.lyricx.rest.controller.SongController;
 import com.lyricxinc.lyricx.service.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.LYRICX_ERR_35;
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.LYRICX_ERR_36;
@@ -53,6 +58,16 @@ public class SongControllerImpl implements SongController {
 
         Song song = songService.getSongBySurrogateKey(surrogateKey);
         SongDTO dto = asSongDTO(song);
+
+        return httpResponse.returnResponse(HttpStatus.OK, SUCCESS.getSuccessMessage(), null, dto);
+    }
+
+    @Override
+    public ResponseEntity<HttpResponseData> getSongsAddedByContributor(final HttpServletRequest request, final @RequestParam Integer pageNumber, final @RequestParam Integer pageSize) {
+
+        Page<Song> songPages = songService.getSongsAddedByContributor(request, pageNumber, pageSize);
+        List<SongDTO> dtoSongList = songPages.stream().map(this::asSongDTO).collect(Collectors.toList());
+        SongPageableDTO dto = new SongPageableDTO(songPages.getTotalPages(), songPages.getNumber(), songPages.getSize(), songPages.getTotalElements(), dtoSongList);
 
         return httpResponse.returnResponse(HttpStatus.OK, SUCCESS.getSuccessMessage(), null, dto);
     }

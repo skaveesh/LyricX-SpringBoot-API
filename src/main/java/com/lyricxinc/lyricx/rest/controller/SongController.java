@@ -22,7 +22,18 @@ public interface SongController {
      * @return the song
      */
     @GetMapping("get")
-    ResponseEntity<HttpResponseData> getSong(@RequestParam("surrogateKey") String surrogateKey);
+    ResponseEntity<HttpResponseData> getSong(@RequestParam String surrogateKey);
+
+    /**
+     * Gets songs added by contributor.
+     *
+     * @param request    the request
+     * @param pageNumber the page number
+     * @param pageSize   the page size
+     * @return the songs added by contributor
+     */
+    @GetMapping("get/contributor")
+    ResponseEntity<HttpResponseData> getSongsAddedByContributor(HttpServletRequest request, @RequestParam Integer pageNumber, @RequestParam Integer pageSize);
 
     /**
      * Save song response entity.
