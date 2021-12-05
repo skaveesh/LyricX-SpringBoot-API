@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.LYRICX_ERR_36;
 import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage;
+import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage.SUCCESS;
 
 @RestController
 public class AlbumControllerImpl implements AlbumController {
@@ -44,7 +45,7 @@ public class AlbumControllerImpl implements AlbumController {
         Album album = albumService.getAlbumBySurrogateKey(surrogateKey);
         AlbumDTO dto = asAlbumTO(album);
 
-        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.ALBUM_CREATE_SUCCESS.getSuccessMessage(), null, dto);
+        return httpResponse.returnResponse(HttpStatus.OK, SUCCESS.getSuccessMessage(), null, dto);
     }
 
     @Override
