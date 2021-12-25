@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -116,7 +117,7 @@ public class SongService {
      */
     public Page<Song> getSongsAddedByContributor(HttpServletRequest request, int pageNumber, int pageSize) {
         Contributor contributor = contributorService.getContributorByHttpServletRequest(request);
-        return songRepository.findByAddedBy(contributor, PageRequest.of(pageNumber, pageSize)).orElseThrow(() -> new NotFoundException(LYRICX_ERR_10));
+        return songRepository.findByAddedBy(contributor, PageRequest.of(pageNumber, pageSize, Sort.by("name"))).orElseThrow(() -> new NotFoundException(LYRICX_ERR_10));
     }
 
     /**
