@@ -230,15 +230,14 @@ public class SongService {
 
         try {
             updateSongArtistList(song, artistSurrogateKeyList, true);
+        } catch (LyricxBaseException ex) {
+            log.warn("Didn't update song artist list", ex);
+        }
 
+        try {
             updateSongGenreList(song, genreIdList, true);
         } catch (LyricxBaseException ex) {
-            if (ex.getCode().equals(LYRICX_ERR_29.name())) {
-                log.warn("Didn't update song artist list", ex);
-            }
-            if (ex.getCode().equals(LYRICX_ERR_30.name())) {
-                log.warn("Didn't update song generic list", ex);
-            }
+            log.warn("Didn't update song genre list", ex);
         }
 
         return songRepository.findById(song.getId()).orElse(null);
