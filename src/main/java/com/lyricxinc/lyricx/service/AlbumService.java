@@ -28,11 +28,9 @@ import java.util.function.BiConsumer;
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 import static com.lyricxinc.lyricx.core.util.StringValidatorUtil.isStringNotEmpty;
 import static com.lyricxinc.lyricx.service.suggest.MediaSuggestFactory.MediaType.ALBUM;
-
 /**
  * The type Album service.
  */
-@Validated
 @Service
 @Transactional
 public class AlbumService {
@@ -103,6 +101,26 @@ public class AlbumService {
     }
 
     /**
+     * Save album.
+     *
+     * @param request the request
+     * @param payload the payload
+     * @param image   the image
+     */
+    public Album saveAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile image) {
+
+        if (payload.getSurrogateKey() == null) {
+            return this.addAlbum(request, payload, image);
+        } else {
+            if (image != null) {
+                return this.updateAlbum(request, payload, image);
+            } else {
+                return this.updateAlbum(request, payload);
+            }
+        }
+    }
+
+    /**
      * Add album.
      *
      * @param request the request
@@ -110,7 +128,7 @@ public class AlbumService {
      * @param image   the image
      */
     @Validated(OnAlbumCreate.class)
-    public void addAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile image) {
+    public Album addAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile image) {
 
         Objects.requireNonNull(payload);
 
@@ -131,7 +149,7 @@ public class AlbumService {
             payload.setImgUrl(albumDefaultImageUrl);
         }
 
-        this.albumRepository.save(payload);
+        return this.albumRepository.save(payload);
     }
 
     /**
@@ -141,13 +159,13 @@ public class AlbumService {
      * @param payload the payload
      */
     @Validated(OnAlbumUpdate.class)
-    public void updateAlbum(final HttpServletRequest request, final @Valid Album payload) {
+    public Album updateAlbum(final HttpServletRequest request, final @Valid Album payload) {
 
         Objects.requireNonNull(payload);
 
         Album existingAlbum = updateAlbumDetails(request, payload, contributorService::checkNonSeniorContributorEditsVerifiedContent);
 
-        albumRepository.save(existingAlbum);
+        return albumRepository.save(existingAlbum);
     }
 
     /**
@@ -158,7 +176,7 @@ public class AlbumService {
      * @param image the image
      */
     @Validated(OnAlbumUpdate.class)
-    public void updateAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile image) {
+    public Album updateAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile image) {
 
         Objects.requireNonNull(payload);
         Objects.requireNonNull(image);
@@ -181,7 +199,7 @@ public class AlbumService {
         }
         existingAlbum.setImgUrl(imgUrl);
 
-        albumRepository.save(existingAlbum);
+        return albumRepository.save(existingAlbum);
     }
 
     /**

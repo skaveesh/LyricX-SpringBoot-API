@@ -44,6 +44,17 @@ public interface AlbumController {
     ResponseEntity<HttpResponseData> searchAlbums(String keyword);
 
     /**
+     * Save album response entity.
+     *
+     * @param request the request
+     * @param payload the payload
+     * @param image   the image
+     * @return the response entity
+     */
+    @PostMapping("save")
+    ResponseEntity<HttpResponseData> saveAlbum(HttpServletRequest request, @RequestPart("payload") AlbumDTO payload, @RequestPart(name = "image", required = false) MultipartFile image);
+
+    /**
      * Update album response entity.
      *
      * @param request the request

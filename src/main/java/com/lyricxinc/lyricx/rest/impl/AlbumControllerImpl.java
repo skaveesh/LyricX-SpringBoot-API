@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.util.Optional;
 
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.LYRICX_ERR_35;
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.LYRICX_ERR_36;
 import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage;
 import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage.SUCCESS;
@@ -43,7 +44,7 @@ public class AlbumControllerImpl implements AlbumController {
     public ResponseEntity<HttpResponseData> getAlbum(String surrogateKey) {
 
         Album album = albumService.getAlbumBySurrogateKey(surrogateKey);
-        AlbumDTO dto = asAlbumTO(album);
+        AlbumDTO dto = asAlbumDTO(album);
 
         return httpResponse.returnResponse(HttpStatus.OK, SUCCESS.getSuccessMessage(), null, dto);
     }
@@ -60,6 +61,16 @@ public class AlbumControllerImpl implements AlbumController {
     public ResponseEntity<HttpResponseData> searchAlbums(final String keyword) {
 
         return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SUCCESS.getSuccessMessage(), null, albumService.searchAlbums(keyword));
+    }
+
+    @Override
+    public ResponseEntity<HttpResponseData> saveAlbum(HttpServletRequest request, @RequestPart("payload") AlbumDTO payload, @RequestPart(name = "image", required = false) MultipartFile image) {
+
+        Album albumPayload = asAlbum(payload);
+        Album savedAlbum = albumService.saveAlbum(request, albumPayload, image);
+        AlbumDTO dto = asAlbumDTO(savedAlbum);
+
+        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.ALBUM_SAVE_SUCCESS.getSuccessMessage(), null, dto);
     }
 
     @Override
@@ -93,7 +104,11 @@ public class AlbumControllerImpl implements AlbumController {
         return null;
     }
 
-    private AlbumDTO asAlbumTO(final Album album) {
+    private Album asAlbum(final AlbumDTO requestDTO) {
+        return Optional.ofNullable(conversionService.convert(requestDTO, Album.class)).orElseThrow(() -> new EntityConversionException(LYRICX_ERR_35));
+    }
+
+    private AlbumDTO asAlbumDTO(final Album album) {
         return Optional.ofNullable(conversionService.convert(album, AlbumDTO.class)).orElseThrow(() -> new EntityConversionException(LYRICX_ERR_36));
     }
 }

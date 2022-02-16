@@ -35,6 +35,17 @@ public interface ArtistController {
     ResponseEntity<HttpResponseData> createArtist(HttpServletRequest request, @RequestPart("payload") ArtistDTO payload, @RequestPart("image") MultipartFile image);
 
     /**
+     * Update artist image response entity.
+     *
+     * @param request the request
+     * @param payload the request payload
+     * @param image   the image
+     * @return the response entity
+     */
+    @PostMapping("save")
+    ResponseEntity<HttpResponseData> saveArtist(HttpServletRequest request, @RequestPart("payload") ArtistDTO payload, @RequestPart(name = "image", required = false) MultipartFile image);
+
+    /**
      * Update artist response entity.
      *
      * @param request        the request

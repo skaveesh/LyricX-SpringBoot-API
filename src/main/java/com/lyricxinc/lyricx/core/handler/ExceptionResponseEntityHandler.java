@@ -100,10 +100,10 @@ public class ExceptionResponseEntityHandler {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseBody
-    public ResponseEntity<HttpResponseData> handleHttpRequestMethodNotSupportedException(LyricxBaseException ex) {
+    public ResponseEntity<HttpResponseData> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
 
         logError(ex);
-        return httpResponse.returnResponse(HttpStatus.FORBIDDEN, ex.getMessage(), ex.getCode(), null);
+        return httpResponse.returnResponse(HttpStatus.FORBIDDEN, ex.getMessage(), LYRICX_ERR_01.name(), null);
     }
 
     private void logError(Exception ex) {

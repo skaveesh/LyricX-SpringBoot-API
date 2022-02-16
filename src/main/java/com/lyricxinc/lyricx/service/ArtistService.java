@@ -72,12 +72,22 @@ public class ArtistService {
         this.mediaSuggestFactory = mediaSuggestFactory;
     }
 
+    /**
+     * Sets artist genre service.
+     *
+     * @param artistGenreService the artist genre service
+     */
     @Autowired
     public void setArtistGenreService(ArtistGenreService artistGenreService) {
 
         this.artistGenreService = artistGenreService;
     }
 
+    /**
+     * Gets artist genre service.
+     *
+     * @return the artist genre service
+     */
     public ArtistGenreService getArtistGenreService() {
 
         return artistGenreService;
@@ -112,9 +122,10 @@ public class ArtistService {
      * @param payload     the payload
      * @param image       the image
      * @param genreIdList the genre id list
+     * @return the artist
      */
     @Validated(OnArtistCreate.class)
-    public void addArtist(final HttpServletRequest request, final @Valid Artist payload, final MultipartFile image, final List<Short> genreIdList) {
+    public Artist addArtist(final HttpServletRequest request, final @Valid Artist payload, final MultipartFile image, final List<Short> genreIdList) {
 
         Objects.requireNonNull(payload);
 
@@ -139,10 +150,42 @@ public class ArtistService {
         Artist newArtist = this.artistRepository.save(payload);
 
         artistGenreService.createArtistGenre(newArtist, genreList);
+
+        return getArtistBySurrogateKey(newArtist.getSurrogateKey());
     }
 
+    /**
+     * Save artist.
+     *
+     * @param request     the request
+     * @param payload     the payload
+     * @param image       the image
+     * @param genreIdList the genre id list
+     * @return the artist
+     */
+    public Artist saveArtist(final HttpServletRequest request, final @Valid Artist payload, final MultipartFile image, final List<Short> genreIdList) {
+
+        if (payload.getSurrogateKey() == null) {
+            return this.addArtist(request, payload, image, genreIdList);
+        } else {
+            if (image != null) {
+                return this.updateArtist(request, payload, image, genreIdList);
+            } else {
+                return this.updateArtist(request, payload, genreIdList);
+            }
+        }
+    }
+
+    /**
+     * Update artist.
+     *
+     * @param request     the request
+     * @param payload     the payload
+     * @param genreIdList the genre id list
+     * @return the artist
+     */
     @Validated(OnArtistUpdate.class)
-    public void updateArtist(final HttpServletRequest request, final @Valid Artist payload, final List<Short> genreIdList) {
+    public Artist updateArtist(final HttpServletRequest request, final @Valid Artist payload, final List<Short> genreIdList) {
 
         Objects.requireNonNull(payload);
 
@@ -151,6 +194,8 @@ public class ArtistService {
         Artist updatedArtist = artistRepository.save(existingArtist);
 
         this.updateNewGenres(updatedArtist, genreIdList);
+
+        return getArtistBySurrogateKey(updatedArtist.getSurrogateKey());
     }
 
     /**
@@ -160,9 +205,10 @@ public class ArtistService {
      * @param payload     the payload
      * @param image       the image
      * @param genreIdList the genre id list
+     * @return the artist
      */
     @Validated(OnArtistUpdate.class)
-    public void updateArtist(final HttpServletRequest request, final @Valid Artist payload, final MultipartFile image, final List<Short> genreIdList) {
+    public Artist updateArtist(final HttpServletRequest request, final @Valid Artist payload, final MultipartFile image, final List<Short> genreIdList) {
 
         Objects.requireNonNull(payload);
         Objects.requireNonNull(image);
@@ -189,6 +235,8 @@ public class ArtistService {
         Artist updatedArtist = artistRepository.save(existingArtist);
 
         this.updateNewGenres(updatedArtist, genreIdList);
+
+        return getArtistBySurrogateKey(updatedArtist.getSurrogateKey());
     }
 
     /**

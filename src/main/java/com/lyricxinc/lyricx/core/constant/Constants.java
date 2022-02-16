@@ -299,6 +299,11 @@ public final class Constants {
         ALBUM_UPDATE_SUCCESS("Album updated successfully."),
 
         /**
+         * Album saved successfully.
+         */
+        ALBUM_SAVE_SUCCESS("Album saved successfully."),
+
+        /**
          * Album artwork and details updated successfully.
          */
         ALBUM_ARTWORK_UPDATE_SUCCESS("Album artwork and details updated successfully."),
@@ -317,6 +322,11 @@ public final class Constants {
          * Artist updated successfully.
          */
         ARTIST_UPDATE_SUCCESS("Artist updated successfully."),
+
+        /**
+         * Artist saved successfully.
+         */
+        ARTIST_SAVE_SUCCESS("Artist saved successfully."),
 
         /**
          * Artist image and details updated successfully.

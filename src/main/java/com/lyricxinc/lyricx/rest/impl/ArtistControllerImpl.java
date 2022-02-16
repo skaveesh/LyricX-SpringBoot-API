@@ -1,5 +1,6 @@
 package com.lyricxinc.lyricx.rest.impl;
 
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.LYRICX_ERR_35;
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.LYRICX_ERR_36;
 import static com.lyricxinc.lyricx.core.constant.Constants.SuccessMessage.*;
 
@@ -56,6 +57,16 @@ public class ArtistControllerImpl implements ArtistController {
     }
 
     @Override
+    public ResponseEntity<HttpResponseData> saveArtist(HttpServletRequest request, @RequestPart("payload") ArtistDTO payload, @RequestPart(name = "image", required = false) MultipartFile image) {
+
+        Artist albumPayload = asArtist(payload);
+        Artist savedAlbum = artistService.saveArtist(request, albumPayload, image, payload.getGenreIdList());
+        ArtistDTO dto = asArtistDTO(savedAlbum);
+
+        return httpResponse.returnResponse(HttpStatus.OK, ARTIST_SAVE_SUCCESS.getSuccessMessage(), null, dto);
+    }
+
+    @Override
     public ResponseEntity<HttpResponseData> updateArtist(HttpServletRequest request, @RequestBody ArtistDTO payload) {
 
         artistService.updateArtist(request, conversionService.convert(payload, Artist.class), payload.getGenreIdList());
@@ -82,6 +93,10 @@ public class ArtistControllerImpl implements ArtistController {
 
         //TODO
         return null;
+    }
+
+    private Artist asArtist(final ArtistDTO requestDTO) {
+        return Optional.ofNullable(conversionService.convert(requestDTO, Artist.class)).orElseThrow(() -> new EntityConversionException(LYRICX_ERR_35));
     }
 
     private ArtistDTO asArtistDTO(final Artist artist) {
