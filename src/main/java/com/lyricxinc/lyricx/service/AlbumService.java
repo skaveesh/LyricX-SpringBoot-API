@@ -12,6 +12,7 @@ import com.lyricxinc.lyricx.repository.AlbumRepository;
 import com.lyricxinc.lyricx.service.amazon.AmazonClientService;
 import com.lyricxinc.lyricx.service.suggest.MediaSuggestFactory;
 import com.lyricxinc.lyricx.service.suggest.MediaSuggestOperation;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ import static com.lyricxinc.lyricx.service.suggest.MediaSuggestFactory.MediaType
  * The type Album service.
  */
 @Service
+@Log4j2
 @Transactional
 public class AlbumService {
 
@@ -109,7 +111,13 @@ public class AlbumService {
      */
     public Album saveAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile image) {
 
-        if (payload.getSurrogateKey() == null) {
+        if (payload.getSurrogateKey() == null || payload.getSurrogateKey().isEmpty()) {
+
+            if(image == null) {
+                log.error("Album art not present while creating an album");
+                throw new ForbiddenException(LYRICX_ERR_41);
+            }
+
             return this.addAlbum(request, payload, image);
         } else {
             if (image != null) {

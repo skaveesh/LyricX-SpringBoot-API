@@ -83,7 +83,7 @@ public class SongControllerImpl implements SongController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> saveSong(final HttpServletRequest request, final @RequestPart("payload") SongDTO requestPayload, final @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<HttpResponseData> saveSong(final HttpServletRequest request, final @RequestPart("payload") SongDTO requestPayload, final @RequestPart(name = "image", required = false) MultipartFile image) {
 
         Song songPayload = asSong(requestPayload);
         Song savedSong = songService.saveSong(request, songPayload, requestPayload.getArtistSurrogateKeyList(), requestPayload.getGenreIdList(), image);

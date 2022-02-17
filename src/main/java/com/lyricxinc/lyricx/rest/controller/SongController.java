@@ -53,8 +53,8 @@ public interface SongController {
      * @param image   the image
      * @return the response entity
      */
-    @PutMapping("save/albumart")
-    ResponseEntity<HttpResponseData> saveSong(HttpServletRequest request, @RequestPart("payload") SongDTO payload, @RequestPart("image") MultipartFile image);
+    @PostMapping("save")
+    ResponseEntity<HttpResponseData> saveSong(HttpServletRequest request, @RequestPart("payload") SongDTO payload, @RequestPart(name = "image", required = false) MultipartFile image);
 
     /**
      * Create song response entity.

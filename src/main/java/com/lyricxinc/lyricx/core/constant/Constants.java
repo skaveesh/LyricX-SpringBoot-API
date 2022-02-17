@@ -261,7 +261,17 @@ public final class Constants {
         /**
          * Didn't update song genre list. Error while saving the song. Rolling back changes
          */
-        LYRICX_ERR_39("Didn't update song genre list. Error while saving the song. Rolling back changes");
+        LYRICX_ERR_39("Didn't update song genre list. Error while saving the song. Rolling back changes"),
+
+        /**
+         * Artist image not present while creating an artist
+         */
+        LYRICX_ERR_40("Artist image not present while creating an artist"),
+
+        /**
+         * Album art not present while creating an album
+         */
+        LYRICX_ERR_41("Album art not present while creating an album");
 
         private String errorMessage;
 

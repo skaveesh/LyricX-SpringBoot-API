@@ -37,9 +37,9 @@ import static com.lyricxinc.lyricx.core.util.StringValidatorUtil.isStringNotEmpt
 /**
  * The type Song service.
  */
+@Service
 @Log4j2
 @Validated
-@Service
 public class SongService {
 
     private final SongRepository songRepository;

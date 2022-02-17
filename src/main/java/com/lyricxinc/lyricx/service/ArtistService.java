@@ -14,6 +14,7 @@ import com.lyricxinc.lyricx.repository.ArtistRepository;
 import com.lyricxinc.lyricx.service.amazon.AmazonClientService;
 import com.lyricxinc.lyricx.service.suggest.MediaSuggestFactory;
 import com.lyricxinc.lyricx.service.suggest.MediaSuggestOperation;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,7 @@ import static com.lyricxinc.lyricx.service.suggest.MediaSuggestFactory.MediaType
  * The type Artist service.
  */
 @Service
+@Log4j2
 @Transactional
 public class ArtistService {
 
@@ -165,7 +167,13 @@ public class ArtistService {
      */
     public Artist saveArtist(final HttpServletRequest request, final @Valid Artist payload, final MultipartFile image, final List<Short> genreIdList) {
 
-        if (payload.getSurrogateKey() == null) {
+        if (payload.getSurrogateKey() == null || payload.getSurrogateKey().isEmpty()) {
+
+            if(image == null) {
+                log.error("Artist image not present while creating an artist");
+                throw new ForbiddenException(LYRICX_ERR_40);
+            }
+
             return this.addArtist(request, payload, image, genreIdList);
         } else {
             if (image != null) {
