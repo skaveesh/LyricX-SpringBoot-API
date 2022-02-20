@@ -1,6 +1,7 @@
 package com.lyricxinc.lyricx.rest.impl;
 
 import com.lyricxinc.lyricx.core.dto.AlbumDTO;
+import com.lyricxinc.lyricx.core.dto.AlbumPageableDTO;
 import com.lyricxinc.lyricx.core.exception.EntityConversionException;
 import com.lyricxinc.lyricx.core.response.HttpResponse;
 import com.lyricxinc.lyricx.core.response.HttpResponseData;
@@ -9,16 +10,19 @@ import com.lyricxinc.lyricx.rest.controller.AlbumController;
 import com.lyricxinc.lyricx.service.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.LYRICX_ERR_35;
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.LYRICX_ERR_36;
@@ -58,9 +62,14 @@ public class AlbumControllerImpl implements AlbumController {
     }
 
     @Override
-    public ResponseEntity<HttpResponseData> searchAlbums(final String keyword) {
+    public ResponseEntity<HttpResponseData> searchAlbums(@RequestParam String query, @RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
 
-        return httpResponse.returnResponse(HttpStatus.OK, SuccessMessage.SUCCESS.getSuccessMessage(), null, albumService.searchAlbums(keyword));
+        Page<Album> albumPages = albumService.searchAlbums(query, pageNumber, pageSize);
+
+        List<AlbumDTO> dtoAlbumList = albumPages.stream().map(this::asAlbumDTO).collect(Collectors.toList());
+        AlbumPageableDTO dto = new AlbumPageableDTO(albumPages.getTotalPages(), albumPages.getNumber(), albumPages.getSize(), albumPages.getTotalElements(), dtoAlbumList);
+
+        return httpResponse.returnResponse(HttpStatus.OK, SUCCESS.getSuccessMessage(), null, dto);
     }
 
     @Override

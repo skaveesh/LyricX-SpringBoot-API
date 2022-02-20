@@ -25,6 +25,17 @@ public interface SongController {
     ResponseEntity<HttpResponseData> getSong(@RequestParam String surrogateKey);
 
     /**
+     * Search songs response entity.
+     *
+     * @param query      the query
+     * @param pageNumber the page number
+     * @param pageSize   the page size
+     * @return the response entity
+     */
+    @GetMapping("search")
+    ResponseEntity<HttpResponseData> searchSongs(@RequestParam String query, @RequestParam Integer pageNumber, @RequestParam Integer pageSize);
+
+    /**
      * Gets songs added by contributor.
      *
      * @param request    the request

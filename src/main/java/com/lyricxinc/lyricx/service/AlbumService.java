@@ -15,6 +15,9 @@ import com.lyricxinc.lyricx.service.suggest.MediaSuggestOperation;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -23,12 +26,16 @@ import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Objects;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.function.BiConsumer;
 
 import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 import static com.lyricxinc.lyricx.core.util.StringValidatorUtil.isStringNotEmpty;
 import static com.lyricxinc.lyricx.service.suggest.MediaSuggestFactory.MediaType.ALBUM;
+
 /**
  * The type Album service.
  */
@@ -92,14 +99,16 @@ public class AlbumService {
     }
 
     /**
-     * Search albums list.
+     * Search albums page.
      *
-     * @param keyword the keyword
-     * @return list list
+     * @param query      the query
+     * @param pageNumber the page number
+     * @param pageSize   the page size
+     * @return the page
      */
-    public List<Album> searchAlbums(final String keyword) {
+    public Page<Album> searchAlbums(final String query, int pageNumber, int pageSize) {
 
-        return this.albumRepository.findTop20ByNameIgnoreCaseContainingOrderByNameAsc(keyword);
+        return this.albumRepository.findByNameContainingIgnoreCase(query, PageRequest.of(pageNumber, pageSize, Sort.by("name")));
     }
 
     /**
@@ -108,6 +117,7 @@ public class AlbumService {
      * @param request the request
      * @param payload the payload
      * @param image   the image
+     * @return the album
      */
     public Album saveAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile image) {
 
@@ -134,6 +144,7 @@ public class AlbumService {
      * @param request the request
      * @param payload the payload
      * @param image   the image
+     * @return the album
      */
     @Validated(OnAlbumCreate.class)
     public Album addAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile image) {
@@ -165,6 +176,7 @@ public class AlbumService {
      *
      * @param request the request
      * @param payload the payload
+     * @return the album
      */
     @Validated(OnAlbumUpdate.class)
     public Album updateAlbum(final HttpServletRequest request, final @Valid Album payload) {
@@ -179,9 +191,10 @@ public class AlbumService {
     /**
      * Update album.
      *
-     * @param request      the request
-     * @param payload      the payload
-     * @param image the image
+     * @param request the request
+     * @param payload the payload
+     * @param image   the image
+     * @return the album
      */
     @Validated(OnAlbumUpdate.class)
     public Album updateAlbum(final HttpServletRequest request, final @Valid Album payload, MultipartFile image) {

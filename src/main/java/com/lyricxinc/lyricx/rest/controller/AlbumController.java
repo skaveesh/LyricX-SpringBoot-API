@@ -24,6 +24,17 @@ public interface AlbumController {
     ResponseEntity<HttpResponseData> getAlbum(@RequestParam("surrogateKey") String surrogateKey);
 
     /**
+     * Search albums response entity.
+     *
+     * @param query      the query
+     * @param pageNumber the page number
+     * @param pageSize   the page size
+     * @return the response entity
+     */
+    @GetMapping("search")
+    ResponseEntity<HttpResponseData> searchAlbums(@RequestParam String query, @RequestParam Integer pageNumber, @RequestParam Integer pageSize);
+
+    /**
      * Create album response entity.
      *
      * @param request the request
@@ -33,15 +44,6 @@ public interface AlbumController {
      */
     @PutMapping("create")
     ResponseEntity<HttpResponseData> createAlbum(HttpServletRequest request, @RequestPart("payload") AlbumDTO payload, @RequestPart("image") MultipartFile image);
-
-    /**
-     * Search albums response entity.
-     *
-     * @param keyword the keyword
-     * @return the response entity
-     */
-    @GetMapping("search")
-    ResponseEntity<HttpResponseData> searchAlbums(String keyword);
 
     /**
      * Save album response entity.

@@ -108,6 +108,18 @@ public class SongService {
     }
 
     /**
+     * Search songs page.
+     *
+     * @param query      the query
+     * @param pageNumber the page number
+     * @param pageSize   the page size
+     * @return the page
+     */
+    public Page<Song> searchSongs(String query, int pageNumber, int pageSize) {
+        return songRepository.findByNameContainingIgnoreCaseOrKeywordsContainingIgnoreCase(query, query, PageRequest.of(pageNumber, pageSize, Sort.by("name")));
+    }
+
+    /**
      * Gets songs added by contributor.
      *
      * @param request    the request

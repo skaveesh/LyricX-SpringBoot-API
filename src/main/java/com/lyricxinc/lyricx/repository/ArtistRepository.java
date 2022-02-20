@@ -2,6 +2,8 @@ package com.lyricxinc.lyricx.repository;
 
 import com.lyricxinc.lyricx.model.Artist;
 import com.lyricxinc.lyricx.model.socket.outbound.ArtistSuggestedItem;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -58,4 +60,14 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
      */
     @Query(nativeQuery = true)
     List<ArtistSuggestedItem> findArtistSuggestionUsingArtistName(@Param("name") String name);
+
+    /**
+     * Find by name containing ignore case.
+     *
+     * @param name     the name
+     * @param pageable the pageable
+     * @return the optional
+     */
+    Page<Artist> findByNameContainingIgnoreCase(String name, Pageable pageable);
+
 }

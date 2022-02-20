@@ -1,7 +1,8 @@
 package com.lyricxinc.lyricx.service.suggest;
 
-import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
-import com.lyricxinc.lyricx.core.exception.LyricxBaseException;
+import com.lyricxinc.lyricx.core.exception.MediaSuggestionException;
+
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.LYRICX_ERR_27;
 
 /**
  * The type Media suggest factory.
@@ -23,7 +24,7 @@ public class MediaSuggestFactory {
             return new ArtistSuggestOperation();
         }
 
-        throw new LyricxBaseException(LYRICX_ERR_27.getErrorMessage(), LYRICX_ERR_27.name());
+        throw new MediaSuggestionException(LYRICX_ERR_27);
     }
 
     /**

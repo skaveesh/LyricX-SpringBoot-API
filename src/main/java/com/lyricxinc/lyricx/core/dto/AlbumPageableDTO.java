@@ -9,14 +9,14 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SongPageableDTO extends PageableDTO {
+public class AlbumPageableDTO extends PageableDTO {
 
-    private List<SongDTO> songList;
+    private List<AlbumDTO> albumList;
 
-    public SongPageableDTO(int totalPages, int currentPage, int pageSize, long totalElements, List<SongDTO> songList) {
+    public AlbumPageableDTO(int totalPages, int currentPage, int pageSize, long totalElements, List<AlbumDTO> albumList) {
 
         super(totalPages, currentPage, pageSize, totalElements);
-        this.songList = songList;
+        this.albumList = albumList;
     }
 
 }

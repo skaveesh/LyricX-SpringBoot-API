@@ -63,13 +63,17 @@ public class SongControllerImpl implements SongController {
     }
 
     @Override
+    public ResponseEntity<HttpResponseData> searchSongs(final String query, final @RequestParam Integer pageNumber, final @RequestParam Integer pageSize) {
+
+        Page<Song> songPages = songService.searchSongs(query, pageNumber, pageSize);
+        return getHttpResponseDataResponseEntityFromSongPage(songPages);
+    }
+
+    @Override
     public ResponseEntity<HttpResponseData> getSongsAddedByContributor(final HttpServletRequest request, final @RequestParam Integer pageNumber, final @RequestParam Integer pageSize) {
 
         Page<Song> songPages = songService.getSongsAddedByContributor(request, pageNumber, pageSize);
-        List<SongDTO> dtoSongList = songPages.stream().map(this::asSongDTO).collect(Collectors.toList());
-        SongPageableDTO dto = new SongPageableDTO(songPages.getTotalPages(), songPages.getNumber(), songPages.getSize(), songPages.getTotalElements(), dtoSongList);
-
-        return httpResponse.returnResponse(HttpStatus.OK, SUCCESS.getSuccessMessage(), null, dto);
+        return getHttpResponseDataResponseEntityFromSongPage(songPages);
     }
 
     @Override
@@ -161,5 +165,13 @@ public class SongControllerImpl implements SongController {
 
     private SongDTO asSongDTO(final Song song) {
         return Optional.ofNullable(conversionService.convert(song, SongDTO.class)).orElseThrow(() -> new EntityConversionException(LYRICX_ERR_36));
+    }
+
+    private ResponseEntity<HttpResponseData> getHttpResponseDataResponseEntityFromSongPage(Page<Song> songPages) {
+
+        List<SongDTO> dtoSongList = songPages.stream().map(this::asSongDTO).collect(Collectors.toList());
+        SongPageableDTO dto = new SongPageableDTO(songPages.getTotalPages(), songPages.getNumber(), songPages.getSize(), songPages.getTotalElements(), dtoSongList);
+
+        return httpResponse.returnResponse(HttpStatus.OK, SUCCESS.getSuccessMessage(), null, dto);
     }
 }

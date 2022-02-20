@@ -61,4 +61,15 @@ public interface SongRepository extends PagingAndSortingRepository<Song, Long> {
      * @return the optional
      */
     Optional<Page<Song>> findByAddedBy(Contributor contributor, Pageable pageable);
+
+    /**
+     * Find by name containing ignore case or keywords containing ignore case page.
+     *
+     * @param name     the name
+     * @param keywords the keywords
+     * @param pageable the pageable
+     * @return the page
+     */
+    Page<Song> findByNameContainingIgnoreCaseOrKeywordsContainingIgnoreCase(String name, String keywords, Pageable pageable);
+
 }

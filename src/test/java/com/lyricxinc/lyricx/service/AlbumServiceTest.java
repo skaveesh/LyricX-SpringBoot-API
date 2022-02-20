@@ -39,7 +39,7 @@ public class AlbumServiceTest {
     @Test
     public void searchAlbums() {
 
-        albumService.searchAlbums("mock").forEach(album -> System.out.println(album.getName()));
+        albumService.searchAlbums("mock", 1, 5).forEach(album -> System.out.println(album.getName()));
 
     }
 

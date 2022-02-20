@@ -24,6 +24,17 @@ public interface ArtistController {
     ResponseEntity<HttpResponseData> getArtist(@RequestParam("surrogateKey") String surrogateKey);
 
     /**
+     * Search artists response entity.
+     *
+     * @param query      the query
+     * @param pageNumber the page number
+     * @param pageSize   the page size
+     * @return the response entity
+     */
+    @GetMapping("search")
+    ResponseEntity<HttpResponseData> searchArtists(@RequestParam String query, @RequestParam Integer pageNumber, @RequestParam Integer pageSize);
+
+    /**
      * Create artist response entity.
      *
      * @param request the request

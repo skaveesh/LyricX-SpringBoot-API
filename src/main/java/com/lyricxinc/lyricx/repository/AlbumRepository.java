@@ -2,6 +2,8 @@ package com.lyricxinc.lyricx.repository;
 
 import com.lyricxinc.lyricx.model.Album;
 import com.lyricxinc.lyricx.model.socket.outbound.AlbumSuggestedItem;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -51,5 +53,14 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
      */
     @Query(value = "SELECT img_url FROM album WHERE surrogate_key=:surrogateKey LIMIT 1", nativeQuery = true)
     Optional<String> findImgUrlUsingSurrogateKey(@Param("surrogateKey") String surrogateKey);
+
+    /**
+     * Find by name containing ignore case.
+     *
+     * @param name     the name
+     * @param pageable the pageable
+     * @return the optional
+     */
+    Page<Album> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
 }

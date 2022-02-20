@@ -14,7 +14,7 @@ public class LyricxBaseException extends RuntimeException {
      * @param message the message
      * @param code    the code
      */
-    public LyricxBaseException(String message, String code) {
+    protected LyricxBaseException(String message, String code) {
 
         super(message);
         this.message = message;

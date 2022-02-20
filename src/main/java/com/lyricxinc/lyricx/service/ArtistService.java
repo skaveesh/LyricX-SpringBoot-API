@@ -17,6 +17,9 @@ import com.lyricxinc.lyricx.service.suggest.MediaSuggestOperation;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -115,6 +118,19 @@ public class ArtistService {
     public Artist getArtistBySurrogateKey(String surrogateKey) {
 
         return artistRepository.findBySurrogateKey(surrogateKey).orElseThrow(() -> new NotFoundException(LYRICX_ERR_12));
+    }
+
+    /**
+     * Search artists page.
+     *
+     * @param query      the query
+     * @param pageNumber the page number
+     * @param pageSize   the page size
+     * @return the page
+     */
+    public Page<Artist> searchArtists(final String query, int pageNumber, int pageSize) {
+
+        return this.artistRepository.findByNameContainingIgnoreCase(query, PageRequest.of(pageNumber, pageSize, Sort.by("name")));
     }
 
     /**
