@@ -27,10 +27,15 @@ public class ArtistToArtistDTOConverter implements Converter<Artist, ArtistDTO> 
         artistDTO.setAlbumsSurrogateKeyList(
                 source.getAlbums().stream().map(Album::getSurrogateKey).collect(
                         Collectors.toList()));
+        artistDTO.setAlbumsNameList(
+                source.getAlbums().stream().map(Album::getName).collect(
+                        Collectors.toList()));
         artistDTO.setArtistSongsSurrogateKeyList(
                 source.getArtistSongs().stream().map(artistSong -> artistSong.getSong().getSurrogateKey()).collect(
-                        Collectors.toList())
-        );
+                        Collectors.toList()));
+        artistDTO.setArtistSongsNameList(
+                source.getArtistSongs().stream().map(artistSong -> artistSong.getSong().getName()).collect(
+                        Collectors.toList()));
 
         return artistDTO;
     }

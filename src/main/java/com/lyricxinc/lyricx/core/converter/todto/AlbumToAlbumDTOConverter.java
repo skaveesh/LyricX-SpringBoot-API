@@ -15,6 +15,7 @@ public class AlbumToAlbumDTOConverter implements Converter<Album, AlbumDTO> {
         AlbumDTO albumDTO = new AlbumDTO();
         albumDTO.setSurrogateKey(source.getSurrogateKey());
         albumDTO.setArtistSurrogateKey(source.getArtist().getSurrogateKey());
+        albumDTO.setArtistName(source.getArtist().getName());
         albumDTO.setYear(source.getYear().toString());
         albumDTO.setName(source.getName());
         albumDTO.setImgUrl(source.getImgUrl());

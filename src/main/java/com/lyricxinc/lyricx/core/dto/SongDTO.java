@@ -19,6 +19,12 @@ public class SongDTO {
 
     private String albumSurrogateKey;
 
+    private String albumName;
+
+    private String artistSurrogateKeyOfTheAlbum;
+
+    private String artistNameOfTheAlbum;
+
     private String guitarKey;
 
     private String beat;
@@ -60,6 +66,8 @@ public class SongDTO {
     private boolean songModifiesRequestsAvailable;
 
     private List<String> artistSurrogateKeyList;
+
+    private List<String> artistNameList;
 
     private List<Short> genreIdList;
 }

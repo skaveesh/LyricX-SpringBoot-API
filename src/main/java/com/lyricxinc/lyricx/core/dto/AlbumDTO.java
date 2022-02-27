@@ -11,6 +11,8 @@ public class AlbumDTO {
 
     private String artistSurrogateKey;
 
+    private String artistName;
+
     private String year;
 
     private String name;

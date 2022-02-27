@@ -1,6 +1,6 @@
 package com.lyricxinc.lyricx.core.dto;
 
-import lombok.*;
+import lombok.Data;
 
 import java.util.List;
 
@@ -27,6 +27,10 @@ public class ArtistDTO {
 
     private List<String> albumsSurrogateKeyList;
 
+    private List<String> albumsNameList;
+
     private List<String> artistSongsSurrogateKeyList;
+
+    private List<String> artistSongsNameList;
 
 }

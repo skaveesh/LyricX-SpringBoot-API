@@ -20,6 +20,9 @@ public class SongToSongDTOConverter implements Converter<Song, SongDTO> {
         songDTO.setSurrogateKey(source.getSurrogateKey());
         songDTO.setName(source.getName());
         songDTO.setAlbumSurrogateKey(source.getAlbum().getSurrogateKey());
+        songDTO.setAlbumName(source.getAlbum().getName());
+        songDTO.setArtistSurrogateKeyOfTheAlbum(source.getAlbum().getArtist().getSurrogateKey());
+        songDTO.setArtistNameOfTheAlbum(source.getAlbum().getArtist().getName());
         songDTO.setGuitarKey(source.getGuitarKey());
         songDTO.setBeat(source.getBeat());
         songDTO.setLanguageCode(source.getLanguage().getLanguageCode());
@@ -74,6 +77,9 @@ public class SongToSongDTOConverter implements Converter<Song, SongDTO> {
         songDTO.setSongModifiesRequestsAvailable(hasItems(source.getSongModifies()));
         songDTO.setArtistSurrogateKeyList(
                 fromNullableSet(source.getArtistSongs()).map(artistSong -> artistSong.getArtist().getSurrogateKey()).collect(
+                        Collectors.toList()));
+        songDTO.setArtistNameList(
+                fromNullableSet(source.getArtistSongs()).map(artistSong -> artistSong.getArtist().getName()).collect(
                         Collectors.toList()));
         songDTO.setGenreIdList(
                 source.getSongGenres().stream().map(songGenre -> songGenre.getGenre().getId()).collect(
