@@ -20,23 +20,27 @@ public class ArtistGenreServiceTest {
 
     @Test
     public void addArtistGenre() {
+
         artistGenreService.addArtistGenre(6L, (short) 1);
         artistGenreService.addArtistGenre(6L, (short) 2);
     }
 
     @Test
-    public void removeArtistGenre(){
+    public void removeArtistGenre() {
+
         artistGenreService.removeArtistGenre(4L, (short) 1);
         artistGenreService.removeArtistGenre(4L, (short) 2);
 
 
-//        System.out.println("RETURN VALUE : "+i);
+        //        System.out.println("RETURN VALUE : "+i);
     }
 
     @Test
-    public void findArtistGenre(){
-        ArtistGenre artistGenre= artistGenreRepository.findByArtist_IdAndGenre_Id(3L, (short) 2);
+    public void findArtistGenre() {
 
-        System.out.println("RETURN VALUE : "+artistGenre.getId());
+        ArtistGenre artistGenre = artistGenreRepository.findByArtist_IdAndGenre_Id(3L, (short) 2);
+
+        System.out.println("RETURN VALUE : " + artistGenre.getId());
     }
+
 }

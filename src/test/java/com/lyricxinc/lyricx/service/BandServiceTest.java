@@ -15,20 +15,25 @@ public class BandServiceTest {
     BandService bandService;
 
     @Test
-    public void getBandAppUsers(){
-        for(BandChanter ap: bandService.getBandChanters(1)){
+    public void getBandAppUsers() {
+
+        for (BandChanter ap : bandService.getBandChanters(1))
+        {
             System.out.println(ap.getChanter().getId());
         }
     }
 
     @Test
     public void addBand() {
+
         bandService.addBand("band3");
-//        bandService.addBand("band2");
+        //        bandService.addBand("band2");
     }
 
     @Test
     public void removeBand() {
+
         bandService.removeBand(3L);
     }
+
 }

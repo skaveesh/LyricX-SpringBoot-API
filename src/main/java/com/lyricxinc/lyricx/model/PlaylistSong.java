@@ -1,6 +1,7 @@
 package com.lyricxinc.lyricx.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -8,17 +9,19 @@ import javax.persistence.*;
 public class PlaylistSong {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @SequenceGenerator(name = "playlist_song_id_seq", sequenceName = "playlist_song_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "playlist_song_id_seq")
+    @JsonIgnore
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "playlistId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "referencePlaylist")
     private Playlist playlist;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "songId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "playlistSongsReferenceSong")
     private Song song;
 
     public PlaylistSong() {
@@ -31,12 +34,12 @@ public class PlaylistSong {
         this.song = song;
     }
 
-    public long getId() {
+    public Long getId() {
 
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
 
         this.id = id;
     }

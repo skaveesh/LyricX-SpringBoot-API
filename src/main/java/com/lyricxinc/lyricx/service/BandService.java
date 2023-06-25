@@ -5,10 +5,12 @@ import com.lyricxinc.lyricx.model.BandChanter;
 import com.lyricxinc.lyricx.repository.BandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
 @Service
+@Transactional
 public class BandService {
 
     private final BandRepository bandRepository;

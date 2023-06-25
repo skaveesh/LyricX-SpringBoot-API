@@ -1,7 +1,9 @@
 package com.lyricxinc.lyricx.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,25 +16,29 @@ import java.util.Set;
 public class Playlist {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @SequenceGenerator(name = "playlist_id_seq", sequenceName = "playlist_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "playlist_id_seq")
+    @JsonIgnore
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "chanterId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "playlistsReferenceChanter")
     private Chanter chanter;
 
     @NotBlank
     private String playlistName;
 
     @CreationTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime lastModifiedDate;
 
     @OneToMany(mappedBy = "song", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "playlistSongsReferenceSong")
     private Set<PlaylistSong> playlistSongs;
 
     public Playlist() {
@@ -52,12 +58,12 @@ public class Playlist {
         this.playlistSongs = playlistSongs;
     }
 
-    public int getId() {
+    public Integer getId() {
 
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
 
         this.id = id;
     }
@@ -99,7 +105,12 @@ public class Playlist {
 
     public void setPlaylistSongs(Set<PlaylistSong> playlistSongs) {
 
-        this.playlistSongs = playlistSongs;
+        if (this.playlistSongs == null) {
+            this.playlistSongs = playlistSongs;
+        } else {
+            this.playlistSongs.clear();
+            this.playlistSongs.addAll(playlistSongs);
+        }
     }
 
 }

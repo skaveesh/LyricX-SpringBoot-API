@@ -1,12 +1,10 @@
 package com.lyricxinc.lyricx.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -15,17 +13,20 @@ import java.time.LocalDateTime;
 public class Genre {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private short id;
+    @SequenceGenerator(name = "genre_id_seq", sequenceName = "genre_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "genre_id_seq")
+    private Short id;
 
     @NotBlank
     @Size(max = 30)
     private String genreName;
 
     @CreationTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime addedDate;
 
     @UpdateTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime lastModifiedDate;
 
     public Genre() {
@@ -37,12 +38,12 @@ public class Genre {
         this.genreName = genreName;
     }
 
-    public short getId() {
+    public Short getId() {
 
         return id;
     }
 
-    public void setId(short id) {
+    public void setId(Short id) {
 
         this.id = id;
     }

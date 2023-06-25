@@ -1,6 +1,8 @@
 package com.lyricxinc.lyricx.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -12,29 +14,31 @@ import java.util.Set;
 public class Chanter {
 
     @Id
+    @JsonIgnore
     private String id;
 
     @CreationTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime addedDate;
 
     @OneToMany(mappedBy = "chanter", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "bandChantersReferenceChanter")
     private Set<BandChanter> bandChanters;
 
     @OneToMany(mappedBy = "chanter", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "favouritesReferenceChanter")
     private Set<Favourite> favourites;
 
     @OneToMany(mappedBy = "chanter", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "playlistsReferenceChanter")
     private Set<Playlist> playlists;
 
     @OneToMany(mappedBy = "chanter", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "chantersReferenceChanter")
     private Set<ChanterFriend> chanters;
 
     @OneToMany(mappedBy = "friend", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "friendsReferenceFriend")
     private Set<ChanterFriend> friends;
 
     public Chanter() {
@@ -68,7 +72,12 @@ public class Chanter {
 
     public void setBandChanters(Set<BandChanter> bandChanters) {
 
-        this.bandChanters = bandChanters;
+        if (this.bandChanters == null) {
+            this.bandChanters = bandChanters;
+        } else {
+            this.bandChanters.clear();
+            this.bandChanters.addAll(bandChanters);
+        }
     }
 
     public Set<Favourite> getFavourites() {
@@ -78,7 +87,12 @@ public class Chanter {
 
     public void setFavourites(Set<Favourite> favourites) {
 
-        this.favourites = favourites;
+        if (this.favourites == null) {
+            this.favourites = favourites;
+        } else {
+            this.favourites.clear();
+            this.favourites.addAll(favourites);
+        }
     }
 
     public Set<Playlist> getPlaylists() {
@@ -88,7 +102,12 @@ public class Chanter {
 
     public void setPlaylists(Set<Playlist> playlists) {
 
-        this.playlists = playlists;
+        if (this.playlists == null) {
+            this.playlists = playlists;
+        } else {
+            this.playlists.clear();
+            this.playlists.addAll(playlists);
+        }
     }
 
     public Set<ChanterFriend> getChanters() {
@@ -98,7 +117,12 @@ public class Chanter {
 
     public void setChanters(Set<ChanterFriend> chanters) {
 
-        this.chanters = chanters;
+        if (this.chanters == null) {
+            this.chanters = chanters;
+        } else {
+            this.chanters.clear();
+            this.chanters.addAll(chanters);
+        }
     }
 
     public Set<ChanterFriend> getFriends() {
@@ -108,7 +132,12 @@ public class Chanter {
 
     public void setFriends(Set<ChanterFriend> friends) {
 
-        this.friends = friends;
+        if (this.friends == null) {
+            this.friends = friends;
+        } else {
+            this.friends.clear();
+            this.friends.addAll(friends);
+        }
     }
 
 }

@@ -1,0 +1,40 @@
+{
+  "properties": [
+    {
+      "name": "com.amazonaws.s3.amazonProperties.endpointUrl",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "com.amazonaws.s3.amazonProperties.accessKey",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "com.amazonaws.s3.amazonProperties.secretKey",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "com.amazonaws.s3.amazonProperties.bucketName",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "com.lyricxinc.lyricx.baseImageBucketUrl",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "com.lyricxinc.lyricx.contributorImageUrl",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "com.lyricxinc.lyricx.albumImageUrl",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "com.lyricxinc.lyricx.artistImageUrl",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "com.lyricxinc.lyricx.songImageUrl",
+      "type": "java.lang.String"
+    }
+  ]
+}

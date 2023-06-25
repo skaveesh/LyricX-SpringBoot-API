@@ -3,8 +3,10 @@ package com.lyricxinc.lyricx.service;
 import com.lyricxinc.lyricx.repository.BandChanterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class BandChanterService {
 
     private final BandChanterRepository bandChanterRepository;

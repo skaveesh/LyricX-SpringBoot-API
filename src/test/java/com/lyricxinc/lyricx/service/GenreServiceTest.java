@@ -15,15 +15,19 @@ public class GenreServiceTest {
 
     @Test
     public void findGenreByName() {
+
     }
 
     @Test
     public void getGenreById() {
+
     }
 
     @Test
     public void addGenre() {
+
         genreService.addGenre("Rap");
         genreService.addGenre("Hip-Hop");
     }
+
 }

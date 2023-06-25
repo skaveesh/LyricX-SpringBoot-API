@@ -1,6 +1,8 @@
 package com.lyricxinc.lyricx.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -11,12 +13,14 @@ import java.time.LocalDateTime;
 public class VisitorCorrection {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @SequenceGenerator(name = "visitor_correction_id_seq", sequenceName = "visitor_correction_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "visitor_correction_id_seq")
+    @JsonIgnore
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "songId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "ReferenceSong")
     private Song song;
 
     @NotBlank
@@ -29,6 +33,7 @@ public class VisitorCorrection {
     private String correction;
 
     @CreationTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime addedDate;
 
     public VisitorCorrection() {
@@ -43,12 +48,12 @@ public class VisitorCorrection {
         this.correction = correction;
     }
 
-    public long getId() {
+    public Long getId() {
 
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
 
         this.id = id;
     }

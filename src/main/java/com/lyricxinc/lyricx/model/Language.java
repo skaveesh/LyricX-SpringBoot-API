@@ -1,50 +1,109 @@
 package com.lyricxinc.lyricx.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lyricxinc.lyricx.model.validator.group.OnLanguageCreate;
+import com.lyricxinc.lyricx.model.validator.group.OnSongCreate;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+/**
+ * The type Language.
+ */
 @Entity
 public class Language {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private short id;
+    @SequenceGenerator(name = "language_id_seq", sequenceName = "language_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "language_id_seq")
+    @JsonIgnore
+    private Short id;
 
-    @NotBlank
     @Size(max = 30)
-    private String language;
+    @NotBlank(groups = {OnLanguageCreate.class})
+    private String languageName;
 
+    @Column(unique = true, nullable = false)
+    @NotBlank(groups = {OnSongCreate.class, OnLanguageCreate.class})
+    @Size(max = 2, min = 2)
+    private String languageCode;
+
+    /**
+     * Instantiates a new Language.
+     */
     public Language() {
 
     }
 
-    public Language(@NotBlank @Size(max = 30) String language) {
+    /**
+     * Instantiates a new Language.
+     *
+     * @param languageName the language name
+     */
+    public Language(@NotBlank @Size(max = 30) String languageName) {
 
-        this.language = language;
+        this.languageName = languageName;
     }
 
-    public short getId() {
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public Short getId() {
 
         return id;
     }
 
-    public void setId(short id) {
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
+    public void setId(Short id) {
 
         this.id = id;
     }
 
-    public String getLanguage() {
+    /**
+     * Gets language name.
+     *
+     * @return the language name
+     */
+    public String getLanguageName() {
 
-        return language;
+        return languageName;
     }
 
-    public void setLanguage(String language) {
+    /**
+     * Sets language name.
+     *
+     * @param languageName the language name
+     */
+    public void setLanguageName(String languageName) {
 
-        this.language = language;
+        this.languageName = languageName;
+    }
+
+    /**
+     * Gets language code.
+     *
+     * @return the language code
+     */
+    public String getLanguageCode() {
+
+        return languageCode;
+    }
+
+    /**
+     * Sets language code.
+     *
+     * @param languageCode should be ISO 639-1:2002 which is a two characters code
+     */
+    public void setLanguageCode(String languageCode) {
+
+        this.languageCode = languageCode;
     }
 
 }

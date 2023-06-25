@@ -1,6 +1,8 @@
 package com.lyricxinc.lyricx.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,20 +15,24 @@ import java.util.Set;
 public class Band {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @SequenceGenerator(name = "band_id_seq", sequenceName = "band_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "band_id_seq")
+    @JsonIgnore
+    private Long id;
 
     @NotBlank
     private String bandName;
 
     @CreationTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime lastModifiedDate;
 
     @OneToMany(mappedBy = "band", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "bandChantersReferenceBand")
     private Set<BandChanter> bandChanters;
 
     public Band() {
@@ -38,12 +44,12 @@ public class Band {
         this.bandName = bandName;
     }
 
-    public long getId() {
+    public Long getId() {
 
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
 
         this.id = id;
     }
@@ -75,7 +81,12 @@ public class Band {
 
     public void setBandChanters(Set<BandChanter> bandChanters) {
 
-        this.bandChanters = bandChanters;
+        if (this.bandChanters == null) {
+            this.bandChanters = bandChanters;
+        } else {
+            this.bandChanters.clear();
+            this.bandChanters.addAll(bandChanters);
+        }
     }
 
 }

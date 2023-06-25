@@ -3,11 +3,13 @@ package com.lyricxinc.lyricx.core.interceptor;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
 import com.lyricxinc.lyricx.core.config.FirebaseConfig;
-import com.lyricxinc.lyricx.core.exception.ForbiddenCustomException;
+import com.lyricxinc.lyricx.core.exception.ForbiddenException;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static com.lyricxinc.lyricx.core.constant.Constants.ErrorMessageAndCode.*;
 
 public class ChanterInterceptor implements HandlerInterceptor {
 
@@ -24,10 +26,10 @@ public class ChanterInterceptor implements HandlerInterceptor {
 
             try
             {
-                decodeToken = FirebaseAuth.getInstance(FirebaseConfig.chanterFirebaseApp).verifyIdToken(authToken);
+                decodeToken = FirebaseAuth.getInstance(FirebaseConfig.getChanterFirebaseApp()).verifyIdToken(authToken);
             } catch (Exception e)
             {
-                throw new ForbiddenCustomException("Provided credentials are not valid.");
+                throw new ForbiddenException(LYRICX_ERR_18);
             }
 
             String uid = decodeToken.getUid();
@@ -39,7 +41,7 @@ public class ChanterInterceptor implements HandlerInterceptor {
         }
         else
         {
-            throw new ForbiddenCustomException("Provided credentials are not valid.");
+            throw new ForbiddenException(LYRICX_ERR_18);
         }
     }
 

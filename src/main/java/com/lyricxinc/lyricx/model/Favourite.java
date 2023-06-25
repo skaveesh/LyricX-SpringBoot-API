@@ -1,6 +1,8 @@
 package com.lyricxinc.lyricx.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -10,20 +12,23 @@ import java.time.LocalDateTime;
 public class Favourite {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @SequenceGenerator(name = "favourite_id_seq", sequenceName = "favourite_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "favourite_id_seq")
+    @JsonIgnore
+    private Integer id;
 
     @CreationTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime lastModifiedDate;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "chanterId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "favouritesReferenceChanter")
     private Chanter chanter;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "songId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "ReferenceSong")
     private Song song;
 
     public Favourite() {
@@ -36,12 +41,12 @@ public class Favourite {
         this.song = song;
     }
 
-    public int getId() {
+    public Integer getId() {
 
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
 
         this.id = id;
     }

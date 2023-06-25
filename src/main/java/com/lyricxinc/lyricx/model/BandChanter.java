@@ -1,6 +1,8 @@
 package com.lyricxinc.lyricx.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -10,41 +12,44 @@ import java.time.LocalDateTime;
 public class BandChanter {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @SequenceGenerator(name = "band_chanter_id_seq", sequenceName = "band_chanter_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "band_chanter_id_seq")
+    @JsonIgnore
+    private Long id;
 
     @CreationTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime addedDate;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "bandId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "bandChantersReferenceBand")
     private Band band;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "chanterId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "bandChantersReferenceChanter")
     private Chanter chanter;
 
-    private boolean moderatorStatus;
+    private Boolean moderatorStatus;
 
     public BandChanter() {
 
     }
 
-    public BandChanter(Band band, Chanter chanter, boolean moderatorStatus) {
+    public BandChanter(Band band, Chanter chanter, Boolean moderatorStatus) {
 
         this.band = band;
         this.chanter = chanter;
         this.moderatorStatus = moderatorStatus;
     }
 
-    public long getId() {
+    public Long getId() {
 
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
 
         this.id = id;
     }
@@ -74,12 +79,12 @@ public class BandChanter {
         this.chanter = chanter;
     }
 
-    public boolean isModeratorStatus() {
+    public Boolean isModeratorStatus() {
 
         return moderatorStatus;
     }
 
-    public void setModeratorStatus(boolean moderatorStatus) {
+    public void setModeratorStatus(Boolean moderatorStatus) {
 
         this.moderatorStatus = moderatorStatus;
     }

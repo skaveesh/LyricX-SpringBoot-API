@@ -15,6 +15,7 @@ public class ChanterServiceTest {
 
     @Test
     public void addChanter() {
+
         chanterService.addChanter("tok1");
         chanterService.addChanter("tok2");
         chanterService.addChanter("tok3");
@@ -22,6 +23,8 @@ public class ChanterServiceTest {
 
     @Test
     public void removeAppUser() {
+
         chanterService.removeAppUser("1r3tesg");
     }
+
 }

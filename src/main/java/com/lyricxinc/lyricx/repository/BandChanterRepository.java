@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface BandChanterRepository extends JpaRepository<BandChanter, Long> {
 
     @Modifying
-    @Query(value = "insert into band_chanter (chanter_id, band_id, moderator_status) values(:chanter_id, :band_id, :moderator_status)", nativeQuery = true)
+    @Query(value = "INSERT INTO band_chanter (chanter_id, band_id, moderator_status) VALUES (:chanter_id, :band_id, :moderator_status)", nativeQuery = true)
     @Transactional
     int addBandAndChanter(@Param("chanter_id") Long chanter_id, @Param("band_id") Long band_id, @Param("moderator_status") Boolean moderator_status);
 

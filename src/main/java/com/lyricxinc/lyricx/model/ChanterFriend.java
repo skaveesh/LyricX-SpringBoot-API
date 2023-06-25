@@ -1,6 +1,8 @@
 package com.lyricxinc.lyricx.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -10,20 +12,23 @@ import java.time.LocalDateTime;
 public class ChanterFriend {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @SequenceGenerator(name = "chanter_friend_id_seq", sequenceName = "chanter_friend_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "chanter_friend_id_seq")
+    @JsonIgnore
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "chanterId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "chantersReferenceChanter")
     private Chanter chanter;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "friendId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "friendsReferenceFriend")
     private Chanter friend;
 
     @CreationTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime friendSince;
 
     public ChanterFriend() {
@@ -36,12 +41,12 @@ public class ChanterFriend {
         this.friend = friend;
     }
 
-    public long getId() {
+    public Long getId() {
 
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
 
         this.id = id;
     }

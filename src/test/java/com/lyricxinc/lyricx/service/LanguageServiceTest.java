@@ -17,7 +17,9 @@ public class LanguageServiceTest {
     private Language language = new Language("English");
 
     @Test
-    public void addLanguage(){
+    public void addLanguage() {
+
         languageService.addLanguage(language);
     }
+
 }

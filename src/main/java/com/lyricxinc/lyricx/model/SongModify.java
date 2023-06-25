@@ -1,6 +1,8 @@
 package com.lyricxinc.lyricx.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -11,12 +13,14 @@ import java.time.LocalDateTime;
 public class SongModify {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @SequenceGenerator(name = "song_modify_id_seq", sequenceName = "song_modify_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "song_modify_id_seq")
+    @JsonIgnore
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "songId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "songModifiesReferenceSong")
     private Song song;
 
     @NotBlank
@@ -24,19 +28,20 @@ public class SongModify {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "contributorId", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "referenceContributor")
     private Contributor contributor;
 
     @UpdateTimestamp
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime lastModifiedDate;
 
-    private boolean hiddenStatus;
+    private Boolean hiddenStatus;
 
     public SongModify() {
 
     }
 
-    public SongModify(Song song, @NotBlank String lyrics, Contributor contributor, boolean hiddenStatus) {
+    public SongModify(Song song, @NotBlank String lyrics, Contributor contributor, Boolean hiddenStatus) {
 
         this.song = song;
         this.lyrics = lyrics;
@@ -44,12 +49,12 @@ public class SongModify {
         this.hiddenStatus = hiddenStatus;
     }
 
-    public long getId() {
+    public Long getId() {
 
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
 
         this.id = id;
     }
@@ -89,12 +94,12 @@ public class SongModify {
         return lastModifiedDate;
     }
 
-    public boolean isHiddenStatus() {
+    public Boolean isHiddenStatus() {
 
         return hiddenStatus;
     }
 
-    public void setHiddenStatus(boolean hiddenStatus) {
+    public void setHiddenStatus(Boolean hiddenStatus) {
 
         this.hiddenStatus = hiddenStatus;
     }
